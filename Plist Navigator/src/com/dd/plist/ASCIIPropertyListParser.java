@@ -105,6 +105,9 @@ public class ASCIIPropertyListParser {
             int len = 0;
             while(!s.hasNext(arrayEndToken)) {
                 NSObject o = parseObject(s);
+// tom start
+                o.setKey(new String("Item " + len));
+// tom end
                 arrayObjects.add(o);
                 len++;
             }
@@ -127,7 +130,10 @@ public class ASCIIPropertyListParser {
                 } else {
                     throw new ParseException("Expected String but found "+s.next(), 0);
                 }                
-                NSObject value = parseObject(s);                
+                NSObject value = parseObject(s);
+// tom start
+                value.setKey(key);
+// tom end
                 dict.put(key, value);                
             }
             if(!s.hasNext(dictionaryEndToken)) {

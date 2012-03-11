@@ -76,4 +76,19 @@ public abstract class NSObject {
         for(int i=0;i<level;i++)
             xml.append(INDENT);
     }
+    
+    
+    
+    
+// tom add start    
+    private String m_key = "";
+    
+    public void setKey(String key) {
+       m_key = key;
+    }
+    
+    public String getKey() {
+        return m_key;
+    }
+// tom add end
 }

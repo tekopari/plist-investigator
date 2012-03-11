@@ -306,7 +306,12 @@ public class BinaryPropertyListParser {
                     int objRef = (int) parseUnsignedInt(copyOfRange(bytes,
                             offset + arrayoffset + i * objectRefSize,
                             offset + arrayoffset + (i + 1) * objectRefSize));
-                    array.setValue(i, parseObject(objRef));
+// tom start
+NSObject nsobj = parseObject(objRef);
+nsobj.setKey(new String("Item " + i)); 
+                    //array.setValue(i, parseObject(objRef));
+array.setValue(i, nsobj);
+// tom end
                 }
                 return array;
 
@@ -337,8 +342,13 @@ public class BinaryPropertyListParser {
                 for (int i = 0; i < length; i++) {
                     int objRef = (int) parseUnsignedInt(copyOfRange(bytes,
                             offset + arrayoffset + i * objectRefSize,
-                            offset + arrayoffset + (i + 1) * objectRefSize));                    
-                    set.addObject(parseObject(objRef));
+                            offset + arrayoffset + (i + 1) * objectRefSize));  
+// tom start
+NSObject nsobj = parseObject(objRef);
+nsobj.setKey(new String("Item " + i)); 
+                    //set.addObject(parseObject(objRef));
+set.addObject(nsobj);
+// tom end
                 }
                 return set;
             }
@@ -376,6 +386,9 @@ public class BinaryPropertyListParser {
                     NSObject key = parseObject(keyRef);
                     NSObject val = parseObject(valRef);
                     //System.out.println("  DICT #"+obj+": Mapped "+key.toString()+" to "+val.toString());
+//tom start
+val.setKey(key.toString());
+// tom end
                     dict.put(key.toString(), val);
                 }
                 return dict;
