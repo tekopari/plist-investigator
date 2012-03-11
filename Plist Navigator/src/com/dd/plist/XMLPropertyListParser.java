@@ -151,15 +151,25 @@ public class XMLPropertyListParser {
                 //separates certain Strings into several nodes
                 for(int j=1;j<key.getChildNodes().getLength();j++)
                     keyString += key.getChildNodes().item(j).getNodeValue();
-                
-		dict.put(keyString, parseObject(val));
+// tom start
+NSObject nsobj = parseObject(val);
+nsobj.setKey(keyString); 
+dict.put(keyString, nsobj);
+//dict.put(keyString, parseObject(val));
+// tom end
+		
             }
             return dict;
         } else if (type.equals("array")) {
             List<Node> children = filterElementNodes(n.getChildNodes());
 	    NSArray array = new NSArray(children.size());
 	    for (int i = 0; i < children.size(); i++) {
-		array.setValue(i, parseObject(children.get(i)));
+// tom start
+NSObject nsobj = parseObject(children.get(i));
+nsobj.setKey(new String("Item " + i)); 
+		//array.setValue(i, parseObject(children.get(i)));
+array.setValue(i, nsobj);
+// tom end
 	    }
 	    return array;
         } else if (type.equals("true")) {
