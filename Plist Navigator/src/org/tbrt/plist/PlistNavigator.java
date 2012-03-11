@@ -1,11 +1,18 @@
 package org.tbrt.plist;
 
+import org.tbrt.plist.*;
+import com.dd.plist.*;
+
+import java.awt.Component;
+
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.BorderLayout;
+
+import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.JToolBar;
 import javax.swing.JButton;
@@ -85,7 +92,40 @@ public class PlistNavigator {
 			
 		JMenuItem mntmNewProject = new JMenuItem("New");
 		mnInvestigation.add(mntmNewProject);
-		
+
+        // TBR addition
+        mntmNewProject.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent arg0) {
+                                        // TODO
+                                        // Create a dialog box to get the name of the jtree node
+
+                                        Component frame = null;
+                                        String s = (String)JOptionPane.showInputDialog(
+                                                            frame,
+                                                            "Type plist file path:\n");
+
+                                        //If a string was returned, say so.
+                                        if ((s != null) && (s.length() > 0)) {
+                                            setLabel("Typed String... " + s + "!");
+                                            investigationTree.addObject(s);
+                                            PlistTreeTable p = new PlistTreeTable(s);
+                                        }  else {
+
+                                        //If you're here, the return value was null/empty.
+                                        setLabel("Come on, finish the sentence!");
+                                        }
+                                        
+                                        
+                                        
+                        }
+
+                        private void setLabel(String string) {
+                                        // TODO Auto-generated method stub
+                                        
+                        }
+        });
+
+        
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mnInvestigation.add(mntmOpen);		
 		
