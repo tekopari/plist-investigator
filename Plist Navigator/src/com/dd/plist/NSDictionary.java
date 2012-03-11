@@ -46,7 +46,7 @@ public class NSDictionary extends NSObject {
      */
     public NSDictionary() {
         //With a linked HashMap the order of elements in the dictionary is kept.
-        dict = new LinkedHashMap<String, NSObject>();
+        dict = new LinkedHashMap<String, NSObject>();  
     }
 
     /**
@@ -164,5 +164,9 @@ public class NSDictionary extends NSObject {
 	for (Map.Entry<String,NSObject> entry : entries) {
 	    out.writeID(out.getID(entry.getValue()));
 	}
+    }
+    
+    public Object[] getAllObjects() {
+        return dict.values().toArray();
     }
 }
