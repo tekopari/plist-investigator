@@ -200,4 +200,8 @@ public class NSArray extends NSObject {
 	    out.writeID(out.getID(obj));
 	}
     }
+    
+    public String toString() {
+        return this.getKey();
+    }
 }

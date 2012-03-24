@@ -155,7 +155,6 @@ public class XMLPropertyListParser {
 NSObject nsobj = parseObject(val);
 nsobj.setKey(keyString); 
 dict.put(keyString, nsobj);
-//dict.put(keyString, parseObject(val));
 // tom end
 		
             }

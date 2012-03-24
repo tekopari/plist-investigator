@@ -219,7 +219,7 @@ public class NSNumber extends NSObject {
         return hash;
     }
 
-
+/*
     @Override
     public String toString() {
         switch(type) {
@@ -236,6 +236,27 @@ public class NSNumber extends NSObject {
                 return super.toString();
             }
         }
+    }
+*/
+    public String toStringValue() {
+        switch(type) {
+            case INTEGER : {
+                return String.valueOf(longValue());
+            }
+            case REAL : {
+                return String.valueOf(doubleValue());
+            }
+            case BOOLEAN : {
+                return String.valueOf(boolValue());
+            }
+            default : {
+                return super.toString();
+            }
+        }
+    }
+    
+    public String toString() {
+        return this.getKey();
     }
 
     @Override

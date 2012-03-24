@@ -139,8 +139,12 @@ public class NSDate extends NSObject {
      * @see java.util.Date#toString()
      * @return A string representation of the date.
      */
-    @Override
-    public String toString() {
+    public String toStringValue() {
         return date.toString();
+    }
+    
+    
+    public String toString() {
+        return this.getKey();
     }
 }

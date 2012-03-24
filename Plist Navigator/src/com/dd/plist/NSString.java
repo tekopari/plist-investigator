@@ -75,8 +75,7 @@ public class NSString extends NSObject {
      * The textual representation of this NSString.
      * @return The NSString's contents.
      */
-    @Override
-    public String toString() {
+    public String toStringValue() {
         return content;
     }
 
@@ -118,5 +117,9 @@ public class NSString extends NSObject {
 	byteBuf.get(bytes);
 	out.writeIntHeader(kind, content.length());
 	out.write(bytes);
+    }   
+    
+    public String toString() {
+        return this.getKey();
     }
 }

@@ -140,4 +140,8 @@ public class NSData extends NSObject {
 	out.writeIntHeader(0x4, bytes.length);
 	out.write(bytes);
     }
+    
+    public String toString() {
+        return this.getKey();
+    }
 }

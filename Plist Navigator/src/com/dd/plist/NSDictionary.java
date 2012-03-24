@@ -169,4 +169,8 @@ public class NSDictionary extends NSObject {
     public Object[] getAllObjects() {
         return dict.values().toArray();
     }
+    
+    public String toString() {
+        return this.getKey();
+    }
 }
