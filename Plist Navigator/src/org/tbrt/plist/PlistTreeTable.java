@@ -19,6 +19,10 @@ public class PlistTreeTable
     }
     
     public PlistTreeTable(String filename) {
+    	
+    	//-------------------------------------------------------------------
+    	// Parse the plist file
+    	//-------------------------------------------------------------------
     	NSDictionary rootDict = null;
         try {
             File file = new File(filename);
@@ -30,9 +34,10 @@ public class PlistTreeTable
           System.err.println("Cannot use the PropertyListParser");
         }
     	
+        //-------------------------------------------------------------------
+        // The frame will have the same name as the file
+        //-------------------------------------------------------------------
 	    JFrame frame = new JFrame(filename);
-	    JTreeTable treeTable = new JTreeTable(new PlistModel(rootDict));
-
 	    frame.addWindowListener(
 	        new WindowAdapter() {
 	            public void windowClosing(WindowEvent we) {
@@ -40,7 +45,11 @@ public class PlistTreeTable
 	            }
 	        }
 	    );
-
+	    
+	    //-------------------------------------------------------------------
+	    // Create the panel to display the plist in
+	    //-------------------------------------------------------------------
+	    JTreeTable treeTable = new JTreeTable(new PlistModel(rootDict));
 	    frame.getContentPane().add(new JScrollPane(treeTable));
 	    frame.pack();
 	    frame.show();

@@ -17,11 +17,8 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     //-----------------------------------------------------------------------
     static protected Class[] columnDataTypes = {
     	TreeTableModel.class, 
-    	//NSObject.class,
     	String.class, 
     	String.class};
-    
-    //NSObject root;
 
     //-----------------------------------------------------------------------
     // The PlistModel constructor
@@ -133,8 +130,9 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     	if(name.equals("com.dd.plist.NSArray")){
     		rc = ((NSArray)node).getKey();	
     	}
-    	else if (name.equals("com.dd.plist.NSDictionary")) {
-    		rc = ((NSDictionary)node).getKey();	
+    	else if (name.equals("com.dd.plist.NSDictionary")) {	
+    		NSDictionary d = (NSDictionary)node;
+    		rc = d.getKey();  
     	}
     	else if (name.equals("com.dd.plist.NSSet")) {
     		rc = ((NSSet)node).getKey();	
@@ -228,13 +226,13 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     		rc = ((NSData)node).getBase64EncodedData();
     	}
     	else if(name.equals("com.dd.plist.NSDate")) {
-    		rc = ((NSDate)node).toString();
+    		rc = ((NSDate)node).toStringValue();
     	}
     	else if(name.equals("com.dd.plist.NSNumber")) {
-    		rc = ((NSNumber)node).toString();
+    		rc = ((NSNumber)node).toStringValue();
     	}
     	else if(name.equals("com.dd.plist.NSString")) {
-    		rc = ((NSString)node).toString();
+    		rc = ((NSString)node).toStringValue();
     	}
     	else {
     		rc = "unknown";

@@ -15,14 +15,16 @@ public class TreeTableModelAdapter extends AbstractTableModel
         this.m_tree = tree;
         this.m_model = model;
 
-	tree.addTreeExpansionListener(new TreeExpansionListener() {
-	    public void treeExpanded(TreeExpansionEvent e) {  
-	      fireTableDataChanged(); 
-	    }
-            public void treeCollapsed(TreeExpansionEvent e) {  
-	      fireTableDataChanged(); 
-	    }
-	});
+	    tree.addTreeExpansionListener(
+	        new TreeExpansionListener() {
+	            public void treeExpanded(TreeExpansionEvent e) {  
+	                fireTableDataChanged(); 
+	            }
+                public void treeCollapsed(TreeExpansionEvent e) {  
+	                fireTableDataChanged(); 
+	            }
+	        }
+	    );
     }
 
     public int getColumnCount() {

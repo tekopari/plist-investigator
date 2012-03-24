@@ -5,6 +5,10 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 
+import com.dd.plist.NSArray;
+import com.dd.plist.NSDictionary;
+import com.dd.plist.NSSet;
+
 public abstract class AbstractTreeTableModel implements TreeTableModel {
     protected Object root;     
     protected EventListenerList listenerList = new EventListenerList();
@@ -51,6 +55,7 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     //-----------------------------------------------------------------------
     public void addTreeModelListener(TreeModelListener l) {
         listenerList.add(TreeModelListener.class, l);
+        return;
     }
 
     //-----------------------------------------------------------------------
@@ -58,6 +63,7 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     //-----------------------------------------------------------------------
     public void removeTreeModelListener(TreeModelListener l) {
         listenerList.remove(TreeModelListener.class, l);
+        return;
     }
 
     //-----------------------------------------------------------------------
@@ -167,7 +173,21 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     // the expansion/contraction of the tree nodes
     //-----------------------------------------------------------------------
     public boolean isCellEditable(Object node, int column) { 
-        return getColumnClass(column) == TreeTableModel.class; 
+    	if(column != 0) {
+    		return false;
+    	}
+    	
+    	String name = node.getClass().getName();
+    	
+    	if(name.equals("com.dd.plist.NSArray") ||
+    	   name.equals("com.dd.plist.NSDictionary")|| 
+    	   name.equals("com.dd.plist.NSSet")) {
+    		System.out.println("IsEditable NAME=" + name);
+    		return true;
+    	}
+    	return false;	
+        
+        //return getColumnClass(column) == TreeTableModel.class;
     }
 
     //-----------------------------------------------------------------------
