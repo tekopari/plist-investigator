@@ -4,6 +4,7 @@ import org.tbrt.plist.*;
 import com.dd.plist.*;
 
 import java.awt.Component;
+import java.awt.Dialog.ModalityType;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -12,6 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.BorderLayout;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.JToolBar;
@@ -43,9 +45,48 @@ public class PlistNavigator {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+ 		//-------------------------------------------------------------------
+		// Check the usage:  
+		// - The INSTALL_PATH identifies the path the tool was installed in.
+		//-------------------------------------------------------------------
+		if(args.length != 1) {
+			System.err.println("USAGE: java org.tbrt.plist.PlistNavigator <INSTALL_PATH>");
+			System.exit(1);
+		}
+		
+		String installPath = args[0];
+		if(installPath.equals("")) {
+			System.err.println("USAGE: java org.tbrt.plist.PlistNavigator <INSTALL_PATH>");
+			System.exit(1);	
+		}
+		
+		//-------------------------------------------------------------------
+		// The INSTALL PATH must be a directory
+		//-------------------------------------------------------------------
+		try {
+ 			File installDir = new File(installPath); 
+ 			if(!(installDir.isDirectory())) {
+ 				System.err.println("Error: Specified INSTALL_DIR is not an existing directory.");
+ 				System.exit(1);		
+ 			}
+		} 
+		catch (Exception e) {
+			System.err.println("Error: " + e.toString());
+ 			System.exit(1);		
+		}
+		
+		//-------------------------------------------------------------------
+        // Initialize the application	
+		//-------------------------------------------------------------------
+		Configuration.initConfiguration(installPath);
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+
+					//-------------------------------------------------------------------
+			        // Start the plist navigator	
+					//-------------------------------------------------------------------
 					PlistNavigator window = new PlistNavigator();
 					window.frmPlistNavigator.setVisible(true);
 				} catch (Exception e) {
@@ -97,7 +138,7 @@ public class PlistNavigator {
         	}
         });
 
-        //Temporary Manu Item
+        //Temporary Menu Item
 		JMenuItem mntmTempPList = new JMenuItem("Add PList (Temporary Item)");
 		mnInvestigation.add(mntmTempPList);
 		
@@ -159,6 +200,21 @@ public class PlistNavigator {
         
 ///////// SECTION ABOVE SHOULD BE MOVED TO FILE InvestigationTree.java //////////
         
+		
+		JMenuItem mntmConfig = new JMenuItem("Settings");
+		mntmConfig.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ConfigurationDialog dialog = new ConfigurationDialog();
+					dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnInvestigation.add(mntmConfig);
         
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mnInvestigation.add(mntmExit);
