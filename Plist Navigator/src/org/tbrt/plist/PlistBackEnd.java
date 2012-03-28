@@ -80,7 +80,7 @@ public class PlistBackEnd {
         		processingInputOption = true;
         	}
         	//---------------------------------------------------------------
-        	// User specified the input file option
+        	// User specified the output file option
         	//---------------------------------------------------------------   	
         	else if(s.equals("-o")) {
         		if(processingInputOption ||
@@ -108,7 +108,7 @@ public class PlistBackEnd {
             	processingOutputType = true;
         	}
         	//---------------------------------------------------------------
-        	// Looking for the output filename
+        	// Looking for the input filename
         	//---------------------------------------------------------------   	
         	else if(processingInputOption) {
         		inputFile = s;
