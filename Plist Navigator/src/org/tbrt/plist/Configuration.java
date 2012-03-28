@@ -5,12 +5,91 @@
 //          the plist tool
 //===========================================================================
 
+
+/* TODO: ADD THIS TO THE MAIN
+ 
+ 		//-------------------------------------------------------------------
+		// Check the usage:  
+		// - The INSTALL_PATH identifies the path the tool was installed in.
+		//-------------------------------------------------------------------
+		if(args.length != 1) {
+			System.err.println("USAGE: java org.tbrt.plist.PlistNavigator <INSTALL_PATH>");
+			System.exit(1);
+		}
+		
+		String installPath = args[0];
+		if(installPath.equals("")) {
+			System.err.println("USAGE: java org.tbrt.plist.PlistNavigator <INSTALL_PATH>");
+			System.exit(1);	
+		}
+		
+		//-------------------------------------------------------------------
+		// The INSTALL PATH must be a directory
+		//-------------------------------------------------------------------
+		try {
+ 			File installDir = new File(installPath); 
+ 			if(!(installDir.isDirectory())) {
+ 				System.err.println("Error: Specified INSTALL_DIR is not an existing directory.");
+ 				System.exit(1);		
+ 			}
+		} 
+		catch (Exception e) {
+			System.err.println("Error: " + e.toString());
+ 			System.exit(1);		
+		}
+		
+		//-------------------------------------------------------------------
+        // Initialize the application	
+		//-------------------------------------------------------------------
+		Configuration.initConfiguration(installPath);
+ */
+
+/* TODO 2: ADD THIS TO MENU
+
+		JMenu mnEdit = new JMenu("Edit");
+		menuBar.add(mnEdit);
+		
+		JMenuItem mntmConfig = new JMenuItem("Configuration");
+		mntmConfig.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ConfigurationDialog dialog = new ConfigurationDialog();
+					dialog.setModalityType(ModalityType.APPLICATION_MODAL);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		mnEdit.add(mntmConfig);
+
+ */
+
+
+/* TODO 3:
+ * 
+ * SAMPLE USAGE
+
+    String path = Configuration.getConfiguration.getHomeDir()
+    	    			    + System.getProperty("file.separator")
+    	    			    + "SOMEDIR";
+ 
+ */
+
 package org.tbrt.plist;
 
+import java.awt.Dialog.ModalityType;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Properties;
+
+import javax.swing.JDialog;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class Configuration {
 	
@@ -35,6 +114,7 @@ public class Configuration {
     public static Configuration getConfiguration() {
     	try {
     	    if(config == null){
+    	    	// TODO: DECIDE ON DEFAULT INSTALLATION DIRECTORY
     		    String path = "C:\\TBRT\\PlistNavigator\\data";
     		    config = new Configuration(path);
     	    }
