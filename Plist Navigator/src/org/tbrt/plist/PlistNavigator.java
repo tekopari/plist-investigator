@@ -263,7 +263,7 @@ public class PlistNavigator {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		sl_panel.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, panel);
 		sl_panel.putConstraint(SpringLayout.WEST, tabbedPane, 6, SpringLayout.EAST, investigationTree);
-		sl_panel.putConstraint(SpringLayout.SOUTH, tabbedPane, 383, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.SOUTH, tabbedPane, -10, SpringLayout.SOUTH, panel);
 		sl_panel.putConstraint(SpringLayout.EAST, tabbedPane, -10, SpringLayout.EAST, panel);
 		panel.add(tabbedPane);
 		
