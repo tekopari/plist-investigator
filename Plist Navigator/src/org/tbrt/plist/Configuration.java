@@ -14,6 +14,37 @@ import java.util.Properties;
 
 public class Configuration {
 	
+    //------------------------------------------------------------
+    // The following method initialize the configuration data
+    //------------------------------------------------------------
+    private static Configuration config = null;
+    
+    public static boolean initConfiguration(String path) {
+    	try {
+    	    if(config == null){
+    		    config = new Configuration(path);
+    		    config.setHomeDir(path);
+    	    }
+    	}
+    	catch (Exception e) {
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public static Configuration getConfiguration() {
+    	try {
+    	    if(config == null){
+    		    String path = "C:\\TBRT\\PlistNavigator\\data";
+    		    config = new Configuration(path);
+    	    }
+    	}
+    	catch (Exception e) {
+    		return null;
+    	}
+    	return config;
+    }
+	
 	//---------------------------------------------------
 	// The name of the file hold the configuration values
 	//---------------------------------------------------
