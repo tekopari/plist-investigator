@@ -3,10 +3,14 @@ package org.tbrt.plist;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -18,6 +22,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+
 
 public class InvestigationTree extends JPanel {
     protected DefaultMutableTreeNode rootNode;
@@ -51,11 +56,79 @@ public class InvestigationTree extends JPanel {
         notePopup = new JPopupMenu();
         unknownPopup = new JPopupMenu();
         
-        investigationsPopup.add(new JMenuItem("Add New Investigation"));
+        JMenuItem mnInvestigations = investigationsPopup.add(new JMenuItem("Add New Investigation"));
+        mnInvestigations.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		Component frame = null;
+        		String s = (String)JOptionPane.showInputDialog(
+        				frame,
+        				"Type the investigation folder name:\n");
+        		if ((s != null) && (s.length() > 0)) {
+        			InvestigationNode node = new InvestigationNode("Investigation", s);
+        			InvestigationNode notes = new InvestigationNode("Notes", "Notes");		
+        			DefaultMutableTreeNode p  = addObject(node);
+        			addObject(p, notes);
+        		}
+        	}
+        });
         
         investigationPopup.add(new JMenuItem("Rename Folder"));
         investigationPopup.add(new JMenuItem("Delete Folder & All Data"));
-        investigationPopup.add(new JMenuItem("Add PList File"));
+        
+        
+        JMenuItem mnPlist = investigationPopup.add(new JMenuItem("Add PList File"));        
+        // TBRT addition
+        mnPlist.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		// TODO
+        		// Create a dialog box to get the name of the jtree node
+        		Component frame = null;
+        		String s = (String)JOptionPane.showInputDialog(
+        				frame,
+        				"Type plist file path:\n");
+        		//If a string was returned, say so.
+        		if ((s != null) && (s.length() > 0)) {
+        			setLabel("Typed String... " + s + "!");
+        			
+        			InvestigationNode evid = new InvestigationNode("EvidenceItems", s);
+        			InvestigationNode notes = new InvestigationNode("Notes", "Notes");
+        			DefaultMutableTreeNode t  = addObject(evid);
+        			addObject(t, notes);       			
+        			
+        			PlistTreeTable p = new PlistTreeTable(s);
+        			
+        			//bew, initial code to create directory per plist file.
+        			// first thing is to remove the .plist extension.
+        			// TODO: need to figure out how to remove the C:\dirname, so that we can
+        			//   just use the filename, and then add our own path name.  I.e. We will 
+        			//   not usually be creating the directoy in same location as where plist
+        			//   file may be.
+        			// TODO: Add additional error check, ie. what if dir exists, or invalid name.
+        			// TODO: Use the final code for getting filename, to also use when displaying
+        			//       on the GUI.
+        			s = s.substring(0, s.lastIndexOf('.'));
+        			//File f = new File("C:" + File.separator + "temp" + File.separator + s);
+        			File f = new File(s);
+        			try{
+        				f.mkdir();
+        				} catch (Exception e) {
+        					e.printStackTrace(); //TODO: Add code to handle displaying correct error codes
+        					}
+        			//bew, end add code
+        			}  else {
+        				
+        				//If you're here, the return value was null/empty.
+        				setLabel("Come on, finish the sentence!");
+        				}
+        		
+                                        
+        	}
+
+        	private void setLabel(String string) {
+        		// TODO Auto-generated method stub                                       
+        	}
+        });       
+        
         investigationPopup.add(new JMenuItem("Search Text String"));
         investigationPopup.add(new JMenuItem("Save Folder Data as PDF File"));
         
@@ -253,7 +326,7 @@ public class InvestigationTree extends JPanel {
     	    		investigationPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
     	    	} 
     	    	else if (nodeName.equals("Investigations")) {
-    	    		investigationsPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
+    	    		investigationsPopup.show((Component) e.getSource(), e.getX(), e.getY());
     	    	}
     	    }
     	    return;
