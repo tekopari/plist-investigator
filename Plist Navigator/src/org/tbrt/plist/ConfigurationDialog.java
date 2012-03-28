@@ -36,6 +36,9 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 	
 	public static void main(String[] args) {
 		try {
+			String installPath = "C:\\Documents and Settings\\paritj\\My Documents\\PlistNavigator";
+			Configuration.initConfiguration(installPath);
+			
 			ConfigurationDialog dialog = new ConfigurationDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
