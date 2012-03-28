@@ -34,7 +34,7 @@ public class InvestigationTree extends JPanel {
 
     public InvestigationTree() {
         super(new GridLayout(1,0));
-        rootNode = new DefaultMutableTreeNode(new InvestigationNode("Investigations", "Investigations"));
+        rootNode = new DefaultMutableTreeNode(new InvestigationNode("Investigations", "All Investigations"));
         treeModel = new DefaultTreeModel(rootNode);
 	    treeModel.addTreeModelListener(new MyTreeModelListener());
         tree = new JTree(treeModel);
@@ -51,25 +51,25 @@ public class InvestigationTree extends JPanel {
         notePopup = new JPopupMenu();
         unknownPopup = new JPopupMenu();
         
-        investigationsPopup.add(new JMenuItem("investigations option#1"));
-        investigationsPopup.add(new JMenuItem("investigations option#2"));
-        investigationsPopup.add(new JMenuItem("investigations option#3"));
+        investigationsPopup.add(new JMenuItem("Add New Investigation"));
         
-        investigationPopup.add(new JMenuItem("investigation option#1"));
-        investigationPopup.add(new JMenuItem("investigation option#2"));
-        investigationPopup.add(new JMenuItem("investigation option#3"));
+        investigationPopup.add(new JMenuItem("Rename Folder"));
+        investigationPopup.add(new JMenuItem("Delete Folder & All Data"));
+        investigationPopup.add(new JMenuItem("Add PList File"));
+        investigationPopup.add(new JMenuItem("Search Text String"));
+        investigationPopup.add(new JMenuItem("Save Folder Data as PDF File"));
         
-        evidenceItemsPopup.add(new JMenuItem("evidence items option#1"));
-        evidenceItemsPopup.add(new JMenuItem("evidence items option#2"));
+        evidenceItemsPopup.add(new JMenuItem("Delete PList"));
+        evidenceItemsPopup.add(new JMenuItem("Search Text String"));
+        evidenceItemsPopup.add(new JMenuItem("Save PList as PDF File"));
         
-        evidenceItemPopup.add(new JMenuItem("evidence item option#1"));
-        evidenceItemPopup.add(new JMenuItem("evidence item option#2"));
+        evidenceItemPopup.add(new JMenuItem("Delete PList"));
+        evidenceItemPopup.add(new JMenuItem("Search Text String"));
+        evidenceItemPopup.add(new JMenuItem("Save PList as PDF file"));
         
-        notesPopup.add(new JMenuItem("notes option#1"));
-        notesPopup.add(new JMenuItem("notes option#2"));
+        notesPopup.add(new JMenuItem("Edit Notes"));
         
-        notePopup.add(new JMenuItem("note option#1"));
-        notePopup.add(new JMenuItem("note option#2"));
+        notePopup.add(new JMenuItem("Edit Notes"));
         
         unknownPopup.add(new JMenuItem("unknown option"));
         
@@ -194,13 +194,13 @@ public class InvestigationTree extends JPanel {
     		
     	    if (e.isPopupTrigger()) {
     	    	if (nodeName.equals("EvidenceItems")) {
-    	    		evidenceItemsPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
+    	    		evidenceItemsPopup.show((Component) e.getSource(), e.getX(), e.getY());
     	    	}
     	    	else if (nodeName.equals("EvidenceItem")) {
-    	    		evidenceItemPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
+    	    		evidenceItemPopup.show((Component) e.getSource(), e.getX(), e.getY());
     	    	}
     	    	else if (nodeName.equals("Notes")) {
-    	    		notesPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
+    	    		notesPopup.show((Component) e.getSource(), e.getX(), e.getY());     	    		
     	    	}
     	    	else if (nodeName.equals("Note")) {
     	    		notePopup.show((Component) e.getSource(), e.getX(), e.getY()); 
@@ -209,7 +209,7 @@ public class InvestigationTree extends JPanel {
     	    		investigationPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
     	    	}
     	    	else if (nodeName.equals("Investigations")) {
-    	    		investigationsPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
+    	    		investigationsPopup.show((Component) e.getSource(), e.getX(), e.getY());
     	    	}
     	    }
     	    return;
