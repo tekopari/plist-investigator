@@ -151,13 +151,28 @@ public class XMLPropertyListParser {
                 //separates certain Strings into several nodes
                 for(int j=1;j<key.getChildNodes().getLength();j++)
                     keyString += key.getChildNodes().item(j).getNodeValue();
+                
+                //-----------------------------------------------------------
+                // TP: Assign the key to the object 
+                //-----------------------------------------------------------
 // tom start
-NSObject nsobj = parseObject(val);
-nsobj.setKey(keyString); 
-dict.put(keyString, nsobj);
+                NSObject nsobj = parseObject(val);
+                nsobj.setKey(keyString);
+System.out.println("KEY[" + keyString + "]");
+                dict.put(keyString, nsobj);
 // tom end
 		
             }
+// tom start 
+	    System.out.println("DUMP--------------------------------START");
+	    String[] keys = dict.allKeys();
+	    for(int i = 0; i < keys.length; i++) {
+	        NSObject myobj = dict.objectForKey(keys[i]);
+	        System.out.println("-->key[" + keys[i] + "] type[" + myobj.getClass().getSimpleName().toString() + "] = [" + myobj.toString() + "]");
+	    }
+	    System.out.println("DUMP--------------------------------END");
+// tom end
+
             return dict;
         } else if (type.equals("array")) {
             List<Node> children = filterElementNodes(n.getChildNodes());
@@ -172,6 +187,7 @@ array.setValue(i, nsobj);
 	    }
 	    return array;
         } else if (type.equals("true")) {
+        	System.out.println("FOUND TRUE");
             return new NSNumber(true);
         } else if (type.equals("false")) {
             return new NSNumber(false);

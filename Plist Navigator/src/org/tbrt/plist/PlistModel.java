@@ -126,6 +126,10 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     	}
     	
     	String rc = "";
+    	rc = new String(((NSObject)node).getKey());
+    	System.out.println("GETKEY[" + rc + "]");
+ // DEBUG--------------
+    	/*
     	String name = node.getClass().getCanonicalName();
     	if(name.equals("com.dd.plist.NSArray")){
     		rc = ((NSArray)node).getKey();	
@@ -152,6 +156,8 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     	else {
     		rc = "unknown";
     	}
+    	*/
+ // DEBUG--------------------
     	return rc;
     }
     

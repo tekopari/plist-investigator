@@ -32,7 +32,10 @@ public class TreeTableModelAdapter extends AbstractTableModel
     }
     
     public Object getValueAt(int rowNum, int columnNum) {
-	    return m_model.getValueAt(nodeForRow(rowNum), columnNum);
+    	String rc = (String) (m_model.getValueAt(nodeForRow(rowNum), columnNum));
+    	System.out.println("GetValueAt[" + rowNum + "][" + columnNum + "]=[" + rc + "]");
+    	return rc;
+	    //return m_model.getValueAt(nodeForRow(rowNum), columnNum);
     }
     
     public String getColumnName(int columnNum) {
@@ -54,10 +57,11 @@ public class TreeTableModelAdapter extends AbstractTableModel
 
     public void setValueAt(Object obj, int rowNum, int columnNum) {
     	m_model.setValueAt(obj, nodeForRow(rowNum), columnNum);
+    	return;
     }
 
     public boolean isCellEditable(int rowNum, int columnNum) {
-         return m_model.isCellEditable(nodeForRow(rowNum), columnNum); 
+        return m_model.isCellEditable(nodeForRow(rowNum), columnNum); 
     }
 }
 

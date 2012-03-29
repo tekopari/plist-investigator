@@ -64,6 +64,7 @@ public class NSDictionary extends NSObject {
      * @param obj The value.
      */
     public void put(String key, NSObject obj) {
+    	System.out.println("PUT NSOBJECT KEY[" + obj.getKey() + "] CLASS[" + obj.getClass().getSimpleName().toString() + "]");
         dict.put(key, obj);
     }
 
