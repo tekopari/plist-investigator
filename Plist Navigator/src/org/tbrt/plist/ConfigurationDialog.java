@@ -80,14 +80,22 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 		{
 			textName = new JTextField();
 			textName.setColumns(10);
-			textName.setText(Configuration.getConfiguration().getInvestigatorName());		
+			String tmp = Configuration.getConfiguration().getInvestigatorName();
+			if(tmp == null) {
+				tmp = "<Your Name>";
+			}
+			textName.setText(tmp);		
 			textName.setBounds(156, 14, 274, 16);
 			contentPanel.add(textName);
 		}
 		{
 			textPhone = new JTextField();
 			textPhone.setBounds(156, 43, 274, 16);
-			textPhone.setText(Configuration.getConfiguration().getInvestigatorPhone());
+			String tmp = Configuration.getConfiguration().getInvestigatorPhone();
+			if(tmp == null) {
+				tmp = "###-###-####";
+			}
+			textPhone.setText(tmp);
 			contentPanel.add(textPhone);
 			textPhone.setColumns(10);
 		}
@@ -95,7 +103,11 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 			textEmail = new JTextField();
 			textEmail.setColumns(10);
 			textEmail.setBounds(156, 72, 274, 16);
-			textEmail.setText(Configuration.getConfiguration().getInvestigatorEmail());			
+			String tmp = Configuration.getConfiguration().getInvestigatorEmail();
+			if(tmp == null) {
+				tmp = "<Your Email Address>";
+			}
+			textEmail.setText(tmp);			
 			contentPanel.add(textEmail);
 		}
 		{

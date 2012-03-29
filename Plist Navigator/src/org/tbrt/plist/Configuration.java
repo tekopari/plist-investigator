@@ -29,7 +29,8 @@ public class Configuration {
     // The following method initialize the configuration data
     //------------------------------------------------------------
     private static Configuration config = null;
-    
+ 	private static String installPath = ""; 
+ 	
     public static boolean initConfiguration(String path) {
     	try {
     	    if(config == null){
@@ -47,7 +48,7 @@ public class Configuration {
     	try {
     	    if(config == null){
     	    	// TODO: DECIDE ON DEFAULT INSTALLATION DIRECTORY
-    		    String path = "C:\\TBRT\\PlistNavigator\\data";
+    		    String path = installPath;
     		    config = new Configuration(path);
     	    }
     	}
@@ -66,6 +67,7 @@ public class Configuration {
 	// The configuration values and system properties values
 	//------------------------------------------------------
 	private Properties p = null;
+
 	
 	public Configuration(String path) throws Exception {
 
@@ -173,6 +175,11 @@ public class Configuration {
 	public synchronized void setHomeDir(String str) {
 		p.setProperty("PLIST.HOME_DIR", str.trim());
 		saveProperties();
+		return;
+	}
+	
+	public static void setInstallPath(String str) {
+		installPath = str;
 		return;
 	}
 }
