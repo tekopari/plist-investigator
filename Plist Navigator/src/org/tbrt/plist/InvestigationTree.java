@@ -39,7 +39,7 @@ public class InvestigationTree extends JPanel {
 
     public InvestigationTree() {
         super(new GridLayout(1,0));
-        rootNode = new DefaultMutableTreeNode(new InvestigationNode("Investigations", "All Investigations"));
+        rootNode = new DefaultMutableTreeNode(new InvestigationNode("Investigations", "My Investigations"));
         treeModel = new DefaultTreeModel(rootNode);
 	    treeModel.addTreeModelListener(new MyTreeModelListener());
         tree = new JTree(treeModel);
@@ -72,7 +72,7 @@ public class InvestigationTree extends JPanel {
         	}
         });
         
-        JMenuItem mnRename = investigationPopup.add(new JMenuItem("Rename Folder"));
+        JMenuItem mnRename = investigationPopup.add(new JMenuItem("Rename Investigation"));
         mnRename.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		Component frame = null;
@@ -86,7 +86,7 @@ public class InvestigationTree extends JPanel {
         	}
         });
         
-        JMenuItem mnDelFolder = investigationPopup.add(new JMenuItem("Delete Folder & All Data"));
+        JMenuItem mnDelFolder = investigationPopup.add(new JMenuItem("Delete Investigation"));
         mnDelFolder.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
 				Component frame = null;
@@ -101,7 +101,7 @@ public class InvestigationTree extends JPanel {
         	}
         });
         
-        JMenuItem mnPlist = investigationPopup.add(new JMenuItem("Add PList File"));        
+        JMenuItem mnPlist = investigationPopup.add(new JMenuItem("Add PList"));        
         // TBRT addition
         mnPlist.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
@@ -155,7 +155,7 @@ public class InvestigationTree extends JPanel {
         });       
         
         investigationPopup.add(new JMenuItem("Search Text String"));
-        investigationPopup.add(new JMenuItem("Save Folder Data as PDF File"));
+        investigationPopup.add(new JMenuItem("Save Investigatoin as PDF File"));
         
         evidenceItemsPopup.add(new JMenuItem("Delete PList")); 
         evidenceItemsPopup.add(new JMenuItem("Search Text String"));
