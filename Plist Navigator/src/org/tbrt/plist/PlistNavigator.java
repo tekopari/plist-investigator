@@ -78,6 +78,7 @@ public class PlistNavigator {
 		// Set the install path
 		//-------------------------------------------------------------------
 		String installPath = getInstallPath(PlistNavigator.class);		
+		Configuration.setInstallPath(installPath);
 		
 		//-------------------------------------------------------------------
 		// The INSTALL PATH must be a directory
