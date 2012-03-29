@@ -111,7 +111,7 @@ public class PlistNavigator {
 	 */
 	private void initialize() {
 		frmPlistNavigator = new JFrame();
-		frmPlistNavigator.setTitle("Plist Investigator");
+		frmPlistNavigator.setTitle("TBRT Plist Investigator");
 		frmPlistNavigator.setBounds(50, 50, 600, 500);
 		frmPlistNavigator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
