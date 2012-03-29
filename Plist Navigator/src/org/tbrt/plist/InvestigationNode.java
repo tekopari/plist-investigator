@@ -25,4 +25,8 @@ public class InvestigationNode {
 		return nodeValue;
 	}
 
+	public void setNodeValue(String s) {
+		nodeValue = s;
+	}
+
 }
