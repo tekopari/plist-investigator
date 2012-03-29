@@ -31,10 +31,8 @@ public class InvestigationTree extends JPanel {
     
     protected JPopupMenu investigationsPopup;
     protected JPopupMenu investigationPopup;
-    protected JPopupMenu evidenceItemsPopup;
     protected JPopupMenu evidenceItemPopup;
     protected JPopupMenu notesPopup;
-    protected JPopupMenu notePopup;
     protected JPopupMenu unknownPopup;
 
     public InvestigationTree() {
@@ -50,10 +48,8 @@ public class InvestigationTree extends JPanel {
         // TODO - rework the popup menus and add listeners
         investigationsPopup = new JPopupMenu();
         investigationPopup = new JPopupMenu();
-        evidenceItemsPopup = new JPopupMenu();
         evidenceItemPopup = new JPopupMenu();
         notesPopup = new JPopupMenu();
-        notePopup = new JPopupMenu();
         unknownPopup = new JPopupMenu();
         
         JMenuItem mnInvestigations = investigationsPopup.add(new JMenuItem("Add New Investigation"));
@@ -62,7 +58,7 @@ public class InvestigationTree extends JPanel {
         		Component frame = null;
         		String s = (String)JOptionPane.showInputDialog(
         				frame,
-        				"Type the investigation folder name:\n");
+        				"Type the investigation name:\n");
         		if ((s != null) && (s.length() > 0)) {
         			InvestigationNode node = new InvestigationNode("Investigation", s);
         			InvestigationNode notes = new InvestigationNode("Notes", "Notes");		
@@ -80,8 +76,7 @@ public class InvestigationTree extends JPanel {
         				frame,
         				"Type the new investigation folder name:\n");
         		if ((s != null) && (s.length() > 0)) {
-        			//TODO
-        			System.out.print(s+"\n");
+        			renameSelectedNode(s);
         		}
         	}
         });
@@ -93,7 +88,7 @@ public class InvestigationTree extends JPanel {
 				int n = JOptionPane.showConfirmDialog (
 						frame,
 						"Are you sure?",
-						"Delete Investigation Folder & All Data",
+						"Delete Investigation with All Data",
 						JOptionPane.YES_NO_OPTION);
 				if (n == 0) {
 					removeSelectedNode();
@@ -115,7 +110,7 @@ public class InvestigationTree extends JPanel {
         		if ((s != null) && (s.length() > 0)) {
         			setLabel("Typed String... " + s + "!");
         			
-        			InvestigationNode evid = new InvestigationNode("EvidenceItems", s);
+        			InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
         			InvestigationNode notes = new InvestigationNode("Notes", "Notes");
         			DefaultMutableTreeNode t  = addObject(evid);
         			addObject(t, notes);       			
@@ -157,17 +152,25 @@ public class InvestigationTree extends JPanel {
         investigationPopup.add(new JMenuItem("Search Text String"));
         investigationPopup.add(new JMenuItem("Save Investigatoin as PDF File"));
         
-        evidenceItemsPopup.add(new JMenuItem("Delete PList")); 
-        evidenceItemsPopup.add(new JMenuItem("Search Text String"));
-        evidenceItemsPopup.add(new JMenuItem("Save PList as PDF File"));
+        JMenuItem mnDelPlist = evidenceItemPopup.add(new JMenuItem("Delete PList"));
+        mnDelPlist.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+				Component frame = null;
+				int n = JOptionPane.showConfirmDialog (
+						frame,
+						"Are you sure?",
+						"Delete PList and Notes",
+						JOptionPane.YES_NO_OPTION);
+				if (n == 0) {
+					removeSelectedNode();
+				}
+        	}
+        });
         
-        evidenceItemPopup.add(new JMenuItem("Delete PList"));
         evidenceItemPopup.add(new JMenuItem("Search Text String"));
-        evidenceItemPopup.add(new JMenuItem("Save PList as PDF file"));
-        
+        evidenceItemPopup.add(new JMenuItem("Save PList as PDF File"));
+               
         notesPopup.add(new JMenuItem("Edit Notes"));
-        
-        notePopup.add(new JMenuItem("Edit Notes"));
         
         unknownPopup.add(new JMenuItem("unknown option"));
         
@@ -176,8 +179,53 @@ public class InvestigationTree extends JPanel {
         JScrollPane scrollPane = new JScrollPane(tree);
         add(scrollPane);
     }
-    
+
+
     //=======================================================================
+    // Rename Selected Node
+    //======================================================================= 
+    public void renameSelectedNode(String s) {
+        TreePath currentSelection = tree.getSelectionPath();
+        
+        //-------------------------------------------------------------------
+        // Verify the user selected a node
+        //-------------------------------------------------------------------
+        if (currentSelection != null) {
+            DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode)
+                         (currentSelection.getLastPathComponent());
+            
+            InvestigationNode iNode = (InvestigationNode)(currentNode.getUserObject());
+            String nodeType = iNode.getNodeType();
+            
+            //---------------------------------------------------------------
+            // Do not allow the root node or structures we create
+            //---------------------------------------------------------------
+            if(nodeType.equals("Investigations") ||
+               nodeType.equals("EvidenceItem") ||
+               nodeType.equals("Notes")) {           
+            	return;
+            }
+            
+            //---------------------------------------------------------------
+            // Do not allow the root node to be renamed
+            //---------------------------------------------------------------
+            MutableTreeNode parent = (MutableTreeNode)(currentNode.getParent());
+            if (parent != null) {
+            	iNode.setNodeValue(s);
+                // TODO handle the rename of the files
+                return;
+            }
+        }
+        else {
+        	//---------------------------------------------------------------
+        	// No selection has been made
+        	//---------------------------------------------------------------
+        	// TODO - set message informing user they did not select anything
+        }
+    }
+
+
+	//=======================================================================
     // Remove Selected Node
     //======================================================================= 
     public void removeSelectedNode() {
@@ -197,7 +245,6 @@ public class InvestigationTree extends JPanel {
             // Do not allow the root node or structures we create
             //---------------------------------------------------------------
             if(nodeType.equals("Investigations") ||
-               nodeType.equals("EvidenceItems") ||
                nodeType.equals("Notes")) {           
             	return;
             }
@@ -291,17 +338,11 @@ public class InvestigationTree extends JPanel {
             }	
     		
     	    if (e.isPopupTrigger()) {
-    	    	if (nodeName.equals("EvidenceItems")) {
-    	    		evidenceItemsPopup.show((Component) e.getSource(), e.getX(), e.getY());
-    	    	}
-    	    	else if (nodeName.equals("EvidenceItem")) {
+    	    	if (nodeName.equals("EvidenceItem")) {
     	    		evidenceItemPopup.show((Component) e.getSource(), e.getX(), e.getY());
     	    	}
     	    	else if (nodeName.equals("Notes")) {
     	    		notesPopup.show((Component) e.getSource(), e.getX(), e.getY());     	    		
-    	    	}
-    	    	else if (nodeName.equals("Note")) {
-    	    		notePopup.show((Component) e.getSource(), e.getX(), e.getY()); 
     	    	}
     	    	else if (nodeName.equals("Investigation")) {
     	    		investigationPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
@@ -335,17 +376,11 @@ public class InvestigationTree extends JPanel {
     	    	if(nodeName.equals("UNKNOWN")) {
     	            unknownPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
     	    	}
-    	    	else if (nodeName.equals("EvidenceItems")) {
-    	    		evidenceItemsPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
-    	    	}
     	    	else if (nodeName.equals("EvidenceItem")) {
     	    		evidenceItemPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
     	    	}
     	    	else if (nodeName.equals("Notes")) {
     	    		notesPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
-    	    	}
-    	    	else if (nodeName.equals("Note")) {
-    	    		notePopup.show((Component) e.getSource(), e.getX(), e.getY()); 
     	    	}
     	    	else if (nodeName.equals("Investigation")) {
     	    		investigationPopup.show((Component) e.getSource(), e.getX(), e.getY()); 
