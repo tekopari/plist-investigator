@@ -147,7 +147,7 @@ public class PlistNavigator {
         		Component frame = null;
         		String s = (String)JOptionPane.showInputDialog(
         				frame,
-        				"Type the investigation folder name:\n");
+        				"Type the investigation name:\n");
         		if ((s != null) && (s.length() > 0)) {
         			InvestigationNode node = new InvestigationNode("Investigation", s);
         			InvestigationNode notes = new InvestigationNode("Notes", "Notes");		
