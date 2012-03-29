@@ -41,7 +41,7 @@ public class InvestigationTree extends JPanel {
         treeModel = new DefaultTreeModel(rootNode);
 	    treeModel.addTreeModelListener(new MyTreeModelListener());
         tree = new JTree(treeModel);
-        tree.setEditable(true);
+        //TC tree.setEditable(true);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setShowsRootHandles(true);
         
@@ -170,8 +170,11 @@ public class InvestigationTree extends JPanel {
         evidenceItemPopup.add(new JMenuItem("Search Text String"));
         evidenceItemPopup.add(new JMenuItem("Save PList as PDF File"));
                
-        notesPopup.add(new JMenuItem("Edit Notes"));
-        
+        JMenuItem mnEdit = notesPopup.add(new JMenuItem("Edit Notes"));
+        mnEdit.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        	}
+        });
         unknownPopup.add(new JMenuItem("unknown option"));
         
         tree.addMouseListener(new MyTreeMouseListener());
