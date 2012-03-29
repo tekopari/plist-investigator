@@ -41,27 +41,43 @@ public class PlistNavigator {
 	private JFrame frmPlistNavigator;
 	private InvestigationTree investigationTree;
 
+	public static String getInstallPath(Class myclass) {
+        String rc = "";
+        String path = myclass.getClassLoader().getResource(
+            myclass.getName().replace('.', '/') + ".class").toString();
+
+        if(path == null) {
+        	rc = "";
+        }
+        else if (path.endsWith(".jar")) {
+        	// Running from jar file
+        	rc = path.substring(6, path.lastIndexOf("/"));
+        }
+        else if (path.endsWith(".class")) {
+        	// Running from eclipse
+        	for(int count = 0; count < 5; count++) {
+            	path = path.substring(0, path.lastIndexOf("/"));
+        	}
+            rc = path.substring(6);
+        }
+        else {
+        	rc = "/";
+        }
+        rc = rc.replaceAll("%20", " ");
+        return rc;
+	}
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		String pwd = System.getProperties().getProperty("user.home");
-		System.out.print("TC:"+pwd);
+		System.out.println("TC:"+pwd);
 		
  		//-------------------------------------------------------------------
-		// Check the usage:  
-		// - The INSTALL_PATH identifies the path the tool was installed in.
+		// Set the install path
 		//-------------------------------------------------------------------
-		if(args.length != 1) {
-			System.err.println("USAGE: java org.tbrt.plist.PlistNavigator <INSTALL_PATH>");
-			System.exit(1);
-		}
-		
-		String installPath = args[0];
-		if(installPath.equals("")) {
-			System.err.println("USAGE: java org.tbrt.plist.PlistNavigator <INSTALL_PATH>");
-			System.exit(1);	
-		}
+		String installPath = getInstallPath(PlistNavigator.class);		
 		
 		//-------------------------------------------------------------------
 		// The INSTALL PATH must be a directory
