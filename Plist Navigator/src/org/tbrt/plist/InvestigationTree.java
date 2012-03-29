@@ -72,9 +72,34 @@ public class InvestigationTree extends JPanel {
         	}
         });
         
-        investigationPopup.add(new JMenuItem("Rename Folder"));
-        investigationPopup.add(new JMenuItem("Delete Folder & All Data"));
+        JMenuItem mnRename = investigationPopup.add(new JMenuItem("Rename Folder"));
+        mnRename.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		Component frame = null;
+        		String s = (String)JOptionPane.showInputDialog(
+        				frame,
+        				"Type the new investigation folder name:\n");
+        		if ((s != null) && (s.length() > 0)) {
+        			//TODO
+        			System.out.print(s+"\n");
+        		}
+        	}
+        });
         
+        JMenuItem mnDelFolder = investigationPopup.add(new JMenuItem("Delete Folder & All Data"));
+        mnDelFolder.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+				Component frame = null;
+				int n = JOptionPane.showConfirmDialog (
+						frame,
+						"Are you sure?",
+						"Delete Investigation Folder & All Data",
+						JOptionPane.YES_NO_OPTION);
+				if (n == 0) {
+					removeSelectedNode();
+				}
+        	}
+        });
         
         JMenuItem mnPlist = investigationPopup.add(new JMenuItem("Add PList File"));        
         // TBRT addition
@@ -132,7 +157,7 @@ public class InvestigationTree extends JPanel {
         investigationPopup.add(new JMenuItem("Search Text String"));
         investigationPopup.add(new JMenuItem("Save Folder Data as PDF File"));
         
-        evidenceItemsPopup.add(new JMenuItem("Delete PList"));
+        evidenceItemsPopup.add(new JMenuItem("Delete PList")); 
         evidenceItemsPopup.add(new JMenuItem("Search Text String"));
         evidenceItemsPopup.add(new JMenuItem("Save PList as PDF File"));
         
@@ -173,7 +198,7 @@ public class InvestigationTree extends JPanel {
             //---------------------------------------------------------------
             if(nodeType.equals("Investigations") ||
                nodeType.equals("EvidenceItems") ||
-               nodeType.equals("Notes")) {
+               nodeType.equals("Notes")) {           
             	return;
             }
             
