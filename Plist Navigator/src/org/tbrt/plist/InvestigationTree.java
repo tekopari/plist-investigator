@@ -140,9 +140,7 @@ public class InvestigationTree extends JPanel {
         				
         				//If you're here, the return value was null/empty.
         				setLabel("Come on, finish the sentence!");
-        				}
-        		
-                                        
+        			}                     
         	}
 
         	private void setLabel(String string) {
@@ -174,10 +172,12 @@ public class InvestigationTree extends JPanel {
         JMenuItem mnEdit = notesPopup.add(new JMenuItem("Edit Notes"));
         mnEdit.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
+        		String s = getNodeParentName();
         	    MyEditor editor = new MyEditor();
-        	    editor.doEdit("TEST");
+        	    editor.doEdit("Notes for "+s, "Add Notes Here");
         	}
         });
+        
         unknownPopup.add(new JMenuItem("unknown option"));
         
         tree.addMouseListener(new MyTreeMouseListener());
@@ -186,6 +186,22 @@ public class InvestigationTree extends JPanel {
         add(scrollPane);
     }
 
+    //=======================================================================
+    // Return Node Parent Name
+    //======================================================================= 
+    public String getNodeParentName() {
+        TreePath currentSelection = tree.getSelectionPath();
+        if (currentSelection != null) {
+            DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode)
+                         (currentSelection.getLastPathComponent());
+            DefaultMutableTreeNode parent = currentNode.getPreviousNode();
+            
+            InvestigationNode iNode = (InvestigationNode)(parent.getUserObject());
+            String s = iNode.getNodeValue();
+            return(s);
+        }
+        return("");
+    }
 
     //=======================================================================
     // Rename Selected Node
