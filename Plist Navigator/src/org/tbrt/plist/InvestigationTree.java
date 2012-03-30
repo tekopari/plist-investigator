@@ -23,7 +23,6 @@ import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 
-
 public class InvestigationTree extends JPanel {
     protected DefaultMutableTreeNode rootNode;
     protected DefaultTreeModel treeModel;
@@ -35,6 +34,8 @@ public class InvestigationTree extends JPanel {
     protected JPopupMenu notesPopup;
     protected JPopupMenu unknownPopup;
 
+    protected MyEditor MyEditor;
+    
     public InvestigationTree() {
         super(new GridLayout(1,0));
         rootNode = new DefaultMutableTreeNode(new InvestigationNode("Investigations", "My Investigations"));
@@ -173,6 +174,8 @@ public class InvestigationTree extends JPanel {
         JMenuItem mnEdit = notesPopup.add(new JMenuItem("Edit Notes"));
         mnEdit.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
+        	    MyEditor editor = new MyEditor();
+        	    editor.doEdit("TEST");
         	}
         });
         unknownPopup.add(new JMenuItem("unknown option"));
