@@ -27,11 +27,16 @@ import javax.swing.JToolBar;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.util.*;
+
 public class MyEditor {
 
-	public void doEdit(String s) {
-	    SimpleEditor editor = new SimpleEditor();
-	    editor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public void doEdit(String title, String s) {
+	    SimpleEditor editor = new SimpleEditor(title, s);
+	    editor.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	    editor.setVisible(true);
     }
 
@@ -46,23 +51,31 @@ public class MyEditor {
 	    private Hashtable actionHash = new Hashtable();
 	
 	    // Create an editor.
-	    public SimpleEditor() {
-	        super("Swing Editor");
-	        textComp = createTextComponent();
-	        makeActionsPretty();
+	    public SimpleEditor(
+	    		String title, 
+	    		String msg) {
+	        super(title);
+	        textComp = createTextComponent(msg);
+	        //TC makeActionsPretty();
 	
 	        Container content = getContentPane();
 	        content.add(textComp, BorderLayout.CENTER);
-	        content.add(createToolBar(), BorderLayout.NORTH);
+	        //TC content.add(createToolBar(), BorderLayout.NORTH);
 	        setJMenuBar(createMenuBar());
-	        setSize(320, 240);
+	        setBounds(200, 100, 500, 400);
 	    }
 	
 	    // Create the JTextComponent subclass.
-	    protected JTextComponent createTextComponent() {
-	        JTextArea ta = new JTextArea();
-	        ta.setLineWrap(true);
-	        return ta;
+	    protected JTextComponent createTextComponent(String s) {
+	        JTextArea textArea = new JTextArea(s);	        
+	        textArea.setLineWrap(true);
+	        textArea.setWrapStyleWord(true);
+	        
+	        //JScrollPane scrollPane = new JScrollPane(textArea);
+	        //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	        //scrollPane.setPreferredSize(new Dimension(250, 250));
+	        
+	        return textArea;
 	   }
 	
 	    // Add icons and friendly names to actions we care about.
@@ -87,12 +100,12 @@ public class MyEditor {
 	    // Create a simple JToolBar with some buttons.
 	    protected JToolBar createToolBar() {
 	        JToolBar bar = new JToolBar();
-	
+
 	        // Add simple actions for opening & saving.
 	        bar.add(getOpenAction()).setText("");
 	        bar.add(getSaveAction()).setText("");
 	        bar.addSeparator();
-	
+	        
 	        // Add cut/copy/paste buttons.
 	        bar.add(textComp.getActionMap().get(DefaultEditorKit.cutAction))
 	            .setText("");
@@ -100,6 +113,7 @@ public class MyEditor {
 	            .setText("");
 	        bar.add(textComp.getActionMap().get(DefaultEditorKit.pasteAction))
 	            .setText("");
+
 	        return bar;
 	    }
 	
@@ -144,7 +158,7 @@ public class MyEditor {
 	        }
 	
 	        public void actionPerformed(ActionEvent ev) {
-	            System.exit(0);
+	            dispose();
 	        }
 	    }
 	
