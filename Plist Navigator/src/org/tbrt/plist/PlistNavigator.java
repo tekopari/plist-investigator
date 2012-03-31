@@ -13,6 +13,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.BorderLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
@@ -127,7 +128,9 @@ public class PlistNavigator {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
 		frmPlistNavigator = new JFrame();
+		frmPlistNavigator.setIconImage(img.getImage());
 		frmPlistNavigator.setTitle("TBRT Plist Investigator");
 		frmPlistNavigator.setBounds(50, 50, 600, 500);
 		frmPlistNavigator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
