@@ -35,6 +35,9 @@ public class MyEditor {
 	    SimpleEditor editor = new SimpleEditor(title, s);
 	    editor.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	    editor.setVisible(true);
+	    
+		 ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
+		 editor.setIconImage(img.getImage());
     }
 
 	public class SimpleEditor extends JFrame {
@@ -43,7 +46,7 @@ public class MyEditor {
 	     private Hashtable actionHash = new Hashtable();
 	   
 	     private JTextComponent textComp;;
-	     
+			
 	     // Create an editor.
 	     public SimpleEditor(String title, String msg) {
 	         super(title);
