@@ -165,9 +165,15 @@ public class PlistNavigator {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					ConfigurationDialog dialog = new ConfigurationDialog();
+					
 					dialog.setModalityType(ModalityType.APPLICATION_MODAL);
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					
+					ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
+					dialog.setIconImage(img.getImage());
+					
 					dialog.setVisible(true);
+					
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
