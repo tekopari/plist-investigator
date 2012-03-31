@@ -24,13 +24,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
+import javax.swing.border.LineBorder;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
-
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.util.*;
+import javax.swing.JScrollPane;
 
 public class MyEditor {
 
@@ -41,43 +38,39 @@ public class MyEditor {
     }
 
 	public class SimpleEditor extends JFrame {
+	     private Action openAction = new OpenAction();
+	     private Action saveAction = new SaveAction();	
+	     private Hashtable actionHash = new Hashtable();
+	   
+	     private JTextComponent textComp;;
+	     
+	     // Create an editor.
+	     public SimpleEditor(String title, String msg) {
+	         super(title);
+	         textComp = createTextComponent(msg);
+	         makeActionsPretty();	   
+	         
+	         //TC Container content = getContentPane();
+	         //TC content.add(textComp, BorderLayout.CENTER);
+	         //TC content.add(createToolBar(), BorderLayout.NORTH);
+	         
+	         setJMenuBar(createMenuBar());
+	         setBounds(200, 100, 500, 400);
+	     }
 	
-	    private Action openAction = new OpenAction();
-	
-	    private Action saveAction = new SaveAction();
-	
-	    private JTextComponent textComp;
-	
-	    private Hashtable actionHash = new Hashtable();
-	
-	    // Create an editor.
-	    public SimpleEditor(
-	    		String title, 
-	    		String msg) {
-	        super(title);
-	        textComp = createTextComponent(msg);
-	        //TC makeActionsPretty();
-	
-	        Container content = getContentPane();
-	        content.add(textComp, BorderLayout.CENTER);
-	        //TC content.add(createToolBar(), BorderLayout.NORTH);
-	        setJMenuBar(createMenuBar());
-	        setBounds(200, 100, 500, 400);
+	     // Create the JTextComponent subclass.
+	     protected JTextComponent createTextComponent(String s) {
+	         JTextArea textArea = new JTextArea(s);	        
+	         textArea.setLineWrap(true);
+	         textArea.setWrapStyleWord(true);
+	         
+		     JScrollPane scrollText = new JScrollPane(textArea);
+		     add(scrollText);	
+		     scrollText.isVisible();	
+		        
+	         return textArea;
 	    }
-	
-	    // Create the JTextComponent subclass.
-	    protected JTextComponent createTextComponent(String s) {
-	        JTextArea textArea = new JTextArea(s);	        
-	        textArea.setLineWrap(true);
-	        textArea.setWrapStyleWord(true);
-	        
-	        //JScrollPane scrollPane = new JScrollPane(textArea);
-	        //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	        //scrollPane.setPreferredSize(new Dimension(250, 250));
-	        
-	        return textArea;
-	   }
-	
+	     
 	    // Add icons and friendly names to actions we care about.
 	    protected void makeActionsPretty() {
 	        Action a;
