@@ -1,5 +1,6 @@
 package org.tbrt.plist;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -46,6 +47,9 @@ public class PlistTreeTable
 	        }
 	    );
 	    
+		ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
+		frame.setIconImage(img.getImage());
+		
 	    //-------------------------------------------------------------------
 	    // Create the panel to display the plist in
 	    //-------------------------------------------------------------------
