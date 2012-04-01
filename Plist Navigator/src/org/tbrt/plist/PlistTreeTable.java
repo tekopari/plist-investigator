@@ -28,6 +28,7 @@ public class PlistTreeTable
         try {
             File file = new File(filename);
             rootDict = (NSDictionary)PropertyListParser.parse(file);
+            // ravi: Why can't we also use rootDict to create PDF?
             rootDict.setKey(file.getName());
         }
         catch (Exception e)
