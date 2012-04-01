@@ -237,11 +237,12 @@ public class BinaryPropertyListParser {
                         length = new BigInteger(copyOfRange(bytes, offset + 2, offset + 2 + intLength)).intValue();
                     }
                 }
+  
                 if (length < Runtime.getRuntime().freeMemory()) {
                     return new NSString(copyOfRange(bytes, offset + stroffset, offset + stroffset + length), "ASCII");
                 } else {
                     throw new Exception("To little heap space available! Wanted to read " + length + " bytes, but only " + Runtime.getRuntime().freeMemory() + " are available.");
-                }
+                }             
             }
             case 0x6: {
                 //UTF-16-BE String
@@ -385,11 +386,11 @@ set.addObject(nsobj);
                             offset + dictoffset + (length * objectRefSize) + (i + 1) * objectRefSize));
                     NSObject key = parseObject(keyRef);
                     NSObject val = parseObject(valRef);
-                    //System.out.println("  DICT #"+obj+": Mapped "+key.toString()+" to "+val.toString());
+System.out.println("  DICT #"+obj+": Mapped "+ ((NSString)key).toStringValue() +" to "+val.toString() + " keyref=" + keyRef);
 //tom start
-val.setKey(key.toString());
+val.setKey(((NSString)key).toStringValue());
 // tom end
-                    dict.put(key.toString(), val);
+                    dict.put(((NSString)key).toStringValue(), val);
                 }
                 return dict;
             }
