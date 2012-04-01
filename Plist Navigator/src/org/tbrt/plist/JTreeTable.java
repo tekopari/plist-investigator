@@ -2,10 +2,13 @@ package org.tbrt.plist;
 
 import javax.swing.JTable;
 import javax.swing.JTree;
+import javax.swing.LookAndFeel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeModel;
+
+import org.tbrt.plist.MyTreeTable.TreeTableCellEditor;
 
 import java.awt.Dimension;
 import java.awt.Component;
@@ -17,6 +20,7 @@ public class JTreeTable extends JTable {
 
     public JTreeTable(TreeTableModel model) {
 	    super();
+	    
 	    tree = new TreeTableCellRenderer(model); 
 	    super.setModel(new TreeTableModelAdapter(model, tree));
 	    tree.setSelectionModel(
@@ -30,16 +34,35 @@ public class JTreeTable extends JTable {
 	    setDefaultRenderer(TreeTableModel.class, tree); 
 	    setDefaultEditor(TreeTableModel.class, new TreeTableCellEditor());  
 	    setShowGrid(false);
-	    setIntercellSpacing(new Dimension(0, 0)); 	        
+	    setIntercellSpacing(new Dimension(0, 0));
+	    
+	    if(tree.getRowHeight() < 1) {
+	    	tree.setRowHeight(18);
+	    }
+	  
     }
 
     public int getEditingRow() {
         return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1 : editingRow;  
     }
 
+    //TOM
+    public void updateUI() {
+	    super.updateUI();
+	    if(tree != null) {
+	        tree.updateUI();
+	    }
+	    // Use the tree's default foreground and background colors in the
+  	    // table. 
+        LookAndFeel.installColorsAndFont(this, 
+        		                         "Tree.background",
+                                         "Tree.foreground", 
+                                         "Tree.font");
+    }
+    
     public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
-	    protected int visibleRow;
+	    protected int visibleRow = 0;
    
 	    public TreeTableCellRenderer(TreeModel model) { 
 	        super(model);
@@ -51,7 +74,7 @@ public class JTreeTable extends JTable {
 	    }
 
 	    public void paint(Graphics g) {
-	        g.translate(0, -visibleRow * getRowHeight());
+	        g.translate(0, -visibleRow * getRowHeight() );
 	        super.paint(g);
 	        return;
 	    }
