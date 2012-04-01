@@ -61,10 +61,34 @@ public class InvestigationTree extends JPanel {
         				frame,
         				"Type the investigation name:\n");
         		if ((s != null) && (s.length() > 0)) {
-        			InvestigationNode node = new InvestigationNode("Investigation", s);
-        			InvestigationNode notes = new InvestigationNode("Notes", "Notes");		
-        			DefaultMutableTreeNode p  = addObject(node);
-        			addObject(p, notes);
+        			//Create the investigation directory
+        			try {
+        				//Create directory
+        				String strDirectory = "d:/tmp/" + s;  //TODO replace "d:/tmp/" with user workspace
+        			    boolean success = (new File(strDirectory)).mkdir();
+        			    if (success) {
+        			    	//Create notes file
+        			    	String notesFile = "Notes";
+        			    	String strFile = strDirectory + "/" + notesFile;
+        			    	File f = new File(strFile);
+        			    	if (!f.exists()) {
+                                f.createNewFile();
+        			    	}
+        			    	
+        			    	// Add node to JTree
+        	        	    InvestigationNode node = new InvestigationNode("Investigation", s);
+        	        		InvestigationNode notes = new InvestigationNode("Notes", notesFile);		
+        	        		DefaultMutableTreeNode p  = addObject(node);
+        	        	    addObject(p, notes);
+       		            }  
+        			    else {
+        			    	String m = "The same investigation name exists.\nPlease use a different name.";
+        			    	JOptionPane.showMessageDialog(frame, m);
+        			    }
+        		    } catch (Exception e) {
+        		    	String m = "Operation Failed. \nPlease try again...";
+        		    	JOptionPane.showMessageDialog(frame, m);
+        		    }
         		}
         	}
         });
@@ -110,12 +134,12 @@ public class InvestigationTree extends JPanel {
         		//If a string was returned, say so.
         		if ((s != null) && (s.length() > 0)) {
         			setLabel("Typed String... " + s + "!");
-        			
-        			InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
+
+        		    InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
         			InvestigationNode notes = new InvestigationNode("Notes", "Notes");
         			DefaultMutableTreeNode t  = addObject(evid);
         			addObject(t, notes);       			
-        			
+       			
         			PlistTreeTable p = new PlistTreeTable(s);
         			
         			//bew, initial code to create directory per plist file.
