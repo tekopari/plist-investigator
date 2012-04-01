@@ -8,8 +8,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreeModel;
 
-import org.tbrt.plist.MyTreeTable.TreeTableCellEditor;
-
 import java.awt.Dimension;
 import java.awt.Component;
 import java.awt.Graphics;
