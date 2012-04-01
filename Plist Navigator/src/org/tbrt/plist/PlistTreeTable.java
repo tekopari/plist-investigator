@@ -15,7 +15,8 @@ public class PlistTreeTable
 {
     public static void main(String args[])
     {
-    	String filename = "C:\\Documents and Settings\\paritj\\My Documents\\NetworkInterfaces.xml";
+    	String filename = "C:\\Documents and Settings\\paritj\\My Documents\\NetworkInterfaces.plist";
+    	//String filename = "C:\\Documents and Settings\\paritj\\My Documents\\PlistOne.xml";
     	PlistTreeTable p = new PlistTreeTable(filename);
     }
     
@@ -55,6 +56,7 @@ public class PlistTreeTable
 	    // Create the panel to display the plist in
 	    //-------------------------------------------------------------------
 	    JTreeTable treeTable = new JTreeTable(new PlistModel(rootDict));
+	    //MyTreeTable treeTable = new MyTreeTable(new PlistModel(rootDict));
 	    frame.getContentPane().add(new JScrollPane(treeTable));
 	    frame.pack();
 	    frame.show();
