@@ -152,25 +152,23 @@ public class XMLPropertyListParser {
                 for(int j=1;j<key.getChildNodes().getLength();j++)
                     keyString += key.getChildNodes().item(j).getNodeValue();
                 
-                //-----------------------------------------------------------
-                // TP: Assign the key to the object 
-                //-----------------------------------------------------------
-// tom start
+                //--------------------------------------------------START
+                // TJP: Set the key in the base NSObject
+                //-------------------------------------------------------
                 NSObject nsobj = parseObject(val);
                 nsobj.setKey(keyString);
 System.out.println("KEY[" + keyString + "]");
                 dict.put(keyString, nsobj);
-// tom end
-		
+                //----------------------------------------------------END
             }
 // tom start 
-	    System.out.println("DUMP--------------------------------START");
-	    String[] keys = dict.allKeys();
-	    for(int i = 0; i < keys.length; i++) {
-	        NSObject myobj = dict.objectForKey(keys[i]);
-	        System.out.println("-->key[" + keys[i] + "] type[" + myobj.getClass().getSimpleName().toString() + "] = [" + myobj.toString() + "]");
-	    }
-	    System.out.println("DUMP--------------------------------END");
+//System.out.println("DUMP--------------------------------START");
+//String[] keys = dict.allKeys();
+//for(int i = 0; i < keys.length; i++) {
+//	        NSObject myobj = dict.objectForKey(keys[i]);
+//	        System.out.println("-->key[" + keys[i] + "] type[" + myobj.getClass().getSimpleName().toString() + "] = [" + myobj.toString() + "]");
+//}
+//System.out.println("DUMP--------------------------------END");
 // tom end
 
             return dict;
@@ -178,16 +176,16 @@ System.out.println("KEY[" + keyString + "]");
             List<Node> children = filterElementNodes(n.getChildNodes());
 	    NSArray array = new NSArray(children.size());
 	    for (int i = 0; i < children.size(); i++) {
-// tom start
-NSObject nsobj = parseObject(children.get(i));
-nsobj.setKey(new String("Item " + i)); 
-		//array.setValue(i, parseObject(children.get(i)));
-array.setValue(i, nsobj);
-// tom end
+            //--------------------------------------------------START
+            // TJP: Set the key in the base NSObject
+            //-------------------------------------------------------
+            NSObject nsobj = parseObject(children.get(i));
+            nsobj.setKey(new String("Item " + i)); 
+            array.setValue(i, nsobj);
+            //----------------------------------------------------END
 	    }
 	    return array;
         } else if (type.equals("true")) {
-        	System.out.println("FOUND TRUE");
             return new NSNumber(true);
         } else if (type.equals("false")) {
             return new NSNumber(false);

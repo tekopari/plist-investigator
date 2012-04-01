@@ -307,12 +307,13 @@ public class BinaryPropertyListParser {
                     int objRef = (int) parseUnsignedInt(copyOfRange(bytes,
                             offset + arrayoffset + i * objectRefSize,
                             offset + arrayoffset + (i + 1) * objectRefSize));
-// tom start
-NSObject nsobj = parseObject(objRef);
-nsobj.setKey(new String("Item " + i)); 
-                    //array.setValue(i, parseObject(objRef));
-array.setValue(i, nsobj);
-// tom end
+                    //--------------------------------------------------START
+                    // TJP: Set the key in the base NSObject
+                    //-------------------------------------------------------
+                    NSObject nsobj = parseObject(objRef);
+                    nsobj.setKey(new String("Item " + i)); 
+                    array.setValue(i, nsobj);
+                    //----------------------------------------------------END
                 }
                 return array;
 
@@ -344,12 +345,14 @@ array.setValue(i, nsobj);
                     int objRef = (int) parseUnsignedInt(copyOfRange(bytes,
                             offset + arrayoffset + i * objectRefSize,
                             offset + arrayoffset + (i + 1) * objectRefSize));  
-// tom start
-NSObject nsobj = parseObject(objRef);
-nsobj.setKey(new String("Item " + i)); 
-                    //set.addObject(parseObject(objRef));
-set.addObject(nsobj);
-// tom end
+
+                    //--------------------------------------------------START
+                    // TJP: Set the key in the base NSObject
+                    //-------------------------------------------------------
+                    NSObject nsobj = parseObject(objRef);
+                    nsobj.setKey(new String("Item " + i)); 
+                    set.addObject(nsobj);
+                    //----------------------------------------------------END
                 }
                 return set;
             }
@@ -386,11 +389,13 @@ set.addObject(nsobj);
                             offset + dictoffset + (length * objectRefSize) + (i + 1) * objectRefSize));
                     NSObject key = parseObject(keyRef);
                     NSObject val = parseObject(valRef);
-System.out.println("  DICT #"+obj+": Mapped "+ ((NSString)key).toStringValue() +" to "+val.toString() + " keyref=" + keyRef);
-//tom start
-val.setKey(((NSString)key).toStringValue());
-// tom end
+                    
+                    //--------------------------------------------------START
+                    // TJP: Set the key in the base NSObject
+                    //-------------------------------------------------------
+                    val.setKey(((NSString)key).toStringValue());
                     dict.put(((NSString)key).toStringValue(), val);
+                    //----------------------------------------------------END
                 }
                 return dict;
             }
