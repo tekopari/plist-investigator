@@ -45,12 +45,18 @@ public class MyEditor {
 	     private Action saveAction = new SaveAction();	
 	     private Hashtable actionHash = new Hashtable();
 	   
-	     private JTextComponent textComp;;
+	     private JTextComponent textComp;
+	     private String notesFileName;
+	     private String titleName;
 			
 	     // Create an editor.
-	     public SimpleEditor(String title, String msg) {
-	         super(title);
-	         textComp = createTextComponent(msg);
+	     public SimpleEditor(String title, String name) {
+	    	 super(title);
+	    	 
+	         titleName = title;
+	         notesFileName = name;
+
+	         textComp = createTextComponent();
 	         makeActionsPretty();	   
 	         
 	         //TC Container content = getContentPane();
@@ -59,11 +65,13 @@ public class MyEditor {
 	         
 	         setJMenuBar(createMenuBar());
 	         setBounds(200, 100, 500, 400);
+	         
+	         myReadFile(notesFileName);
 	     }
 	
 	     // Create the JTextComponent subclass.
-	     protected JTextComponent createTextComponent(String s) {
-	         JTextArea textArea = new JTextArea(s);	        
+	     protected JTextComponent createTextComponent() {
+	         JTextArea textArea = new JTextArea();	        
 	         textArea.setLineWrap(true);
 	         textArea.setWrapStyleWord(true);
 	         
@@ -121,7 +129,7 @@ public class MyEditor {
 	        menubar.add(file);
 	        menubar.add(edit);
 	
-	        file.add(getOpenAction());
+	        //TC file.add(getOpenAction());
 	        file.add(getSaveAction());
 	        file.add(new ExitAction());
 	        edit.add(textComp.getActionMap().get(DefaultEditorKit.cutAction));
@@ -144,9 +152,50 @@ public class MyEditor {
 	    protected JTextComponent getTextComponent() {
 	        return textComp;
 	    }
-	
+
+	    // Read the file
+	    protected void myReadFile(String s) {
+	    	File file = new File(s);
+	    	FileReader reader = null;
+            try {
+                reader = new FileReader(file);
+                textComp.read(reader, null);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(SimpleEditor.this,
+                    "File Not Found", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException x) {
+                    }
+                }
+            }
+	    }
+
+	    // Write to file
+	    protected void myWriteFile(String s) {
+	    	File file = new File(s);
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter(file);
+                textComp.write(writer);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(SimpleEditor.this,
+                "File Not Saved", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    } catch (IOException x) {
+                    }
+                }
+            }
+	    }
+        
+        
 	    // ********** ACTION INNER CLASSES ********** //
-	
+
 	    // A very simple exit action
 	    public class ExitAction extends AbstractAction {
 	        public ExitAction() {
@@ -154,7 +203,18 @@ public class MyEditor {
 	        }
 	
 	        public void actionPerformed(ActionEvent ev) {
-	            dispose();
+				int n = JOptionPane.showConfirmDialog (
+						textComp,
+						"Save the Notes Before Exit?",
+						titleName,
+						JOptionPane.YES_NO_CANCEL_OPTION);
+				System.out.println("TC:"+n);
+				if ((n == 0) || (n == 1)) {
+					if (n == 0) {
+				       myWriteFile(notesFileName);
+					}
+				    dispose();
+				}
 	        }
 	    }
 	
@@ -165,8 +225,7 @@ public class MyEditor {
 	        }
 	
 	        // Query user for a filename and attempt to open and read the file into
-	        // the
-	        // text component.
+	        // the text component.
 	        public void actionPerformed(ActionEvent ev) {
 	            JFileChooser chooser = new JFileChooser();
 	            if (chooser.showOpenDialog(SimpleEditor.this) != JFileChooser.APPROVE_OPTION)
@@ -198,10 +257,13 @@ public class MyEditor {
 	        public SaveAction() {
 	            super("Save", new ImageIcon("icons/save.gif"));
 	        }
-	
-	        // Query user for a filename and attempt to open and write the text
-	        // component's content to the file.
+
 	        public void actionPerformed(ActionEvent ev) {
+	            myWriteFile(notesFileName);
+	            
+	            /*TC
+	            // Query user for a filename and attempt to open and write the text
+	            // component's content to the file.
 	            JFileChooser chooser = new JFileChooser();
 	            if (chooser.showSaveDialog(SimpleEditor.this) != JFileChooser.APPROVE_OPTION)
 	                return;
@@ -224,7 +286,8 @@ public class MyEditor {
 	                    }
 	                }
 	            }
-	        }
+	            TC*/
+	        }	        
 	    }
 	}
 }
