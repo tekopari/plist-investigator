@@ -59,7 +59,7 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 	 */
 	public ConfigurationDialog() {
 		setTitle("Plist Navigator Configuration");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 550, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -114,7 +114,7 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 		{
 			textEmail = new JTextField();
 			textEmail.setColumns(10);
-			textEmail.setBounds(156, 72, 274, 16);
+			textEmail.setBounds(156, 72, 374, 16);
 			String tmp = Configuration.getConfiguration().getInvestigatorEmail();
 			if(tmp == null) {
 				tmp = "<Your Email Address>";
@@ -125,14 +125,14 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 		{
 			textHomedir = new JTextField();
 			textHomedir.setColumns(10);
-			textHomedir.setBounds(156, 101, 274, 16);
+			textHomedir.setBounds(156, 101, 374, 16);
 			textHomedir.setText(Configuration.getConfiguration().getHomeDir());	
 			contentPanel.add(textHomedir);
 		}
 		{
 			textWorkspace = new JTextField();
 			textWorkspace.setColumns(10);
-			textWorkspace.setBounds(156, 130, 274, 16);
+			textWorkspace.setBounds(156, 130, 374, 16);
 			String tmp = Configuration.getConfiguration().getWorkspace();
 			if(tmp == null) {
 				tmp = "<Your Workspace>";
