@@ -8,6 +8,9 @@ package org.tbrt.plist;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -30,32 +33,58 @@ import javax.swing.text.JTextComponent;
 import javax.swing.JScrollPane;
 
 public class MyEditor {
-
+    private JTextComponent textComp;
+    private String notesFileName;
+    private String titleName;
+    
 	public void doEdit(String title, String s) {
-	    SimpleEditor editor = new SimpleEditor(title, s);
+        titleName = title;
+        notesFileName = s;
+        
+	    SimpleEditor editor = new SimpleEditor();
 	    editor.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	    editor.setVisible(true);
-	    
-		 ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
-		 editor.setIconImage(img.getImage());
+	      
+	    ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
+		editor.setIconImage(img.getImage());
+		 
+	    editor.addWindowListener(new WindowAdapter() {
+	        public void windowClosing(WindowEvent e) {
+				int n = JOptionPane.showConfirmDialog (
+						textComp,
+						"Save the Notes Before Exit?",
+						titleName,
+						JOptionPane.YES_NO_OPTION);
+			    if (n == 0) {
+			    	File file = new File(notesFileName);
+		            FileWriter writer = null;
+		            try {
+		                writer = new FileWriter(file);
+		                textComp.write(writer);
+		            } catch (IOException ex) {
+		            } finally {
+		                if (writer != null) {
+		                    try {
+		                        writer.close();
+		                    } catch (IOException x) {
+		                    }
+		                }
+		            }
+				}
+
+	         }
+	     });
     }
 
 	public class SimpleEditor extends JFrame {
 	     private Action openAction = new OpenAction();
 	     private Action saveAction = new SaveAction();	
 	     private Hashtable actionHash = new Hashtable();
-	   
-	     private JTextComponent textComp;
-	     private String notesFileName;
-	     private String titleName;
 			
 	     // Create an editor.
-	     public SimpleEditor(String title, String name) {
-	    	 super(title);
+	     public SimpleEditor() {
+	    	 super(titleName);
 	    	 
-	         titleName = title;
-	         notesFileName = name;
-
 	         textComp = createTextComponent();
 	         makeActionsPretty();	   
 	         
@@ -208,7 +237,6 @@ public class MyEditor {
 						"Save the Notes Before Exit?",
 						titleName,
 						JOptionPane.YES_NO_CANCEL_OPTION);
-				System.out.println("TC:"+n);
 				if ((n == 0) || (n == 1)) {
 					if (n == 0) {
 				       myWriteFile(notesFileName);
