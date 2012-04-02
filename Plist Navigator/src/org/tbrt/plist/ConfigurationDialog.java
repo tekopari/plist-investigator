@@ -29,7 +29,8 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 	private JTextField textEmail;
 	private JTextField textHomedir;
 	private JTextField textVersion;
-
+	private JTextField textWorkspace;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -78,6 +79,11 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 			contentPanel.add(lblHomeDir);
 		}
 		{
+			JLabel lblHomeDir = new JLabel("Investigation Workspace:");
+			lblHomeDir.setBounds(12, 130, 140, 16);
+			contentPanel.add(lblHomeDir);
+		}
+		{
 			textName = new JTextField();
 			textName.setColumns(10);
 			String tmp = Configuration.getConfiguration().getInvestigatorName();
@@ -116,6 +122,17 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 			textHomedir.setBounds(156, 101, 274, 16);
 			textHomedir.setText(Configuration.getConfiguration().getHomeDir());	
 			contentPanel.add(textHomedir);
+		}
+		{
+			textWorkspace = new JTextField();
+			textWorkspace.setColumns(10);
+			textWorkspace.setBounds(156, 130, 274, 16);
+			String tmp = Configuration.getConfiguration().getWorkspace();
+			if(tmp == null) {
+				tmp = "<Your Workspace>";
+			}
+			textWorkspace.setText(tmp);	
+			contentPanel.add(textWorkspace);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -176,13 +193,15 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 			String error = validateText(false, "Investigator Name", textName.getText())
 			             + validateText(false, "Investigator Phone", textPhone.getText())
 			             + validateText(false, "Investigator Email", textEmail.getText())
-			             + validateText(false, "Home Directory", textHomedir.getText());
+			             + validateText(false, "Home Directory", textHomedir.getText())
+			             + validateText(false, "Workspace Directory", textWorkspace.getText());
 
 			if(error.equals("")) {
 				Configuration.getConfiguration().setInvestigatorName(textName.getText());
 				Configuration.getConfiguration().setInvestigatorPhone(textPhone.getText()); 
 				Configuration.getConfiguration().setInvestigatorEmail(textEmail.getText()); 
 				Configuration.getConfiguration().setHomeDir(textHomedir.getText());
+				Configuration.getConfiguration().setWorkspace(textWorkspace.getText());
 	            setVisible(false);             
 	            dispose(); 
 			}	
