@@ -64,7 +64,9 @@ public class InvestigationTree extends JPanel {
         			//Create the investigation directory
         			try {
         				//Create directory
-        				String strDirectory = "d:/tmp/" + s;  //TODO replace "d:/tmp/" with user workspace
+        				String rootDir = Configuration.getConfiguration().getWorkspace();
+        				String strDirectory = rootDir + "/" + s;
+        				
         			    boolean success = (new File(strDirectory)).mkdir();
         			    if (success) {
         			    	//Create notes file
@@ -86,7 +88,7 @@ public class InvestigationTree extends JPanel {
         			    	JOptionPane.showMessageDialog(frame, m);
         			    }
         		    } catch (Exception e) {
-        		    	String m = "Operation Failed. \nPlease try again...";
+        		    	String m = "Add Operation Failed. \nPlease try again...";
         		    	JOptionPane.showMessageDialog(frame, m);
         		    }
         		}
@@ -101,7 +103,23 @@ public class InvestigationTree extends JPanel {
         				frame,
         				"Type the new investigation folder name:\n");
         		if ((s != null) && (s.length() > 0)) {
-        			renameSelectedNode(s);
+        			try {
+        			    String rootDir = Configuration.getConfiguration().getWorkspace();       			
+        			    File f = new File(rootDir + "/" + getNodeName());
+        		    	File f2 = new File(rootDir + "/" + s);
+        			
+        			    boolean success = f.renameTo(f2);
+        			    if (success) {
+        	  			    renameSelectedNode(s);
+        			    }
+        			    else {
+       			        	String m = "The same investigation name exists.\nPlease use a different name.";
+    			    	    JOptionPane.showMessageDialog(frame, m);
+        			    }
+        			} catch (Exception e) {
+        				String m = "Rename Operation Failed. \nPlease try again...";
+        		    	JOptionPane.showMessageDialog(frame, m);
+        			}
         		}
         	}
         });
@@ -116,7 +134,22 @@ public class InvestigationTree extends JPanel {
 						"Delete Investigation with All Data",
 						JOptionPane.YES_NO_OPTION);
 				if (n == 0) {
-					removeSelectedNode();
+					try {
+					    String rootDir = Configuration.getConfiguration().getWorkspace();					
+					    File f = new File(rootDir + "/" + getNodeName());
+					    
+					    boolean success = deleteDir(f);
+					    if (success) {
+					    	removeSelectedNode();
+					    }
+					    else {
+	        				String m = "Operation Failed. \nPlease try again...";
+	        		    	JOptionPane.showMessageDialog(frame, m);
+					    }
+					} catch (Exception  e) {
+        				String m = "Delete Operation Failed. \nPlease try again...";
+        		    	JOptionPane.showMessageDialog(frame, m);
+					}
 				}
         	}
         });
@@ -185,7 +218,23 @@ public class InvestigationTree extends JPanel {
 						"Delete PList and Notes",
 						JOptionPane.YES_NO_OPTION);
 				if (n == 0) {
-					removeSelectedNode();
+					try {
+					    String rootDir = Configuration.getConfiguration().getWorkspace();
+					    String parentNode = getNodeParentName();
+					    File f = new File(rootDir + "/" + parentNode + "/" + getNodeName());
+					    
+					    boolean success = deleteDir(f);
+					    if (success) {
+					    	removeSelectedNode();
+					    }
+					    else {
+	        				String m = "Operation Failed. \nPlease try again...";
+	        		    	JOptionPane.showMessageDialog(frame, m);
+					    }
+					} catch (Exception  e) {
+        				String m = "Delete Operation Failed. \nPlease try again...";
+        		    	JOptionPane.showMessageDialog(frame, m);
+					}
 				}
         	}
         });
@@ -196,9 +245,14 @@ public class InvestigationTree extends JPanel {
         JMenuItem mnEdit = notesPopup.add(new JMenuItem("Edit Notes"));
         mnEdit.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		String s = getNodeParentName();
+        		String rootDir = Configuration.getConfiguration().getWorkspace();
+        		String parentNode = getNodeParentName();
+        		String notesFile = "Notes";
+        		
         	    MyEditor editor = new MyEditor();
-        	    editor.doEdit("Notes for "+s, "Add Notes Here");
+        	    editor.doEdit(
+        	    		"Notes for " + parentNode, 
+        	    		rootDir + "/" + parentNode + "/" + notesFile);
         	}
         });
         
@@ -210,6 +264,24 @@ public class InvestigationTree extends JPanel {
         add(scrollPane);
     }
 
+    //=======================================================================
+    // Delete directory including all files and sub-directories
+    //=======================================================================
+    public static boolean deleteDir(File dir) {
+    	if (dir.isDirectory()) {
+    		String[] children = dir.list();
+    		for (int i = 0; i < children.length; i++) {
+    			boolean success = deleteDir(new File(dir, children[i]));
+    			if (!success) {
+    				return(false);
+    			}
+    		}
+    	}
+    	// The directory is now empty to be deleted
+    	boolean s = dir.delete();
+    	return(s);
+    }
+    
     //=======================================================================
     // Return Node Parent Name
     //======================================================================= 
@@ -227,6 +299,21 @@ public class InvestigationTree extends JPanel {
         return("");
     }
 
+  //=======================================================================
+    // Return Node Name
+    //======================================================================= 
+    public String getNodeName() {
+        TreePath currentSelection = tree.getSelectionPath();
+        if (currentSelection != null) {
+            DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode)
+                         (currentSelection.getLastPathComponent());
+            InvestigationNode iNode = (InvestigationNode)(currentNode.getUserObject());
+            String s = iNode.getNodeValue();
+            return(s);
+        }
+        return("");
+    }
+    
     //=======================================================================
     // Rename Selected Node
     //======================================================================= 
