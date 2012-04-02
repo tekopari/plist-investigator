@@ -32,7 +32,7 @@ public class Configuration {
     private static Configuration config = null;
  	private static String installPath = ""; 
  	
-    public static boolean initConfiguration(String path) {
+    private static boolean initConfiguration(String path) {
     	try {
     	    if(config == null){
     		    config = new Configuration(path);
@@ -47,7 +47,7 @@ public class Configuration {
     	return true;
     }
     
-    public static boolean initWorkspace() {   	
+    private static boolean initWorkspace() { 
     	String workspace = Configuration.getConfiguration().getWorkspace();
     	
     	//-------------------------------------------------------------------
@@ -56,9 +56,15 @@ public class Configuration {
     	// GUI.
     	//-------------------------------------------------------------------
     	if(workspace == null || workspace.equals("") || workspace.equals("<Your Workspace>")) {
-    		workspace = System.getProperties().getProperty("user.home") 
-			         + System.getProperty("file.separator")
-			         + "My Investigations";
+    		int len = System.getProperty("user.home").length();
+    		char[] tmp = System.getProperty("user.home").toCharArray();
+    		for(int i = 0; i < len; i++) {
+    			if(tmp[i] == '\\') {
+    				tmp[i] = '/';
+    		    }	
+    		}
+    		workspace = new String(tmp) + "/My Investigations";
+    		
     		Configuration.getConfiguration().setWorkspace(workspace);
     	}
 
@@ -91,6 +97,79 @@ public class Configuration {
     	}
     	return config;
     }
+	
+	private static String removeBackSlashes(String str) {
+		int len = str.length();
+		char[] tmp = str.toCharArray();
+		for(int i = 0; i < len; i++) {
+			if(tmp[i] == '\\') {
+				tmp[i] = '/';
+		    }	
+		}
+		return new String(tmp);
+	}
+	
+	private static String getInstallPath() {
+        String rc = "";
+        Class myclass = Configuration.class;
+        String path = myclass.getClassLoader().getResource(
+            myclass.getName().replace('.', '/') + ".class").toString();
+
+        if(path == null) {
+        	rc = "";
+        }
+        else if (path.endsWith(".jar")) {
+        	// Running from jar file
+        	rc = path.substring(6, path.lastIndexOf("/"));
+        }
+        else if (path.endsWith(".class")) {
+        	// Running from eclipse
+        	for(int count = 0; count < 5; count++) {
+            	path = path.substring(0, path.lastIndexOf("/"));
+        	}
+            rc = path.substring(6);
+        }
+        else {
+        	rc = "/";
+        }
+        rc = rc.replaceAll("%20", " ");
+        return rc;
+	}
+	
+	public static void init() {
+ 		//-------------------------------------------------------------------
+		// Set the install path
+		//-------------------------------------------------------------------
+		String installPath = Configuration.getInstallPath();		
+		Configuration.setInstallPath(installPath);
+		
+		//-------------------------------------------------------------------
+		// The INSTALL PATH must be a directory
+		//-------------------------------------------------------------------
+		try {
+ 			File installDir = new File(installPath); 
+ 			if(!(installDir.isDirectory())) {
+ 				System.err.println("Error: Specified INSTALL_DIR is not an existing directory.");
+ 				System.exit(1);		
+ 			}
+		} 
+		catch (Exception e) {
+			System.err.println("Error: " + e.toString());
+ 			System.exit(1);		
+		}
+	
+		//---------------------------------------------------------------
+        // Initialize the application	
+		//---------------------------------------------------------------
+		Configuration.initConfiguration(installPath);
+		
+		//---------------------------------------------------------------
+		// Check for the workspace directory in the users home directory
+		//---------------------------------------------------------------
+		Configuration.initWorkspace();
+		
+		return;
+	}
 	
 	//---------------------------------------------------
 	// The name of the file hold the configuration values
@@ -215,19 +294,19 @@ public class Configuration {
 	}
 	
 	public synchronized void setHomeDir(String str) {
-		p.setProperty("PLIST.HOME_DIR", str.trim());
+		p.setProperty("PLIST.HOME_DIR", removeBackSlashes(str.trim()));
 		saveProperties();
 		return;
 	}
 	
 	public synchronized void setWorkspace(String str) {
-		p.setProperty("PLIST.WORKSPACE", str.trim());
+		p.setProperty("PLIST.WORKSPACE", removeBackSlashes(str.trim()));
 		saveProperties();
 		return;
 	}
 	
 	public static void setInstallPath(String str) {
-		installPath = str;
+		installPath = removeBackSlashes(str.trim());
 		return;
 	}
 }

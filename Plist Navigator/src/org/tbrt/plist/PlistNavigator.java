@@ -41,32 +41,6 @@ public class PlistNavigator {
 
 	private JFrame frmPlistNavigator;
 	private InvestigationTree investigationTree;
-
-	public static String getInstallPath(Class myclass) {
-        String rc = "";
-        String path = myclass.getClassLoader().getResource(
-            myclass.getName().replace('.', '/') + ".class").toString();
-
-        if(path == null) {
-        	rc = "";
-        }
-        else if (path.endsWith(".jar")) {
-        	// Running from jar file
-        	rc = path.substring(6, path.lastIndexOf("/"));
-        }
-        else if (path.endsWith(".class")) {
-        	// Running from eclipse
-        	for(int count = 0; count < 5; count++) {
-            	path = path.substring(0, path.lastIndexOf("/"));
-        	}
-            rc = path.substring(6);
-        }
-        else {
-        	rc = "/";
-        }
-        rc = rc.replaceAll("%20", " ");
-        return rc;
-	}
 	
 	/**
 	 * Launch the application.
@@ -74,35 +48,9 @@ public class PlistNavigator {
 	public static void main(String[] args) {
 		
  		//-------------------------------------------------------------------
-		// Set the install path
+		// Initialize the configuration
 		//-------------------------------------------------------------------
-		String installPath = getInstallPath(PlistNavigator.class);		
-		Configuration.setInstallPath(installPath);
-		
-		//-------------------------------------------------------------------
-		// The INSTALL PATH must be a directory
-		//-------------------------------------------------------------------
-		try {
- 			File installDir = new File(installPath); 
- 			if(!(installDir.isDirectory())) {
- 				System.err.println("Error: Specified INSTALL_DIR is not an existing directory.");
- 				System.exit(1);		
- 			}
-		} 
-		catch (Exception e) {
-			System.err.println("Error: " + e.toString());
- 			System.exit(1);		
-		}
-	
-		//-------------------------------------------------------------------
-        // Initialize the application	
-		//-------------------------------------------------------------------
-		Configuration.initConfiguration(installPath);
-		
-		//-------------------------------------------------------------------
-		// Check for the workspace directory in the users home directory
-		//-------------------------------------------------------------------
-		Configuration.initWorkspace();
+		Configuration.init();
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

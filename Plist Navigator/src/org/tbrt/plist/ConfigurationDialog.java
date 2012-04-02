@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -36,10 +37,15 @@ public class ConfigurationDialog extends JDialog implements ActionListener {
 	 */
 	
 	public static void main(String[] args) {
-		try {
-			String installPath = "C:\\Documents and Settings\\paritj\\My Documents\\PlistNavigator";
-			Configuration.initConfiguration(installPath);
-			
+		
+ 		//-------------------------------------------------------------------
+		// Initialize the configuration
+		//-------------------------------------------------------------------
+		Configuration.init();
+		try {			
+			//---------------------------------------------------------------
+			// Display GUI
+			//---------------------------------------------------------------
 			ConfigurationDialog dialog = new ConfigurationDialog();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);

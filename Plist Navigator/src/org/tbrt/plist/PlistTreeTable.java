@@ -15,7 +15,7 @@ public class PlistTreeTable
 {
     public static void main(String args[])
     {
-    	String filename = "C:\\Documents and Settings\\paritj\\My Documents\\NetworkInterfaces.plist";
+    	String filename = "C:\\Documents and Settings\\paritj\\My Documents\\NetworkInterfaces.xml";
     	//String filename = "C:\\Documents and Settings\\paritj\\My Documents\\PlistOne.xml";
     	PlistTreeTable p = new PlistTreeTable(filename);
     }
