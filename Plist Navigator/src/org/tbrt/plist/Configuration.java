@@ -18,6 +18,7 @@
 
 package org.tbrt.plist;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -39,6 +40,39 @@ public class Configuration {
     	    }
     	}
     	catch (Exception e) {
+    		System.err.println("Error: Failed to initialize configuration");
+    		System.err.println("Reason: " + e);		
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public static boolean initWorkspace() {   	
+    	String workspace = Configuration.getConfiguration().getWorkspace();
+    	
+    	//-------------------------------------------------------------------
+    	// If the workspace is not set you the default workspace
+    	// If they do not like it the can change it in the configuration
+    	// GUI.
+    	//-------------------------------------------------------------------
+    	if(workspace == null || workspace.equals("") || workspace.equals("<Your Workspace>")) {
+    		workspace = System.getProperties().getProperty("user.home") 
+			         + System.getProperty("file.separator")
+			         + "My Investigations";
+    		Configuration.getConfiguration().setWorkspace(workspace);
+    	}
+
+		File workspaceDir = null;
+		try {
+			workspaceDir = new File(workspace);
+				
+		    if(!workspaceDir.exists()) {
+			    workspaceDir.mkdirs();
+		    }
+		}
+    	catch (Exception e) {
+    		System.err.println("Error: Failed to initialize workspace");
+    		System.err.println("Reason: " + e);	
     		return false;
     	}
     	return true;
@@ -103,6 +137,7 @@ public class Configuration {
 			out.println("PLIST.INVESTIGATOR.EMAIL=" + System.getProperty("PLIST.INVESTIGATOR.EMAIL"));
 			out.println("PLIST.VERSION=" + System.getProperty("PLIST.VERSION"));
 			out.println("PLIST.HOME_DIR=" + System.getProperty("PLIST.HOME_DIR"));
+			out.println("PLIST.WORKSPACE=" + System.getProperty("PLIST.WORKSPACE"));
 			out.close();							
 		}
 		catch (Exception e) {
@@ -147,6 +182,13 @@ public class Configuration {
 		return System.getProperty("PLIST.HOME_DIR");
 	}
 	
+	//---------------------------------------------------------------------------
+	// Get the workspace
+	//---------------------------------------------------------------------------
+	public synchronized String getWorkspace() {
+		return System.getProperty("PLIST.WORKSPACE");
+	}
+	
 	public synchronized void setInvestigatorName(String str) {
 		p.setProperty("PLIST.INVESTIGATOR.NAME", str.trim());
 		saveProperties();
@@ -174,6 +216,12 @@ public class Configuration {
 	
 	public synchronized void setHomeDir(String str) {
 		p.setProperty("PLIST.HOME_DIR", str.trim());
+		saveProperties();
+		return;
+	}
+	
+	public synchronized void setWorkspace(String str) {
+		p.setProperty("PLIST.WORKSPACE", str.trim());
 		saveProperties();
 		return;
 	}

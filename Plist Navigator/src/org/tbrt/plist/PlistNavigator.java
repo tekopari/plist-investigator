@@ -72,8 +72,6 @@ public class PlistNavigator {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		String pwd = System.getProperties().getProperty("user.home");
-		System.out.println("TC:"+pwd);
 		
  		//-------------------------------------------------------------------
 		// Set the install path
@@ -100,6 +98,11 @@ public class PlistNavigator {
         // Initialize the application	
 		//-------------------------------------------------------------------
 		Configuration.initConfiguration(installPath);
+		
+		//-------------------------------------------------------------------
+		// Check for the workspace directory in the users home directory
+		//-------------------------------------------------------------------
+		Configuration.initWorkspace();
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
