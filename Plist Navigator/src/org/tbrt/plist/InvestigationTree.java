@@ -181,21 +181,14 @@ public class InvestigationTree extends JPanel {
         				
         			    boolean success = (new File(strDirectory)).mkdir();
         			    if (success) {
-        			    	    //Choose PList target file name
-        			    	    File toFile = new File(fileName); 
+        			        //Choose PList target file name
+        			    	File toFile = new File(fileName); 
         			    	   
-        			    	    //BEW: Will revisit, for now will just use plistfile        			    	    //  source file?  We will just use the original plist file provided.
-        			    	    //BEW:  provided.
-        			    	    //
-                			    //Choose PList source file name and perform copy
-        			    	    //JFileChooser chooser = doFileChooser();
-            	                //int c = chooser.showOpenDialog(frame);
-            	                //if (c == JFileChooser.APPROVE_OPTION){
-                	            //   File fromFile = chooser.getSelectedFile();
-
+                			//Choose PList source file name and perform copy
+        			    	File fromFile = doFileChooser(frame);
+        			    	if (fromFile != null) {
             			    	//Copy PList file
-            			    	//BEW: CopyFile(fromFile, toFile);
-            			    	copyFile(fl, toFile);
+            			    	copyFile(fromFile, toFile);
 
         			            //Create notes file
         			    	    File f = new File(strDirectory + "/" + nameNotesFile);
@@ -204,19 +197,18 @@ public class InvestigationTree extends JPanel {
         			    	    }
         			    	
         			    	    // Add node to JTree
-        			    	    //BEW:  Do we want to add full orig directory+file?  Or just file name?
                 		        InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
                 			    InvestigationNode notes = new InvestigationNode("Notes", nameNotesFile);
                 			    DefaultMutableTreeNode t  = addObject(evid);
                 			    addObject(t, notes);
                 			    
                 			    PlistTreeTable p = new PlistTreeTable(fileName);   
-            	            //BEW}
-            	            //BEWelse {
-            	            //BEW	File f = new File(strDirectory);
-            	            //BEW	deleteDir(f);
-            	            //BEW}
-        		            }  
+            	            }
+            	            else {
+            	            	File f = new File(strDirectory);
+            	            	deleteDir(f);
+            	            }
+        		        }  
         			    else {
         			    	String m = "The same plist name exists.\nPlease use a different name.";
         			    	JOptionPane.showMessageDialog(frame, m);
