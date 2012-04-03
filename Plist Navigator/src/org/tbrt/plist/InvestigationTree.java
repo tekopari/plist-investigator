@@ -43,6 +43,7 @@ public class InvestigationTree extends JPanel {
     private String nameMyInvestigations = "My Investigations";
     private String nameNotesFile = "Notes";
     private String namePlistFile = "PListFile";
+    private String nameORG = "org";
     
     public InvestigationTree() {
         super(new GridLayout(1,0));
@@ -142,24 +143,22 @@ public class InvestigationTree extends JPanel {
         			    boolean success = (new File(strDirectory)).mkdir();
         			    if (success) {        			    	   
                 			//Choose PList source file name and perform copy
-        			    	File fromFile = doFileChooser(frame);
+        			    	File fromFile = doFileChooser(frame, "Choose a PList File to Import");
         			    	if (fromFile != null) {
         			    		String f = fromFile.getName();      			    		
         			    		
             			    	//Copy PList file
-        			    		String fileName = strDirectory + "/" + f + ".org";
+        			    		String fileName = strDirectory + "/" + f + "." + nameORG;
         			    		File toFile = new File(fileName);
             			    	copyFile(fromFile, toFile);
             			    	
             			    	//Copy PList file to a fixed name           			    	
             			    	int pos = f.lastIndexOf('.');
             			    	String ext = f.substring(pos + 1);
-            			    	fileName = strDirectory + "/" + namePlistFile;
-            			    	//TC: will enable the code below after figuring out the name for PDF generation
-            			    	//if (ext.length() > 0) {
-            			    	//	fileName = fileName + "." + ext;
-            			    	//}
-            			    	System.out.println("TC:"+fileName);
+            			    	fileName = strDirectory + "/" + namePlistFile;            			    
+            			    	if (ext.length() > 0) {
+            			    		fileName = fileName + "." + ext;
+            			    	}
             			    	
             			    	toFile = new File(fileName);
             			    	copyFile(fromFile, toFile);
@@ -203,21 +202,37 @@ public class InvestigationTree extends JPanel {
         		Component frame = null;
         		
    			    //Choose a PDF file name
-        		File f = doFileChooser(frame);
-	            if (f != null) {
-    	            String pdfName = f.getPath() + ".pdf";
+        		File fileName = doFileChooser(frame, "Choose a PDF File Name");
+	            if (fileName != null) {
+    	            String pdfName = fileName.getPath() + ".pdf";
     	            
     	            String [] dirPath = new String[2000];
     	            int max = travelDirPath(frame, dirPath, 2000);
     	            for (int i = 0; i < max; i++) {
     	            	String notesName = dirPath[i] + "/" + nameNotesFile;
     	            	String plistName = "";
+ 
     	            	if (i > 0) {
-    	            		plistName = dirPath[i] + "/" + namePlistFile;
+    	            		System.out.println("TC1:"+i+":"+dirPath[i]);
+    	            		
+   	    	                File folder = new File(dirPath[i]);
+    	        		    File[] listOfFiles = folder.listFiles();
+    	        		    
+    	        		    for (int j = 0; j < listOfFiles.length; j++) {
+    	        		        if (listOfFiles[j].isFile()) {
+    	        		            String f = listOfFiles[j].getName();
+    	        		            if (!f.endsWith(nameORG) && !f.contains(nameNotesFile)) {
+    	        		               plistName = dirPath[i] + "/" + f;
+    	        		               System.out.println("TC:pdf:"+i+":"+notesName+","+plistName+":");
+    	        		              // PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+    	        		            }
+    	        		        }
+    	        		    }
     	            	}
-    	            	System.out.println("TC:pdf:"+dirPath[i]+":"+i+":"+notesName+","+plistName);
-        		    
-        	            //PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+    	            	else {
+    	            		System.out.println("TC:pdf:"+i+":"+notesName+","+plistName+":");
+    	            		// PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+    	            	}
     	            }
         		}
         	}
@@ -290,14 +305,25 @@ public class InvestigationTree extends JPanel {
         		Component frame = null;
         		
    			    //Choose a PDF file name
-        		File f = doFileChooser(frame);
-	            if (f != null) {
-    	            String pdfName = f.getPath() + ".pdf";
-    	            String p = getDirPath() + "/" + getNodeName();
-        		    String plistName = p + "/" + namePlistFile;
-        		    String notesName = p + "/" + nameNotesFile;
+        		File target = doFileChooser(frame, "Choose a PDF File Name");
+	            if (target != null) {
+    	            String pdfName = target.getPath() + ".pdf";
+    	            
+    	            String path = getDirPath() + "/" + getNodeName();
+    	            String notesName = path + "/" + nameNotesFile;
+    	            
+    	            File folder = new File(path);
+        		    File[] listOfFiles = folder.listFiles();
         		    
-        	        PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+        		    for (int i = 0; i < listOfFiles.length; i++) {
+        		        if (listOfFiles[i].isFile()) {
+        		            String f = listOfFiles[i].getName();
+        		            if (!f.endsWith(nameORG) && !f.contains(nameNotesFile)) {
+        		               String plistName = path + "/" + f;
+        		               PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+        		            }
+        		        }
+        		    }
         		}
         	}
         });
@@ -333,9 +359,7 @@ public class InvestigationTree extends JPanel {
 			//Create the investigation directory
 			try {
 				//Create directory
-				String strDirectory = getDirPath() + "/" + s;
-				System.out.println("TC:"+strDirectory);
-				
+				String strDirectory = getDirPath() + "/" + s;			
 			    boolean success = (new File(strDirectory)).mkdir();
 			    if (success) {
 			    	//Create notes file
@@ -365,7 +389,7 @@ public class InvestigationTree extends JPanel {
     //=======================================================================
     // Handle File Chooser
     //=======================================================================
-    public File doFileChooser(Component frame) {
+    public File doFileChooser(Component frame, String title) {
         JFileChooser chooser = new JFileChooser() {
             protected JDialog createDialog( Component parent ) throws HeadlessException {
                 JDialog dialog = super.createDialog( parent );            	                   
@@ -375,7 +399,7 @@ public class InvestigationTree extends JPanel {
             }
         };
         
-        chooser.setDialogTitle("Choose a PList File to Import");
+        chooser.setDialogTitle(title);
         
         int c = chooser.showOpenDialog(frame);
         if (c == JFileChooser.APPROVE_OPTION){
