@@ -98,16 +98,7 @@ public class PlistNavigator {
 		// Add New investigation folder
         mntmNewProject.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		Component frame = null;
-        		String s = (String)JOptionPane.showInputDialog(
-        				frame,
-        				"Type the investigation name:\n");
-        		if ((s != null) && (s.length() > 0)) {
-        			InvestigationNode node = new InvestigationNode("Investigation", s);
-        			InvestigationNode notes = new InvestigationNode("Notes", "Notes");		
-        			DefaultMutableTreeNode p  = investigationTree.addObject(null, node);
-        			investigationTree.addObject(p, notes);
-        		}
+        		investigationTree.createNewInvstigation();
         	}
         });
 
