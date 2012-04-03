@@ -42,7 +42,7 @@ public class InvestigationTree extends JPanel {
     
     private String nameMyInvestigations = "My Investigations";
     private String nameNotesFile = "Notes";
-    private String namePlistFile = "PListFile.plist";
+    private String namePlistFile = "PListFile";
     
     public InvestigationTree() {
         super(new GridLayout(1,0));
@@ -132,34 +132,42 @@ public class InvestigationTree extends JPanel {
         		Component frame = null;
         		String s = (String)JOptionPane.showInputDialog(
         				frame,
-        				"Type a PList name for the investigation:\n");
+        				"Type Evidence Name for the investigation:\n");
         		if ((s != null) && (s.length() > 0)) {
         			//Create the PList directory
         			try {
         				//Create directory
-                        File fl = new File(s);
-                        String fFile = fl.getName();
-                        //BEW: Remove. String fFileNameStripped = fFile.substring(0, fFile.lastIndexOf('.'));
-                        
-        				String strDirectory = getDirPath() + "/" + getNodeName() + "/" + fFile;
-        				System.out.println("BEW:strDir" + strDirectory);
-        				String fileName = strDirectory + "/" + fFile;
+        				String strDirectory = getDirPath() + "/" + getNodeName() + "/" + s;
         				
         			    boolean success = (new File(strDirectory)).mkdir();
-        			    if (success) {
-        			        //Choose PList target file name
-        			    	File toFile = new File(fileName); 
-        			    	   
+        			    if (success) {        			    	   
                 			//Choose PList source file name and perform copy
         			    	File fromFile = doFileChooser(frame);
         			    	if (fromFile != null) {
+        			    		String f = fromFile.getName();      			    		
+        			    		
             			    	//Copy PList file
+        			    		String fileName = strDirectory + "/" + f + ".org";
+        			    		File toFile = new File(fileName);
+            			    	copyFile(fromFile, toFile);
+            			    	
+            			    	//Copy PList file to a fixed name           			    	
+            			    	int pos = f.lastIndexOf('.');
+            			    	String ext = f.substring(pos + 1);
+            			    	fileName = strDirectory + "/" + namePlistFile;
+            			    	//TC: will enable the code below after figuring out the name for PDF generation
+            			    	//if (ext.length() > 0) {
+            			    	//	fileName = fileName + "." + ext;
+            			    	//}
+            			    	System.out.println("TC:"+fileName);
+            			    	
+            			    	toFile = new File(fileName);
             			    	copyFile(fromFile, toFile);
 
         			            //Create notes file
-        			    	    File f = new File(strDirectory + "/" + nameNotesFile);
-        			    	    if (!f.exists()) {
-                                    f.createNewFile();
+        			    	    File n = new File(strDirectory + "/" + nameNotesFile);
+        			    	    if (!n.exists()) {
+                                    n.createNewFile();
         			    	    }
         			    	
         			    	    // Add node to JTree
