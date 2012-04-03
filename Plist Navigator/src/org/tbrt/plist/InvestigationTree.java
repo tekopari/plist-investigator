@@ -206,12 +206,14 @@ public class InvestigationTree extends JPanel {
 	            if (fileName != null) {
     	            String pdfName = fileName.getPath() + ".pdf";
     	            
-    	            String [] dirPath = new String[2000];
-    	            int max = travelDirPath(frame, dirPath, 2000);
+    	            String[] nodeName = new String[2001];
+    	            String[] dirPath = new String[2001];
+    	            int max = travelDirPath(frame, nodeName, dirPath, 2000);
     	            for (int i = 0; i < max; i++) {
-    	            	String notesName = dirPath[i] + "/" + nameNotesFile;
+    	            	String notesName = dirPath[i] + "/" + nameNotesFile;   	            	
+    	            	String invName = nodeName[i];
     	            	String plistName = "";
- 
+    	            	
     	            	if (i > 0) {
    	    	                File folder = new File(dirPath[i]);
     	        		    File[] listOfFiles = folder.listFiles();
@@ -221,15 +223,15 @@ public class InvestigationTree extends JPanel {
     	        		            String f = listOfFiles[j].getName();
     	        		            if (!f.endsWith(nameORG) && !f.contains(nameNotesFile)) {
     	        		               plistName = dirPath[i] + "/" + f;
-    	        		               System.out.println("TC:pdf:"+i+":"+notesName+","+plistName+":");
-    	        		              // PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+    	        		               System.out.println("TC:pdf:"+i+":"+invName+":"+notesName+","+plistName+":");
+    	        		              // PdfCreate pdfH = new PdfCreate(invName, notesName, plistName, pdfName);
     	        		            }
     	        		        }
     	        		    }
     	            	}
     	            	else {
-    	            		System.out.println("TC:pdf:"+i+":"+notesName+","+plistName+":");
-    	            		// PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+    	            		System.out.println("TC:pdf:"+i+":"+invName+":"+notesName+","+plistName+":");
+    	            		// PdfCreate pdfH = new PdfCreate(invName, notesName, plistName, pdfName);
     	            	}
     	            }
         		}
@@ -305,9 +307,10 @@ public class InvestigationTree extends JPanel {
    			    //Choose a PDF file name
         		File target = doFileChooser(frame, "Choose a PDF File Name");
 	            if (target != null) {
+	            	String nodeName = getNodeName();
     	            String pdfName = target.getPath() + ".pdf";
     	            
-    	            String path = getDirPath() + "/" + getNodeName();
+    	            String path = getDirPath() + "/" + nodeName;
     	            String notesName = path + "/" + nameNotesFile;
     	            
     	            File folder = new File(path);
@@ -318,7 +321,7 @@ public class InvestigationTree extends JPanel {
         		            String f = listOfFiles[i].getName();
         		            if (!f.endsWith(nameORG) && !f.contains(nameNotesFile)) {
         		               String plistName = path + "/" + f;
-        		               PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+        		               PdfCreate h = new PdfCreate(nodeName, notesName, plistName, pdfName);
         		            }
         		        }
         		    }
@@ -493,7 +496,7 @@ public class InvestigationTree extends JPanel {
     //=======================================================================
     // Return set of directory paths under a current node
     //=======================================================================
-    public int travelDirPath(Component frame, String[] p, int max) {
+    public int travelDirPath(Component frame, String[] n, String[] p, int max) {
     	String rootPath = Configuration.getConfiguration().getWorkspace();;
     	int i = 0;
     	
@@ -505,6 +508,7 @@ public class InvestigationTree extends JPanel {
             String invName = iNode.getNodeValue();
 
             rootPath = rootPath + "/" + invName;
+            n[i] = invName;
             p[i++] = rootPath;
             
             DefaultMutableTreeNode sibling = currentNode.getNextNode();
@@ -513,6 +517,7 @@ public class InvestigationTree extends JPanel {
                 	
                 String s = iNode2.getNodeValue();
                 if (!s.contains(nameNotesFile)) {  //skip the first child which is the Notes file
+                	n[i] = s;
                     p[i++] = rootPath + "/" + s;
                 }	
                 sibling = sibling.getNextSibling();
