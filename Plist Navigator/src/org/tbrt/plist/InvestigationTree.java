@@ -3,13 +3,11 @@ package org.tbrt.plist;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
-import java.nio.file.Files;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -27,8 +25,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-
-import org.tbrt.plist.MyEditor.SimpleEditor;
 
 public class InvestigationTree extends JPanel {
     protected DefaultMutableTreeNode rootNode;
@@ -305,7 +301,7 @@ public class InvestigationTree extends JPanel {
         JMenuItem mnEdit = notesPopup.add(new JMenuItem("Edit Notes"));
         mnEdit.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		String parentNode = getNodeParentName();
+        		//String parentNode = getNodeParentName();
         		String dirFile = getDirPath() + "/" + nameNotesFile;
         		
         	    MyEditor editor = new MyEditor();
