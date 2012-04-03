@@ -171,20 +171,32 @@ public class InvestigationTree extends JPanel {
         			//Create the PList directory
         			try {
         				//Create directory
-        				String strDirectory = getDirPath() + "/" + getNodeName() + "/" + s;
-        				String fileName = strDirectory + "/" + namePlistFile;
+                        File fl = new File(s);
+                        String fParent = fl.getParent();
+                        String fFile = fl.getName();
+                        String fFileNameStripped = fFile.substring(0, fFile.lastIndexOf('.'));
+                        
+        				String strDirectory = getDirPath() + "/" + getNodeName() + "/" + fFileNameStripped;
+        				System.out.println("BEW:strDir" + strDirectory);
+        				String fileName = strDirectory + "/" + fFile;
         				
         			    boolean success = (new File(strDirectory)).mkdir();
         			    if (success) {
-     			    	    //Choose PList target file name
-     			    	    File toFile = new File(fileName); 
-     			    	   
-                			//Choose PList source file name and perform copy
-     			    	    File fromFile = doFileChooser(frame);
-     			    	    
-            	            if (fromFile != null){
+        			    	    //Choose PList target file name
+        			    	    File toFile = new File(fileName); 
+        			    	   
+        			    	    //BEW: Will revisit, for now will just use plistfile        			    	    //  source file?  We will just use the original plist file provided.
+        			    	    //BEW:  provided.
+        			    	    //
+                			    //Choose PList source file name and perform copy
+        			    	    //JFileChooser chooser = doFileChooser();
+            	                //int c = chooser.showOpenDialog(frame);
+            	                //if (c == JFileChooser.APPROVE_OPTION){
+                	            //   File fromFile = chooser.getSelectedFile();
+
             			    	//Copy PList file
-            			    	copyFile(fromFile, toFile);
+            			    	//BEW: CopyFile(fromFile, toFile);
+            			    	copyFile(fl, toFile);
 
         			            //Create notes file
         			    	    File f = new File(strDirectory + "/" + nameNotesFile);
@@ -193,18 +205,19 @@ public class InvestigationTree extends JPanel {
         			    	    }
         			    	
         			    	    // Add node to JTree
+        			    	    //BEW:  Do we want to add full orig directory+file?  Or just file name?
                 		        InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
                 			    InvestigationNode notes = new InvestigationNode("Notes", nameNotesFile);
                 			    DefaultMutableTreeNode t  = addObject(evid);
                 			    addObject(t, notes);
                 			    
                 			    PlistTreeTable p = new PlistTreeTable(fileName);   
-            	            }
-            	            else {
-            	            	File f = new File(strDirectory);
-            	            	deleteDir(f);
-            	            }
-       		            }  
+            	            //BEW}
+            	            //BEWelse {
+            	            //BEW	File f = new File(strDirectory);
+            	            //BEW	deleteDir(f);
+            	            //BEW}
+        		            }  
         			    else {
         			    	String m = "The same plist name exists.\nPlease use a different name.";
         			    	JOptionPane.showMessageDialog(frame, m);
@@ -215,7 +228,7 @@ public class InvestigationTree extends JPanel {
         		    }
         		}                 
         	}
-        });       
+        });    
         
         investigationPopup.add(new JMenuItem("Search Text String"));
         investigationPopup.add(new JMenuItem("Save Investigatoin as PDF File"));
