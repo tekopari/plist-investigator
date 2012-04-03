@@ -26,16 +26,16 @@ public class PdfCreate {
 	//TC public PdfCreate(NSDictionary rootDict) {
 	//TC }
 	
-	public PdfCreate(String plistName) {
+	public PdfCreate(String plistName, String pdfName) {
 		NSDictionary rootDict = null;
-		System.out.println("TC:pdfcreate:"+plistName);
+		System.out.println("TC:pdfcreate:"+plistName+","+pdfName);
 		
 		try {
 			File file = new File(plistName);
 			rootDict = (NSDictionary) PropertyListParser.parse(file);
 			// ravi: Why can't we also use rootDict to create PDF?
 			rootDict.setKey(file.getName());
-			testcreate();
+			testcreate(pdfName);
 			
 			System.out.println(rootDict);
 		} catch (Exception e) {
@@ -44,7 +44,7 @@ public class PdfCreate {
 
 	}	
 	
-	public void testcreate() throws IOException, COSVisitorException {
+	public void testcreate(String fileName) throws IOException, COSVisitorException {
 		// the document
 		PDDocument doc = null;
 		try {
@@ -63,8 +63,7 @@ public class PdfCreate {
 			contentStream.drawString(message);
 			contentStream.endText();
 			contentStream.close();
-			String file = "C:/tmp/tbrt.pdf";
-			doc.save(file);
+			doc.save(fileName);
 		} finally {
 			if (doc != null) {
 				doc.close();
