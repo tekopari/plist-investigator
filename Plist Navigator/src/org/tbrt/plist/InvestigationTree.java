@@ -171,7 +171,7 @@ public class InvestigationTree extends JPanel {
         			    	
         			    	    // Add node to JTree
                 		        InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
-                			    InvestigationNode notes = new InvestigationNode("Notes", "PList Notes");
+                			    InvestigationNode notes = new InvestigationNode("Notes", "PList "+nameNotesFile);
                 			    DefaultMutableTreeNode t  = addObject(evid);
                 			    addObject(t, notes);
                 			    
@@ -213,8 +213,6 @@ public class InvestigationTree extends JPanel {
     	            	String plistName = "";
  
     	            	if (i > 0) {
-    	            		System.out.println("TC1:"+i+":"+dirPath[i]);
-    	            		
    	    	                File folder = new File(dirPath[i]);
     	        		    File[] listOfFiles = folder.listFiles();
     	        		    
@@ -371,7 +369,7 @@ public class InvestigationTree extends JPanel {
 			    	
 			    	// Add node to JTree
 	        	    InvestigationNode node = new InvestigationNode("Investigation", s);
-	        		InvestigationNode notes = new InvestigationNode("Notes", "Investigation Notes");		
+	        		InvestigationNode notes = new InvestigationNode("Notes", "Investigation "+nameNotesFile);		
 	        		DefaultMutableTreeNode p  = addObject(node);
 	        	    addObject(p, notes);
 		            }  
@@ -514,7 +512,7 @@ public class InvestigationTree extends JPanel {
                 InvestigationNode iNode2 = (InvestigationNode)(sibling.getUserObject());
                 	
                 String s = iNode2.getNodeValue();
-                if (s != nameNotesFile) {  //skip the first child which is the Notes file
+                if (!s.contains(nameNotesFile)) {  //skip the first child which is the Notes file
                     p[i++] = rootPath + "/" + s;
                 }	
                 sibling = sibling.getNextSibling();
