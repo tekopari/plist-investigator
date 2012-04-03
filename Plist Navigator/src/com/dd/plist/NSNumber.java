@@ -207,7 +207,9 @@ public class NSNumber extends NSObject {
     public boolean equals(Object obj) {
 	if (!(obj instanceof NSNumber)) return false;
 	NSNumber n = (NSNumber) obj;
-	return type == n.type && longValue == n.longValue && doubleValue == n.doubleValue && boolValue == n.boolValue;
+	//tom
+	//return type == n.type && longValue == n.longValue && doubleValue == n.doubleValue && boolValue == n.boolValue;
+	return n.getKey().equals(this.getKey()) && type == n.type && longValue == n.longValue && doubleValue == n.doubleValue && boolValue == n.boolValue;
     }
 
     @Override

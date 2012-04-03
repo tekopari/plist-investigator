@@ -114,7 +114,9 @@ public class NSDate extends NSObject {
 
     @Override
     public boolean equals(Object obj) {
-        return obj.getClass().equals(getClass()) && date.equals(((NSDate) obj).getDate());
+    	return this.getKey().equals(((NSDate)obj).getKey()) && obj.getClass().equals(getClass()) && date.equals(((NSDate) obj).getDate());
+        //tom
+    	//return obj.getClass().equals(getClass()) && date.equals(((NSDate) obj).getDate());
     }
 
     @Override

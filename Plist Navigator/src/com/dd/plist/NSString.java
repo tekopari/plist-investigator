@@ -63,7 +63,8 @@ public class NSString extends NSObject {
     @Override
     public boolean equals(Object obj) {
 	if (!(obj instanceof NSString)) return false;
-	return content.equals(((NSString)obj).content);
+	//tom
+	return this.getKey().equals(((NSString)obj).getKey()) && content.equals(((NSString)obj).content);
     }
     
     @Override

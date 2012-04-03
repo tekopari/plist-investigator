@@ -112,7 +112,9 @@ public class NSData extends NSObject {
 
     @Override
     public boolean equals(Object obj) {
-        return obj.getClass().equals(getClass()) && Arrays.equals(((NSData) obj).bytes, bytes);
+    	return this.getKey().equals(((NSData)obj).getKey()) && obj.getClass().equals(getClass()) && Arrays.equals(((NSData) obj).bytes, bytes);
+    	// tom
+        //return obj.getClass().equals(getClass()) && Arrays.equals(((NSData) obj).bytes, bytes);
     }
 
     @Override
