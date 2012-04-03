@@ -23,9 +23,26 @@ public class PdfCreate {
 		PDFont font = PDType1Font.HELVETICA_BOLD;
 	}
 
-	public PdfCreate(NSDictionary rootDict) {
-	}
+	//TC public PdfCreate(NSDictionary rootDict) {
+	//TC }
 	
+	public PdfCreate(String plistName) {
+		NSDictionary rootDict = null;
+		System.out.println("TC:pdfcreate:"+plistName);
+		
+		try {
+			File file = new File(plistName);
+			rootDict = (NSDictionary) PropertyListParser.parse(file);
+			// ravi: Why can't we also use rootDict to create PDF?
+			rootDict.setKey(file.getName());
+			testcreate();
+			
+			System.out.println(rootDict);
+		} catch (Exception e) {
+			System.err.println("Cannot use the PropertyListParser");
+		}
+
+	}	
 	
 	public void testcreate() throws IOException, COSVisitorException {
 		// the document
@@ -65,7 +82,7 @@ public class PdfCreate {
 			
 			System.out.println(rootDict);
 			
-			new PdfCreate(rootDict);
+			//TC new PdfCreate(rootDict);
 		} catch (Exception e) {
 			System.err.println("Cannot use the PropertyListParser");
 		}
