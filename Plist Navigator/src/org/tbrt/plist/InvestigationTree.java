@@ -64,41 +64,7 @@ public class InvestigationTree extends JPanel {
         JMenuItem mnInvestigations = investigationsPopup.add(new JMenuItem("Add New Investigation"));
         mnInvestigations.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		Component frame = null;
-        		String s = (String)JOptionPane.showInputDialog(
-        				frame,
-        				"Type the investigation name:\n");
-        		if ((s != null) && (s.length() > 0)) {
-        			//Create the investigation directory
-        			try {
-        				//Create directory
-        				String strDirectory = getDirPath() + "/" + s;
-        				System.out.println("TC:"+strDirectory);
-        				
-        			    boolean success = (new File(strDirectory)).mkdir();
-        			    if (success) {
-        			    	//Create notes file
-        			    	String strFile = strDirectory + "/" + nameNotesFile;
-        			    	File f = new File(strFile);
-        			    	if (!f.exists()) {
-                                f.createNewFile();
-        			    	}
-        			    	
-        			    	// Add node to JTree
-        	        	    InvestigationNode node = new InvestigationNode("Investigation", s);
-        	        		InvestigationNode notes = new InvestigationNode("Notes", nameNotesFile);		
-        	        		DefaultMutableTreeNode p  = addObject(node);
-        	        	    addObject(p, notes);
-       		            }  
-        			    else {
-        			    	String m = "The same investigation name exists.\nPlease use a different name.";
-        			    	JOptionPane.showMessageDialog(frame, m);
-        			    }
-        		    } catch (Exception e) {
-        		    	String m = "Add Operation Failed. \nPlease try again...";
-        		    	JOptionPane.showMessageDialog(frame, m);
-        		    }
-        		}
+        		createNewInvstigation();
         	}
         });
         
@@ -347,6 +313,47 @@ public class InvestigationTree extends JPanel {
         add(scrollPane);
     }
 
+    //=======================================================================
+    // Handle File Chooser
+    //=======================================================================
+    public void createNewInvstigation() {
+		Component frame = null;
+		String s = (String)JOptionPane.showInputDialog(
+				frame,
+				"Type the investigation name:\n");
+		if ((s != null) && (s.length() > 0)) {
+			//Create the investigation directory
+			try {
+				//Create directory
+				String strDirectory = getDirPath() + "/" + s;
+				System.out.println("TC:"+strDirectory);
+				
+			    boolean success = (new File(strDirectory)).mkdir();
+			    if (success) {
+			    	//Create notes file
+			    	String strFile = strDirectory + "/" + nameNotesFile;
+			    	File f = new File(strFile);
+			    	if (!f.exists()) {
+                        f.createNewFile();
+			    	}
+			    	
+			    	// Add node to JTree
+	        	    InvestigationNode node = new InvestigationNode("Investigation", s);
+	        		InvestigationNode notes = new InvestigationNode("Notes", nameNotesFile);		
+	        		DefaultMutableTreeNode p  = addObject(node);
+	        	    addObject(p, notes);
+		            }  
+			    else {
+			    	String m = "The same investigation name exists.\nPlease use a different name.";
+			    	JOptionPane.showMessageDialog(frame, m);
+			    }
+		    } catch (Exception e) {
+		    	String m = "Add Operation Failed. \nPlease try again...";
+		    	JOptionPane.showMessageDialog(frame, m);
+		    }
+		}
+    }
+    
     //=======================================================================
     // Handle File Chooser
     //=======================================================================
