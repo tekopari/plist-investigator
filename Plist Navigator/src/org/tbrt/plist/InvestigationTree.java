@@ -312,7 +312,7 @@ public class InvestigationTree extends JPanel {
         		String dirFile = getDirPath() + "/" + nameNotesFile;
         		
         	    MyEditor editor = new MyEditor();
-        	    editor.doEdit("Notes for " + parentNode, dirFile);
+        	    editor.doEdit(dirFile, dirFile);
         	}
         });
         
