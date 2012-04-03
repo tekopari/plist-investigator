@@ -46,7 +46,7 @@ public class InvestigationTree extends JPanel {
     
     private String nameMyInvestigations = "My Investigations";
     private String nameNotesFile = "Notes";
-    private String namePlistFile = "plistfile.plist";
+    private String namePlistFile = "PListFile.plist";
     
     public InvestigationTree() {
         super(new GridLayout(1,0));
