@@ -231,7 +231,7 @@ public class InvestigationTree extends JPanel {
         
         investigationPopup.add(new JMenuItem("Search Text String"));
         
-        JMenuItem mnInv2pdf = investigationPopup.add(new JMenuItem("Save Investigatoin as PDF File"));
+        JMenuItem mnInv2pdf = investigationPopup.add(new JMenuItem("Save Investigation as PDF File"));
         mnInv2pdf.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		Component frame = null;
