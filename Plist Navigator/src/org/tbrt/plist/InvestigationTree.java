@@ -172,11 +172,10 @@ public class InvestigationTree extends JPanel {
         			try {
         				//Create directory
                         File fl = new File(s);
-                        String fParent = fl.getParent();
                         String fFile = fl.getName();
-                        String fFileNameStripped = fFile.substring(0, fFile.lastIndexOf('.'));
+                        //BEW: Remove. String fFileNameStripped = fFile.substring(0, fFile.lastIndexOf('.'));
                         
-        				String strDirectory = getDirPath() + "/" + getNodeName() + "/" + fFileNameStripped;
+        				String strDirectory = getDirPath() + "/" + getNodeName() + "/" + fFile;
         				System.out.println("BEW:strDir" + strDirectory);
         				String fileName = strDirectory + "/" + fFile;
         				
