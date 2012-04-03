@@ -164,7 +164,7 @@ public class InvestigationTree extends JPanel {
         			    	
         			    	    // Add node to JTree
                 		        InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
-                			    InvestigationNode notes = new InvestigationNode("Notes", nameNotesFile);
+                			    InvestigationNode notes = new InvestigationNode("Notes", "PList Notes");
                 			    DefaultMutableTreeNode t  = addObject(evid);
                 			    addObject(t, notes);
                 			    
@@ -339,7 +339,7 @@ public class InvestigationTree extends JPanel {
 			    	
 			    	// Add node to JTree
 	        	    InvestigationNode node = new InvestigationNode("Investigation", s);
-	        		InvestigationNode notes = new InvestigationNode("Notes", nameNotesFile);		
+	        		InvestigationNode notes = new InvestigationNode("Notes", "Investigation Notes");		
 	        		DefaultMutableTreeNode p  = addObject(node);
 	        	    addObject(p, notes);
 		            }  
