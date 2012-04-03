@@ -7,8 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
+import java.io.*;
+import java.nio.file.Files;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,6 +26,8 @@ import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 
+import org.tbrt.plist.MyEditor.SimpleEditor;
+
 public class InvestigationTree extends JPanel {
     protected DefaultMutableTreeNode rootNode;
     protected DefaultTreeModel treeModel;
@@ -35,6 +40,9 @@ public class InvestigationTree extends JPanel {
     protected JPopupMenu unknownPopup;
 
     protected MyEditor MyEditor;
+    protected PdfCreate PdfCreate;
+    
+    private String nameNotesFile = "Notes";
     
     public InvestigationTree() {
         super(new GridLayout(1,0));
@@ -70,8 +78,7 @@ public class InvestigationTree extends JPanel {
         			    boolean success = (new File(strDirectory)).mkdir();
         			    if (success) {
         			    	//Create notes file
-        			    	String notesFile = "Notes";
-        			    	String strFile = strDirectory + "/" + notesFile;
+        			    	String strFile = strDirectory + "/" + nameNotesFile;
         			    	File f = new File(strFile);
         			    	if (!f.exists()) {
                                 f.createNewFile();
@@ -79,7 +86,7 @@ public class InvestigationTree extends JPanel {
         			    	
         			    	// Add node to JTree
         	        	    InvestigationNode node = new InvestigationNode("Investigation", s);
-        	        		InvestigationNode notes = new InvestigationNode("Notes", notesFile);		
+        	        		InvestigationNode notes = new InvestigationNode("Notes", nameNotesFile);		
         	        		DefaultMutableTreeNode p  = addObject(node);
         	        	    addObject(p, notes);
        		            }  
@@ -154,54 +161,66 @@ public class InvestigationTree extends JPanel {
         	}
         });
         
-        JMenuItem mnPlist = investigationPopup.add(new JMenuItem("Add PList"));        
-        // TBRT addition
+        JMenuItem mnPlist = investigationPopup.add(new JMenuItem("Add PList"));
         mnPlist.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		// TODO
-        		// Create a dialog box to get the name of the jtree node
         		Component frame = null;
         		String s = (String)JOptionPane.showInputDialog(
         				frame,
-        				"Type plist file path:\n");
-        		//If a string was returned, say so.
+        				"Type a PList name for the investigation:\n");
         		if ((s != null) && (s.length() > 0)) {
-        			setLabel("Typed String... " + s + "!");
-
-        		    InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
-        			InvestigationNode notes = new InvestigationNode("Notes", "Notes");
-        			DefaultMutableTreeNode t  = addObject(evid);
-        			addObject(t, notes);       			
-       			
-        			PlistTreeTable p = new PlistTreeTable(s);
-        			
-        			//bew, initial code to create directory per plist file.
-        			// first thing is to remove the .plist extension.
-        			// TODO: need to figure out how to remove the C:\dirname, so that we can
-        			//   just use the filename, and then add our own path name.  I.e. We will 
-        			//   not usually be creating the directoy in same location as where plist
-        			//   file may be.
-        			// TODO: Add additional error check, ie. what if dir exists, or invalid name.
-        			// TODO: Use the final code for getting filename, to also use when displaying
-        			//       on the GUI.
-        			s = s.substring(0, s.lastIndexOf('.'));
-        			//File f = new File("C:" + File.separator + "temp" + File.separator + s);
-        			File f = new File(s);
-        			try{
-        				f.mkdir();
-        				} catch (Exception e) {
-        					e.printStackTrace(); //TODO: Add code to handle displaying correct error codes
-        					}
-        			//bew, end add code
-        			}  else {
+        			//Create the PList directory
+        			try {
+        				//Create directory
+        				String rootDir = Configuration.getConfiguration().getWorkspace();
+        				String plistName = "PList";
+        				String strDirectory = rootDir + "/" + getNodeName() + "/" + plistName;
         				
-        				//If you're here, the return value was null/empty.
-        				setLabel("Come on, finish the sentence!");
-        			}                     
-        	}
+        			    boolean success = (new File(strDirectory)).mkdir();
+        			    if (success) {
+     			    	    //Choose PList target file name
+     			    	    String plistFile = "plistfile.plist";
+     			    	    File toFile = new File(strDirectory + "/" + plistFile); 
+     			    	   
+                			//Choose PList source file name and perform copy
+            	            JFileChooser chooser = new JFileChooser();
+            	            chooser.setDialogTitle("Choose a PList File to Import");
+            	    		
+            	            int c = chooser.showOpenDialog(frame);
+            	            if (c == JFileChooser.APPROVE_OPTION){
+                	            File fromFile = chooser.getSelectedFile();
 
-        	private void setLabel(String string) {
-        		// TODO Auto-generated method stub                                       
+            			    	//Copy PList file
+            			    	copyFile(fromFile, toFile);
+
+        			            //Create notes file
+        			    	    File f = new File(strDirectory + "/" + nameNotesFile);
+        			    	    if (!f.exists()) {
+                                    f.createNewFile();
+        			    	    }
+        			    	
+        			    	    // Add node to JTree
+                		        InvestigationNode evid = new InvestigationNode("EvidenceItem", plistName);
+                			    InvestigationNode notes = new InvestigationNode("Notes", nameNotesFile);
+                			    DefaultMutableTreeNode t  = addObject(evid);
+                			    addObject(t, notes);
+                			    
+                			    PlistTreeTable p = new PlistTreeTable(s);   
+            	            }
+            	            else {
+            			    	String m = "Operation Failed. \nPlease try again...";
+            			    	JOptionPane.showMessageDialog(frame, m);
+            	            }
+       		            }  
+        			    else {
+        			    	String m = "The same plist name exists.\nPlease use a different name.";
+        			    	JOptionPane.showMessageDialog(frame, m);
+        			    }
+        		    } catch (Exception e) {
+        		    	String m = "Add Operation Failed. \nPlease try again...";
+        		    	JOptionPane.showMessageDialog(frame, m);
+        		    }
+        		}                 
         	}
         });       
         
@@ -220,8 +239,7 @@ public class InvestigationTree extends JPanel {
 				if (n == 0) {
 					try {
 					    String rootDir = Configuration.getConfiguration().getWorkspace();
-					    String parentNode = getNodeParentName();
-					    File f = new File(rootDir + "/" + parentNode + "/" + getNodeName());
+					    File f = new File(rootDir + "/" + getNodeName());
 					    
 					    boolean success = deleteDir(f);
 					    if (success) {
@@ -240,19 +258,32 @@ public class InvestigationTree extends JPanel {
         });
         
         evidenceItemPopup.add(new JMenuItem("Search Text String"));
-        evidenceItemPopup.add(new JMenuItem("Save PList as PDF File"));
-               
+        
+        JMenuItem mnPlist2pdf = evidenceItemPopup.add(new JMenuItem("Save PList as PDF File"));
+        mnPlist2pdf.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		String rootDir = Configuration.getConfiguration().getWorkspace();
+        		String plistFile = "plistfile.plist";
+        		//String f = rootDir + "/" + getNodeParentName() + "/" + plistFile;
+        		String f = "C:/tmp/plistfile.plist";
+        		
+        		System.out.println("TC:InvestigationTree:"+f);
+        	    PdfCreate pdfH = new PdfCreate(f);
+        	}
+        });
+        
         JMenuItem mnEdit = notesPopup.add(new JMenuItem("Edit Notes"));
         mnEdit.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		String rootDir = Configuration.getConfiguration().getWorkspace();
         		String parentNode = getNodeParentName();
-        		String notesFile = "Notes";
+        		
+        		System.out.println("TC:notes_edit:"+parentNode);
         		
         	    MyEditor editor = new MyEditor();
         	    editor.doEdit(
         	    		"Notes for " + parentNode, 
-        	    		rootDir + "/" + parentNode + "/" + notesFile);
+        	    		rootDir + "/" + parentNode + "/" + nameNotesFile);
         	}
         });
         
@@ -264,6 +295,23 @@ public class InvestigationTree extends JPanel {
         add(scrollPane);
     }
 
+    //=======================================================================
+    // Delete directory including all files and sub-directories
+    //=======================================================================
+    public void copyFile(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
+    
     //=======================================================================
     // Delete directory including all files and sub-directories
     //=======================================================================
@@ -290,11 +338,16 @@ public class InvestigationTree extends JPanel {
         if (currentSelection != null) {
             DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode)
                          (currentSelection.getLastPathComponent());
-            DefaultMutableTreeNode parent = currentNode.getPreviousNode();
-            
-            InvestigationNode iNode = (InvestigationNode)(parent.getUserObject());
-            String s = iNode.getNodeValue();
-            return(s);
+            String s = "";
+            while (s != nameNotesFile) {
+                DefaultMutableTreeNode parent = currentNode.getPreviousNode();
+                InvestigationNode iNode = (InvestigationNode)(currentNode.getUserObject());
+                s = iNode.getNodeValue();
+                currentNode = parent;
+        	}
+            InvestigationNode iNode = (InvestigationNode)(currentNode.getUserObject());
+            String p = iNode.getNodeValue();
+            return(p);
         }
         return("");
     }
