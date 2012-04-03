@@ -2,6 +2,7 @@ package org.tbrt.plist;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ import java.io.*;
 import java.nio.file.Files;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -182,9 +184,7 @@ public class InvestigationTree extends JPanel {
      			    	    File toFile = new File(fileName); 
      			    	   
                 			//Choose PList source file name and perform copy
-            	            JFileChooser chooser = new JFileChooser();
-            	            chooser.setDialogTitle("Choose a PList File to Import");
-            	    		
+     			    	    JFileChooser chooser = doFileChooser();
             	            int c = chooser.showOpenDialog(frame);
             	            if (c == JFileChooser.APPROVE_OPTION){
                 	            File fromFile = chooser.getSelectedFile();
@@ -207,8 +207,8 @@ public class InvestigationTree extends JPanel {
                 			    PlistTreeTable p = new PlistTreeTable(fileName);   
             	            }
             	            else {
-            			    	String m = "Operation Failed. \nPlease try again...";
-            			    	JOptionPane.showMessageDialog(frame, m);
+            	            	File f = new File(strDirectory);
+            	            	deleteDir(f);
             	            }
        		            }  
         			    else {
@@ -293,9 +293,7 @@ public class InvestigationTree extends JPanel {
         		Component frame = null;
         		
    			    //Choose a PDF file name
-	            JFileChooser chooser = new JFileChooser();
-	            chooser.setDialogTitle("Select Directory and Enter PDF File Name");
-	    		
+        		JFileChooser chooser = doFileChooser();
 	            int c = chooser.showOpenDialog(frame);
 	            if (c == JFileChooser.APPROVE_OPTION){
     	            File f = chooser.getSelectedFile();
@@ -304,10 +302,6 @@ public class InvestigationTree extends JPanel {
         		    
         	        PdfCreate pdfH = new PdfCreate(plistName, pdfName);
         		}
-	            else {
-   			    	String m = "Operation Failed. \nPlease try again...";
-			    	JOptionPane.showMessageDialog(frame, m);
-	            }
         	}
         });
         
@@ -330,6 +324,22 @@ public class InvestigationTree extends JPanel {
         add(scrollPane);
     }
 
+    //=======================================================================
+    // Handle File Chooser
+    //=======================================================================
+    public JFileChooser doFileChooser() {
+        JFileChooser chooser = new JFileChooser() {
+            protected JDialog createDialog( Component parent ) throws HeadlessException {
+                JDialog dialog = super.createDialog( parent );            	                   
+                ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
+    		    dialog.setIconImage(img.getImage());
+                return dialog;
+            }
+        };
+        chooser.setDialogTitle("Choose a PList File to Import");    
+        return chooser;
+    }
+    
     //=======================================================================
     // Delete directory including all files and sub-directories
     //=======================================================================
@@ -366,7 +376,7 @@ public class InvestigationTree extends JPanel {
     }
 
     //=======================================================================
-    // Return Node Name
+    // Return Directory Path 
     //=======================================================================
     public String getDirPath() {
     	String rootPath = Configuration.getConfiguration().getWorkspace();;
