@@ -26,7 +26,7 @@ public class PdfCreate {
 	//TC public PdfCreate(NSDictionary rootDict) {
 	//TC }
 	
-	public PdfCreate(String plistName, String pdfName) {
+	public PdfCreate(String notesName, String plistName, String pdfName) {
 		NSDictionary rootDict = null;
 		System.out.println("TC:pdfcreate:"+plistName+","+pdfName);
 		

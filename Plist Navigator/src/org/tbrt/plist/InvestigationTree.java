@@ -184,11 +184,9 @@ public class InvestigationTree extends JPanel {
      			    	    File toFile = new File(fileName); 
      			    	   
                 			//Choose PList source file name and perform copy
-     			    	    JFileChooser chooser = doFileChooser();
-            	            int c = chooser.showOpenDialog(frame);
-            	            if (c == JFileChooser.APPROVE_OPTION){
-                	            File fromFile = chooser.getSelectedFile();
-
+     			    	    File fromFile = doFileChooser(frame);
+     			    	    
+            	            if (fromFile != null){
             			    	//Copy PList file
             			    	copyFile(fromFile, toFile);
 
@@ -293,14 +291,13 @@ public class InvestigationTree extends JPanel {
         		Component frame = null;
         		
    			    //Choose a PDF file name
-        		JFileChooser chooser = doFileChooser();
-	            int c = chooser.showOpenDialog(frame);
-	            if (c == JFileChooser.APPROVE_OPTION){
-    	            File f = chooser.getSelectedFile();
+        		File f = doFileChooser(frame);
+	            if (f != null){
     	            String pdfName = f.getPath() + ".pdf";	            
         		    String plistName = getDirPath() + "/" + getNodeName() + "/" + namePlistFile;
+        		    String notesName = getDirPath() + "/" + getNodeName() + "/" + nameNotesFile;
         		    
-        	        PdfCreate pdfH = new PdfCreate(plistName, pdfName);
+        	        PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
         		}
         	}
         });
@@ -327,7 +324,7 @@ public class InvestigationTree extends JPanel {
     //=======================================================================
     // Handle File Chooser
     //=======================================================================
-    public JFileChooser doFileChooser() {
+    public File doFileChooser(Component frame) {
         JFileChooser chooser = new JFileChooser() {
             protected JDialog createDialog( Component parent ) throws HeadlessException {
                 JDialog dialog = super.createDialog( parent );            	                   
@@ -336,8 +333,15 @@ public class InvestigationTree extends JPanel {
                 return dialog;
             }
         };
-        chooser.setDialogTitle("Choose a PList File to Import");    
-        return chooser;
+        
+        chooser.setDialogTitle("Choose a PList File to Import");
+        
+        int c = chooser.showOpenDialog(frame);
+        if (c == JFileChooser.APPROVE_OPTION){
+            File f = chooser.getSelectedFile();
+            return f;
+        }
+        return null;
     }
     
     //=======================================================================
