@@ -230,8 +230,33 @@ public class InvestigationTree extends JPanel {
         });    
         
         investigationPopup.add(new JMenuItem("Search Text String"));
-        investigationPopup.add(new JMenuItem("Save Investigatoin as PDF File"));
-
+        
+        JMenuItem mnInv2pdf = investigationPopup.add(new JMenuItem("Save Investigatoin as PDF File"));
+        mnInv2pdf.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		Component frame = null;
+        		
+   			    //Choose a PDF file name
+        		File f = doFileChooser(frame);
+	            if (f != null) {
+    	            String pdfName = f.getPath() + ".pdf";
+    	            
+    	            String [] dirPath = new String[2000];
+    	            int max = travelDirPath(frame, dirPath, 2000);
+    	            for (int i = 0; i < max; i++) {
+    	            	String notesName = dirPath[i] + "/" + nameNotesFile;
+    	            	String plistName = "";
+    	            	if (i > 0) {
+    	            		plistName = dirPath[i] + "/" + namePlistFile;
+    	            	}
+    	            	System.out.println("TC:pdf:"+dirPath[i]+":"+i+":"+notesName+","+plistName);
+        		    
+        	            //PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
+    	            }
+        		}
+        	}
+        });
+        
         JMenuItem mnRePlist = evidenceItemPopup.add(new JMenuItem("Rename PList"));
         mnRePlist.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
@@ -300,10 +325,11 @@ public class InvestigationTree extends JPanel {
         		
    			    //Choose a PDF file name
         		File f = doFileChooser(frame);
-	            if (f != null){
-    	            String pdfName = f.getPath() + ".pdf";	            
-        		    String plistName = getDirPath() + "/" + getNodeName() + "/" + namePlistFile;
-        		    String notesName = getDirPath() + "/" + getNodeName() + "/" + nameNotesFile;
+	            if (f != null) {
+    	            String pdfName = f.getPath() + ".pdf";
+    	            String p = getDirPath() + "/" + getNodeName();
+        		    String plistName = p + "/" + namePlistFile;
+        		    String notesName = p + "/" + nameNotesFile;
         		    
         	        PdfCreate pdfH = new PdfCreate(notesName, plistName, pdfName);
         		}
@@ -388,7 +414,7 @@ public class InvestigationTree extends JPanel {
     }
 
     //=======================================================================
-    // Return Directory Path 
+    // Return directory path to current node
     //=======================================================================
     public String getDirPath() {
     	String rootPath = Configuration.getConfiguration().getWorkspace();;
@@ -434,7 +460,44 @@ public class InvestigationTree extends JPanel {
 
     	return(dirPath);
     }
- 
+
+    //=======================================================================
+    // Return set of directory paths under a current node
+    //=======================================================================
+    public int travelDirPath(Component frame, String[] p, int max) {
+    	String rootPath = Configuration.getConfiguration().getWorkspace();;
+    	int i = 0;
+    	
+        TreePath currentSelection = tree.getSelectionPath();
+        if (currentSelection != null) {
+            DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode)
+                         (currentSelection.getLastPathComponent());
+            InvestigationNode iNode = (InvestigationNode)(currentNode.getUserObject());
+            String invName = iNode.getNodeValue();
+
+            rootPath = rootPath + "/" + invName;
+            p[i++] = rootPath;
+            
+            DefaultMutableTreeNode sibling = currentNode.getNextNode();
+            while (sibling != null) {
+                InvestigationNode iNode2 = (InvestigationNode)(sibling.getUserObject());
+                	
+                String s = iNode2.getNodeValue();
+                if (s != nameNotesFile) {  //skip the first child which is the Notes file
+                    p[i++] = rootPath + "/" + s;
+                }	
+                sibling = sibling.getNextSibling();
+                
+                if (i >= max) {
+                	int c = max - 1;
+    				String m = "Sorry, not able to handle more than" + c + "PList files.";
+    		    	JOptionPane.showMessageDialog(frame, m);
+                }
+            }
+        }
+        return(i);
+    }
+    
     //=======================================================================
     // Return Node Parent Name
     //======================================================================= 
