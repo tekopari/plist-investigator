@@ -43,7 +43,7 @@ public class InvestigationTree extends JPanel {
     private String nameMyInvestigations = "My Investigations";
     private String nameNotesFile = "Notes";
     private String namePlistFile = "PListFile";
-    private String nameORG = "org";
+    private String nameExtORG = ".org";
     
     public InvestigationTree() {
         super(new GridLayout(1,0));
@@ -148,7 +148,7 @@ public class InvestigationTree extends JPanel {
         			    		String f = fromFile.getName();      			    		
         			    		
             			    	//Copy PList file
-        			    		String fileName = strDirectory + "/" + f + "." + nameORG;
+        			    		String fileName = strDirectory + "/" + f + nameExtORG;
         			    		File toFile = new File(fileName);
             			    	copyFile(fromFile, toFile);
             			    	
@@ -175,7 +175,7 @@ public class InvestigationTree extends JPanel {
                 			    DefaultMutableTreeNode t  = addObject(evid);
                 			    addObject(t, notes);
                 			    
-                			    PlistTreeTable p = new PlistTreeTable(fileName);   
+                			    //TC PlistTreeTable p = new PlistTreeTable(fileName);   
             	            }
             	            else {
             	            	File f = new File(strDirectory);
@@ -204,7 +204,11 @@ public class InvestigationTree extends JPanel {
    			    //Choose a PDF file name
         		File fileName = doFileChooser(frame, "Choose a PDF File Name");
 	            if (fileName != null) {
-    	            String pdfName = fileName.getPath() + ".pdf";
+    	            String pdfName = fileName.getPath();
+    	            
+    	            if (!pdfName.endsWith(".pdf")) {
+    	            	pdfName = pdfName + ".pdf";
+    	            }
     	            
     	            String[] nodeName = new String[2001];
     	            String[] dirPath = new String[2001];
@@ -221,7 +225,7 @@ public class InvestigationTree extends JPanel {
     	        		    for (int j = 0; j < listOfFiles.length; j++) {
     	        		        if (listOfFiles[j].isFile()) {
     	        		            String f = listOfFiles[j].getName();
-    	        		            if (!f.endsWith(nameORG) && !f.contains(nameNotesFile)) {
+    	        		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
     	        		               plistName = dirPath[i] + "/" + f;
     	        		               System.out.println("TC:pdf:"+i+":"+invName+":"+notesName+","+plistName+":");
     	        		              // PdfCreate pdfH = new PdfCreate(invName, notesName, plistName, pdfName);
@@ -235,6 +239,28 @@ public class InvestigationTree extends JPanel {
     	            	}
     	            }
         		}
+        	}
+        });
+ 
+        JMenuItem mnShowPlist = evidenceItemPopup.add(new JMenuItem("Show PList"));
+        mnShowPlist.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		String nodeName = getNodeName();
+	            
+	            String path = getDirPath() + "/" + nodeName;
+
+	            File folder = new File(path);
+    		    File[] listOfFiles = folder.listFiles();
+    		    
+    		    for (int i = 0; i < listOfFiles.length; i++) {
+    		        if (listOfFiles[i].isFile()) {
+    		            String f = listOfFiles[i].getName();
+    		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
+    		               String plistName = path + "/" + f;
+    		               PlistTreeTable p = new PlistTreeTable(plistName);
+    		            }
+    		        }
+    		    }
         	}
         });
         
@@ -308,7 +334,11 @@ public class InvestigationTree extends JPanel {
         		File target = doFileChooser(frame, "Choose a PDF File Name");
 	            if (target != null) {
 	            	String nodeName = getNodeName();
-    	            String pdfName = target.getPath() + ".pdf";
+    	            String pdfName = target.getPath();
+    	            
+    	            if (!pdfName.endsWith(".pdf")) {
+    	            	pdfName = pdfName + ".pdf";
+    	            }
     	            
     	            String path = getDirPath() + "/" + nodeName;
     	            String notesName = path + "/" + nameNotesFile;
@@ -319,7 +349,7 @@ public class InvestigationTree extends JPanel {
         		    for (int i = 0; i < listOfFiles.length; i++) {
         		        if (listOfFiles[i].isFile()) {
         		            String f = listOfFiles[i].getName();
-        		            if (!f.endsWith(nameORG) && !f.contains(nameNotesFile)) {
+        		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
         		               String plistName = path + "/" + f;
         		               PdfCreate h = new PdfCreate(nodeName, notesName, plistName, pdfName);
         		            }
