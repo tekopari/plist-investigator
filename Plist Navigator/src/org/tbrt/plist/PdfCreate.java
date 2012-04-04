@@ -19,6 +19,14 @@ import com.dd.plist.PropertyListParser;
 
 public class PdfCreate {
 
+	public int pdfStatus() {
+		int rc = 0;
+		
+		//TODO Handle PDF operation status. "rc=0" means success, "rc=1" means error
+		
+		return(rc);
+	}
+	
 	public void foo() {
 		PDFont font = PDType1Font.HELVETICA_BOLD;
 	}
@@ -42,7 +50,9 @@ public class PdfCreate {
 			System.err.println("Cannot use the PropertyListParser");
 		}
 
-	}	
+	}
+	
+
 	
 	public void testcreate(String fileName) throws IOException, COSVisitorException {
 		// the document
