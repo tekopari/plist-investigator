@@ -40,11 +40,11 @@ public class PlistTreeTable
         //-------------------------------------------------------------------
         // The frame will have the same name as the file
         //-------------------------------------------------------------------
-	    JFrame frame = new JFrame(filename);
+	    final JFrame frame = new JFrame(filename);
 	    frame.addWindowListener(
 	        new WindowAdapter() {
 	            public void windowClosing(WindowEvent we) {
-		            System.exit(0);
+	            	frame.dispose();
 	            }
 	        }
 	    );
