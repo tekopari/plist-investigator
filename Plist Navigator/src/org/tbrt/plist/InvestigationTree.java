@@ -39,6 +39,7 @@ public class InvestigationTree extends JPanel {
 
     protected MyEditor MyEditor;
     protected PdfCreate PdfCreate;
+    protected PlistFileDialog PlistFileDialog;
     
     private String nameMyInvestigations = "My Investigations";
     private String nameNotesFile = "Notes";
@@ -116,7 +117,7 @@ public class InvestigationTree extends JPanel {
         JMenuItem mnInvestigations = investigationsPopup.add(new JMenuItem("Add New Investigation"));
         mnInvestigations.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		createNewInvstigation();
+        		createNewInvestigation();
         	}
         });
         
@@ -192,67 +193,69 @@ public class InvestigationTree extends JPanel {
         mnPlist.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		Component frame = null;
-        		String s = (String)JOptionPane.showInputDialog(
-        				frame,
-        				"Type Evidence Name for the investigation:\n");
-        		if ((s != null) && (s.length() > 0)) {
-        			//Create the PList directory
-        			try {
-        				//Create directory
-        				String strDirectory = getDirPath() + "/" + getNodeName() + "/" + s;
-        				
-        			    boolean success = (new File(strDirectory)).mkdir();
-        			    if (success) {        			    	   
-                			//Choose PList source file name and perform copy
-        			    	File fromFile = doFileChooser(frame, "Choose a PList File to Import");
-        			    	if (fromFile != null) {
-        			    		String f = fromFile.getName();      			    		
-        			    		
-            			    	//Copy PList file
-        			    		String fileName = strDirectory + "/" + f + nameExtORG;
-        			    		File toFile = new File(fileName);
-            			    	copyFile(fromFile, toFile);
-            			    	
-            			    	//Copy PList file to a fixed name           			    	
-            			    	int pos = f.lastIndexOf('.');
-            			    	String ext = f.substring(pos + 1);
-            			    	fileName = strDirectory + "/" + namePlistFile;            			    
-            			    	if (ext.length() > 0) {
-            			    		fileName = fileName + "." + ext;
-            			    	}
-            			    	
-            			    	toFile = new File(fileName);
-            			    	copyFile(fromFile, toFile);
-
-        			            //Create notes file
-        			    	    File n = new File(strDirectory + "/" + nameNotesFile);
-        			    	    if (!n.exists()) {
-                                    n.createNewFile();
+        		try {			
+        			PlistFileDialog dia = new PlistFileDialog("C:/");
+        			PlistMetaData metadata = dia.importPlist("c:/");
+        			
+        			//TC String eviId = metadata.getEvidenceId();
+        			String eviName = metadata.getEvidenceName();
+        			String eviFile = metadata.getPlistFilename();
+        			
+        			if ((eviName.length() > 0) && (eviFile.length() > 0)) {
+        				File fromFile = new File(eviFile);
+        				if (fromFile.exists()) {       				
+        				    //Create directory
+        				    String strDirectory = getDirPath() + "/" + getNodeName() + "/" + eviName;        				
+        			        boolean success = (new File(strDirectory)).mkdir();
+        			        if (success) {
+                			    //Choose PList source file name and perform copy
+        			    	    String f = fromFile.getName();      			    		
+    			    		
+        			    	    //Copy PList file
+    			    		    String fileName = strDirectory + "/" + f + nameExtORG;
+    			    		    File toFile = new File(fileName);
+        			    	    copyFile(fromFile, toFile);
+        			    	
+        			    	    //Copy PList file to a fixed name           			    	
+        			    	    int pos = f.lastIndexOf('.');
+        			    	    String ext = f.substring(pos + 1);
+        			    	    fileName = strDirectory + "/" + namePlistFile;            			    
+        			    	    if (ext.length() > 0) {
+        			    		    fileName = fileName + "." + ext;
         			    	    }
         			    	
-        			    	    // Add node to JTree
-                		        InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
-                			    //TC InvestigationNode notes = new InvestigationNode("Notes", "PList "+nameNotesFile);
-                			    DefaultMutableTreeNode t  = addObject(evid);
-                			    //TC addObject(t, notes);
-                			    
-                			    //TC PlistTreeTable p = new PlistTreeTable(fileName);   
-            	            }
-            	            else {
-            	            	File f = new File(strDirectory);
-            	            	deleteDir(f);
-            	            }
-        		        }  
-        			    else {
-        			    	String m = "The same plist name exists.\nPlease use a different name.";
-        			    	JOptionPane.showMessageDialog(frame, m);
+        			    	    toFile = new File(fileName);
+        			    	    copyFile(fromFile, toFile);
+
+    			                //Create notes file
+    			    	        File n = new File(strDirectory + "/" + nameNotesFile);
+    			    	        if (!n.exists()) {
+                                    n.createNewFile();
+    			    	        }
+    			    	
+    			    	        // Add node to JTree
+            		            InvestigationNode evid = new InvestigationNode("EvidenceItem", eviName);
+            			        //TC InvestigationNode notes = new InvestigationNode("Notes", "PList "+nameNotesFile);
+            			        DefaultMutableTreeNode t  = addObject(evid);
+            			        //TC addObject(t, notes);
+        			        }
+        			        else {
+        			    	    String m = "The same evidence name exists.\nPlease use a different name.";
+        			    	    JOptionPane.showMessageDialog(frame, m);
+        			        }
         			    }
-        		    } catch (Exception e) {
-        		    	String m = "Add Operation Failed. \nPlease try again...";
-        		    	JOptionPane.showMessageDialog(frame, m);
-        		    }
-        		}                 
-        	}
+        				else {
+        			        String m = "The evidence file does not exist.";
+     			    	    JOptionPane.showMessageDialog(frame, m);
+        				}
+        			}
+        			
+        		} catch (Exception e) {
+        			e.printStackTrace();
+    		    	String m = "Add Operation Failed. \nPlease try again...";
+    		    	JOptionPane.showMessageDialog(frame, m);
+        		}
+        	}       		                
         });    
         
         investigationPopup.add(new JMenuItem("Search Text String"));
@@ -452,7 +455,7 @@ public class InvestigationTree extends JPanel {
     //=======================================================================
     // Handle File Chooser
     //=======================================================================
-    public void createNewInvstigation() {
+    public void createNewInvestigation() {
 		Component frame = null;
 		String s = (String)JOptionPane.showInputDialog(
 				frame,
@@ -460,8 +463,10 @@ public class InvestigationTree extends JPanel {
 		if ((s != null) && (s.length() > 0)) {
 			//Create the investigation directory
 			try {
-				//Create directory
-				String strDirectory = getDirPath() + "/" + s;			
+				//Create directory				
+				String rootPath = Configuration.getConfiguration().getWorkspace();
+				String strDirectory = rootPath + "/" + s;
+				
 			    boolean success = (new File(strDirectory)).mkdir();
 			    if (success) {
 			    	//Create notes file
@@ -474,7 +479,7 @@ public class InvestigationTree extends JPanel {
 			    	// Add node to JTree
 	        	    InvestigationNode node = new InvestigationNode("Investigation", s);
 	        		//TC InvestigationNode notes = new InvestigationNode("Notes", "Investigation "+nameNotesFile);		
-	        		DefaultMutableTreeNode p  = addObject(node);
+	        		DefaultMutableTreeNode p  = addObject(null, node);
 	        	    //TC addObject(p, notes);
 		            }  
 			    else {
@@ -550,7 +555,7 @@ public class InvestigationTree extends JPanel {
     // Return directory path to current node
     //=======================================================================
     public String getDirPath() {
-    	String rootPath = Configuration.getConfiguration().getWorkspace();;
+    	String rootPath = Configuration.getConfiguration().getWorkspace();
     	String dirPath = "";
     	
         TreePath currentSelection = tree.getSelectionPath();
