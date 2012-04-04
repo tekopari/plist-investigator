@@ -41,6 +41,8 @@ public class PlistNavigator {
 
 	private JFrame frmPlistNavigator;
 	private InvestigationTree investigationTree;
+	private TabbedPane tabbedPane;
+	private DisplayImagePanel imagePanel;
 	
 	/**
 	 * Launch the application.
@@ -186,11 +188,27 @@ public class PlistNavigator {
 		//===================================================================
 		// Tab panels
 		//===================================================================
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		sl_panel.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, panel);
-		sl_panel.putConstraint(SpringLayout.WEST, tabbedPane, 6, SpringLayout.EAST, investigationTree);
-		sl_panel.putConstraint(SpringLayout.SOUTH, tabbedPane, -10, SpringLayout.SOUTH, panel);
-		sl_panel.putConstraint(SpringLayout.EAST, tabbedPane, -10, SpringLayout.EAST, panel);
-		panel.add(tabbedPane);
+//		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+//		tabbedPane = new TabbedPane();
+//		sl_panel.putConstraint(SpringLayout.NORTH, tabbedPane, 10, SpringLayout.NORTH, panel);
+//		sl_panel.putConstraint(SpringLayout.WEST, tabbedPane, 6, SpringLayout.EAST, investigationTree);
+//		sl_panel.putConstraint(SpringLayout.SOUTH, tabbedPane, -10, SpringLayout.SOUTH, panel);
+//		sl_panel.putConstraint(SpringLayout.EAST, tabbedPane, -10, SpringLayout.EAST, panel);
+//		panel.add(tabbedPane);
+		
+		//===================================================================
+		// Image Panel
+		//===================================================================
+//		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		
+		//BEW:  Replace above with below.  Just adding some color for now.  We need to decide if this panel
+		//   will be used for just displaying, or also for displaying what is clicked-on in the left panel?
+		
+		imagePanel = new DisplayImagePanel();
+		sl_panel.putConstraint(SpringLayout.NORTH, imagePanel, 10, SpringLayout.NORTH, panel);
+		sl_panel.putConstraint(SpringLayout.WEST, imagePanel, 6, SpringLayout.EAST, investigationTree);
+		sl_panel.putConstraint(SpringLayout.SOUTH, imagePanel, -10, SpringLayout.SOUTH, panel);
+		sl_panel.putConstraint(SpringLayout.EAST, imagePanel, -10, SpringLayout.EAST, panel);
+		panel.add(imagePanel);
 	}
 }
