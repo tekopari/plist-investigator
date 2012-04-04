@@ -98,7 +98,7 @@ public class PlistNavigator {
 		// Add New investigation folder
         mntmNewProject.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		investigationTree.createNewInvstigation();
+        		investigationTree.createNewInvestigation();
         	}
         });
 
