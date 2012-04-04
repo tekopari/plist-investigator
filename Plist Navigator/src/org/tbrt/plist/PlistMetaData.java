@@ -1,18 +1,34 @@
 package org.tbrt.plist;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Properties;
 
 public class PlistMetaData {
-    private String evidenceId;
+	private String investigationDir;
+
+	private String evidenceId;
     private String evidenceName;
     private String plistFilename;
     private File plistFile;
     
 	public PlistMetaData() {
+		investigationDir = "";
 	    evidenceId = "";
 	    evidenceName = "";
 	    plistFilename = "";
 	    plistFile = null;
+	}
+	
+	public String getInvestigationDir() {
+		return investigationDir;
+	}
+
+	public void setInvestigationDir(String investigationDir) {
+		this.investigationDir = investigationDir;
 	}
 	
 	private String removeBackSlashes(String str) {
@@ -49,4 +65,40 @@ public class PlistMetaData {
 	public void setFile(File file) {
 		this.plistFile = file;
 	}
+	
+	private void save(String filename) {
+		try {
+			PrintWriter out = new PrintWriter(new FileWriter(filename));
+			out.println("EVIDENCE.ID=" + this.getEvidenceId());
+			out.println("EVIDENCE.NAME=" + this.getEvidenceName());
+			out.println("INVESTIGATION.DIR=" + this.getInvestigationDir());
+			out.println("PLIST.FILE=" + this.getPlistFilename());
+			out.close();							
+		}
+		catch (Exception e) {
+			System.err.println("ERROR: Failed to write file [" + filename + "] :");
+			System.err.println(e);
+		}
+		return;
+	}
+	
+	private void load(String filename) {
+		Properties p = null;
+        FileInputStream propFile = null;
+		try {
+			propFile = new FileInputStream(filename);
+			p = new Properties();
+            p.load(propFile);
+            this.setEvidenceId(p.getProperty("EVIDENCE.ID", ""));
+            this.setEvidenceName(p.getProperty("EVIDENCE.NAME", ""));
+            this.setInvestigationDir(p.getProperty("INVESTIGATION.DIR", ""));
+            this.setPlistFilename(p.getProperty("PLIST.FILE", ""));
+            this.setFile(null);
+		} catch (Exception e) {
+			System.err.println("ERROR: Failed to read file [" + filename + "] :");
+			System.err.println(e);
+		}
+        return;
+	}
+	
 }

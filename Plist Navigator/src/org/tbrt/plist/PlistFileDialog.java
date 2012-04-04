@@ -62,8 +62,8 @@ public class PlistFileDialog extends JDialog implements ActionListener {
 
 
 	public PlistFileDialog(String dirname) {
-		investigationDirectory = dirname;
 		metadata = new PlistMetaData();
+		metadata.setInvestigationDir(dirname);
 		setTitle("Plist File Importer");
 		setBounds(100, 100, 550, 200);
 		getContentPane().setLayout(new BorderLayout());
