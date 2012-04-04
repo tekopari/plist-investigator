@@ -276,7 +276,10 @@ public class InvestigationTree extends JPanel {
     	            
     	            String[] nodeName = new String[2001];
     	            String[] dirPath = new String[2001];
+    	      
     	            int max = travelDirPath(frame, nodeName, dirPath, 2000);
+    	            int flag = 0;
+    	            
     	            for (int i = 0; i < max; i++) {
     	            	String notesName = dirPath[i] + "/" + nameNotesFile;   	            	
     	            	String invName = nodeName[i];
@@ -291,17 +294,29 @@ public class InvestigationTree extends JPanel {
     	        		            String f = listOfFiles[j].getName();
     	        		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
     	        		               plistName = dirPath[i] + "/" + f;
-    	        		               System.out.println("TC:pdf:"+i+":"+invName+":"+notesName+","+plistName+":");
-    	        		              // PdfCreate pdfH = new PdfCreate(invName, notesName, plistName, pdfName);
+    	        		               PdfCreate h = new PdfCreate(invName, notesName, plistName, pdfName);
+    	        		               if (h.pdfStatus() != 0) {
+    	        		            	   flag = 1;
+    	        		            	   j = listOfFiles.length;
+    	        		            	   i = max;
+    	        		               }
     	        		            }
     	        		        }
     	        		    }
     	            	}
     	            	else {
-    	            		System.out.println("TC:pdf:"+i+":"+invName+":"+notesName+","+plistName+":");
-    	            		// PdfCreate pdfH = new PdfCreate(invName, notesName, plistName, pdfName);
+    	            		PdfCreate h = new PdfCreate(invName, notesName, plistName, pdfName);
+    	            		if (h.pdfStatus() != 0) {
+    	            			flag = 1;
+     		            	    i = max;
+    	            		}
     	            	}
     	            }
+    	            String m = "PDF file \"" + pdfName + "\" is ready.";
+		            if (flag != 0) {
+		                m = "Failed to generate the PDF file \"" + pdfName + "\".";
+		            }
+		            JOptionPane.showMessageDialog(frame, m);
         		}
         	}
         });
@@ -426,6 +441,12 @@ public class InvestigationTree extends JPanel {
         		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
         		               String plistName = path + "/" + f;
         		               PdfCreate h = new PdfCreate(nodeName, notesName, plistName, pdfName);
+        		               
+        		               String m = "PDF file \"" + pdfName + "\" is ready.";
+        		               if (h.pdfStatus() != 0) {
+        		            	   m = "Failed to generate the PDF file \"" + pdfName + "\".";
+        		               }
+        	        		   JOptionPane.showMessageDialog(frame, m);
         		            }
         		        }
         		    }
