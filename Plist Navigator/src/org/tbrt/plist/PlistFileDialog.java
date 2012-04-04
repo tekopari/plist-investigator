@@ -20,11 +20,10 @@ import javax.swing.JTextField;
 public class PlistFileDialog extends JDialog implements ActionListener {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textId;
+	//TC private JTextField textId;
 	private JTextField textName;
 	private JTextField textFilename;
 	private PlistMetaData metadata;
-	private String investigationDirectory;
 	
 	/**
 	 * Launch the application.
@@ -71,9 +70,9 @@ public class PlistFileDialog extends JDialog implements ActionListener {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-		    JLabel lblID= new JLabel("Evidence Id:");
-		    lblID.setBounds(12, 14, 140, 16);
-		    contentPanel.add(lblID);
+		    //TC JLabel lblID= new JLabel("Evidence Id:");
+			//TC lblID.setBounds(12, 14, 140, 16);
+			//TC contentPanel.add(lblID);
 		}
 		{
 			JLabel lblName = new JLabel("Evidence Name:");
@@ -86,11 +85,11 @@ public class PlistFileDialog extends JDialog implements ActionListener {
 			contentPanel.add(lblEmail);
 		}
 		{
-			textId = new JTextField();
-			textId.setColumns(10);
-			textId.setText("");		
-			textId.setBounds(106, 14, 274, 16);
-			contentPanel.add(textId);
+			//TC textId = new JTextField();
+			//TC textId.setColumns(10);
+			//TC textId.setText("");		
+			//TC textId.setBounds(106, 14, 274, 16);
+			//TC contentPanel.add(textId);
 		}		
 		{
 			textName = new JTextField();
@@ -137,8 +136,8 @@ public class PlistFileDialog extends JDialog implements ActionListener {
 	}
 
 	private String validateText(String name, String str){
-		String rc = "";
-
+		String rc = "";		
+		
 		if(str == null || str.equals("")) {
 			if(name == null || name.equals("")){
 				rc = "The specified field is a null or empty value.\n";
@@ -175,28 +174,28 @@ public class PlistFileDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent evt) {
 		if(evt.getActionCommand().equals("OK")){
 
-			String error = validateText("Plist Filename", textFilename.getText());
-
-			if(error.equals("")) {
+			String error1 = validateText("Plist Filename", textName.getText());
+			String error2 = validateText("Plist Filename", textFilename.getText());
+			
+			if ((error1.equals("") && error2.equals(""))) {
 	            metadata.setEvidenceName(textName.getText());
-				metadata.setEvidenceId(textId.getText());	
+	          //TC metadata.setEvidenceId(textId.getText());	
 				metadata.setPlistFilename(textFilename.getText());
 	            setVisible(false);             
 	            dispose(); 
 			}	
 			else {
-				MessageDialog.displayMessage("FORM VALIDATION ERROR",  error);	
+				//TC MessageDialog.displayMessage("FORM VALIDATION ERROR",  error);	
 			}
 		}
 		else if (evt.getActionCommand().equals("BROWSE")) {
 		    metadata.setFile(doFileChooser(contentPanel, "Choose a PList File to Import"));
-		    textName.setText(metadata.getFile().getName());
 		    textFilename.setText(metadata.getFile().getAbsolutePath());
 		}
 		else if (evt.getActionCommand().equals("CANCEL")) {
-            metadata.setEvidenceName("CANCEL");
-			metadata.setEvidenceId("CANCEL");	
-			metadata.setPlistFilename("CANCEL");
+            metadata.setEvidenceName("");
+			metadata.setEvidenceId("");	
+			metadata.setPlistFilename("");
             setVisible(false);             
             dispose(); 
 		}
