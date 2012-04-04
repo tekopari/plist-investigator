@@ -41,7 +41,7 @@ public class PlistNavigator {
 
 	private JFrame frmPlistNavigator;
 	private InvestigationTree investigationTree;
-	private TabbedPane tabbedPane;
+	//private TabbedPane tabbedPane;
 	private DisplayImagePanel imagePanel;
 	
 	/**
