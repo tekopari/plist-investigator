@@ -28,6 +28,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.JScrollPane;
@@ -36,8 +38,10 @@ public class MyEditor {
     private JTextComponent textComp;
     private String notesFileName;
     private String titleName;
+    private boolean changed;
     
 	public void doEdit(String title, String s) {
+		changed = false;
         titleName = title;
         notesFileName = s;
         
@@ -50,41 +54,44 @@ public class MyEditor {
 		 
 	    editor.addWindowListener(new WindowAdapter() {
 	        public void windowClosing(WindowEvent e) {
-				int n = JOptionPane.showConfirmDialog (
-						textComp,
-						"Save the Notes Before Exit?",
-						titleName,
-						JOptionPane.YES_NO_OPTION);
-			    if (n == 0) {
-			    	File file = new File(notesFileName);
-		            FileWriter writer = null;
-		            try {
-		                writer = new FileWriter(file);
-		                textComp.write(writer);
-		            } catch (IOException ex) {
-		            } finally {
-		                if (writer != null) {
-		                    try {
-		                        writer.close();
-		                    } catch (IOException x) {
-		                    }
-		                }
-		            }
-				}
-
+	        	if (changed) {
+	        		int n = JOptionPane.showConfirmDialog (
+							textComp,
+							"Save the Notes Before Exit?",
+							titleName,
+							JOptionPane.YES_NO_OPTION);
+				    if (n == 0) {
+				    	File file = new File(notesFileName);
+			            FileWriter writer = null;
+			            try {
+			                writer = new FileWriter(file);
+			                textComp.write(writer);
+			            } catch (IOException ex) {
+			            } finally {
+			                if (writer != null) {
+			                    try {
+			                        writer.close();
+			                    } catch (IOException x) {
+			                    }
+			                }
+			            }
+					}
+	        	}
+				
 	         }
 	     });
     }
-
+	
 	public class SimpleEditor extends JFrame {
 	     private Action openAction = new OpenAction();
 	     private Action saveAction = new SaveAction();	
-	     private Hashtable actionHash = new Hashtable();
+	     private Hashtable actionHash = new Hashtable();	        
 			
 	     // Create an editor.
 	     public SimpleEditor() {
 	    	 super(titleName);
 	    	 
+	    	 changed = false;
 	         textComp = createTextComponent();
 	         makeActionsPretty();	   
 	         
@@ -93,24 +100,39 @@ public class MyEditor {
 	         //TC content.add(createToolBar(), BorderLayout.NORTH);
 	         
 	         setJMenuBar(createMenuBar());
-	         setBounds(200, 100, 500, 400);
+	         setBounds(200, 100, 500, 400);	                	         
 	         
 	         myReadFile(notesFileName);
+	         
+	         textComp.getDocument().addDocumentListener(new DocumentListener() {
+	        	 public void insertUpdate(DocumentEvent e) {
+	     		    changed = true;
+	     		} 
+	     		    
+	     	    public void removeUpdate(DocumentEvent e) {
+	     		    changed = true;
+	     		}
+	     		    
+	     		public void changedUpdate(DocumentEvent e) {
+	     		    changed = true;
+	     		}
+	         });
 	     }
+	     
 	
 	     // Create the JTextComponent subclass.
 	     protected JTextComponent createTextComponent() {
 	         JTextArea textArea = new JTextArea();	        
 	         textArea.setLineWrap(true);
-	         textArea.setWrapStyleWord(true);
+	         textArea.setWrapStyleWord(true);	         
 	         
 		     JScrollPane scrollText = new JScrollPane(textArea);
 		     add(scrollText);	
-		     scrollText.isVisible();	
-		        
-	         return textArea;
+		     scrollText.isVisible();
+	         
+             return textArea;
 	    }
-	     
+	    
 	    // Add icons and friendly names to actions we care about.
 	    protected void makeActionsPretty() {
 	        Action a;
@@ -232,17 +254,19 @@ public class MyEditor {
 	        }
 	
 	        public void actionPerformed(ActionEvent ev) {
-				int n = JOptionPane.showConfirmDialog (
-						textComp,
-						"Save the Notes Before Exit?",
-						titleName,
-						JOptionPane.YES_NO_CANCEL_OPTION);
-				if ((n == 0) || (n == 1)) {
-					if (n == 0) {
-				       myWriteFile(notesFileName);
-					}
-				    dispose();
+	        	if (changed) {
+				    int n = JOptionPane.showConfirmDialog (
+						    textComp,
+						    "Save the Notes Before Exit?",
+						    titleName,
+						    JOptionPane.YES_NO_CANCEL_OPTION);
+				    if ((n == 0) || (n == 1)) {
+					    if (n == 0) {
+				           myWriteFile(notesFileName);
+					    }
+				    }
 				}
+	        	dispose();
 	        }
 	    }
 	
@@ -288,6 +312,7 @@ public class MyEditor {
 
 	        public void actionPerformed(ActionEvent ev) {
 	            myWriteFile(notesFileName);
+	            changed = false;
 	            
 	            /*TC
 	            // Query user for a filename and attempt to open and write the text
