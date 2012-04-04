@@ -43,7 +43,7 @@ public class InvestigationTree extends JPanel {
     
     private String nameMyInvestigations = "My Investigations";
     private String nameNotesFile = "Notes";
-    private String namePlistFile = "PListFile";
+    //TC private String namePlistFile = "PListFile";
     private String nameExtORG = ".org";
     
     private void init(){
@@ -212,20 +212,23 @@ public class InvestigationTree extends JPanel {
         			    	    String f = fromFile.getName();      			    		
     			    		
         			    	    //Copy PList file
-    			    		    String fileName = strDirectory + "/" + f + nameExtORG;
+    			    		    String fileName = strDirectory + "/" + f;   			    		 
     			    		    File toFile = new File(fileName);
         			    	    copyFile(fromFile, toFile);
-        			    	
-        			    	    //Copy PList file to a fixed name           			    	
-        			    	    int pos = f.lastIndexOf('.');
-        			    	    String ext = f.substring(pos + 1);
-        			    	    fileName = strDirectory + "/" + namePlistFile;            			    
-        			    	    if (ext.length() > 0) {
-        			    		    fileName = fileName + "." + ext;
-        			    	    }
-        			    	
-        			    	    toFile = new File(fileName);
+        			    	    toFile = new File(fileName + nameExtORG);
         			    	    copyFile(fromFile, toFile);
+        			    	
+        			    	    
+        			    	    //Copy PList file to a fixed name           			    	
+        			    	    //TC int pos = f.lastIndexOf('.');
+        			    	    //TC String ext = f.substring(pos + 1);
+        			    	    //TC fileName = strDirectory + "/" + namePlistFile;            			    
+        			    	    //TC if (ext.length() > 0) {
+        			    	    //TC     fileName = fileName + "." + ext;
+        			    	    //TC }
+        			    	    //TC
+        			    	    //TC toFile = new File(fileName);
+        			    	    //TC copyFile(fromFile, toFile);
 
     			                //Create notes file
     			    	        File n = new File(strDirectory + "/" + nameNotesFile);
