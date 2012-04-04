@@ -45,6 +45,56 @@ public class InvestigationTree extends JPanel {
     private String namePlistFile = "PListFile";
     private String nameExtORG = ".org";
     
+    private void init(){
+        
+        //-------------------------------------------------------------------
+        // Read the workspace and only return a list of directory names
+        //-------------------------------------------------------------------
+        String workspace = Configuration.getConfiguration().getWorkspace();
+        File workspaceDir = new File(workspace);
+        FileFilter dirOnlyFilter = new FileFilter() {
+            public boolean accept(File file) {
+                return file.isDirectory();
+            }
+        };
+        
+        //-------------------------------------------------------------------
+        // Read the contents of each investigation and create nodes
+        //-------------------------------------------------------------------
+        File[] investigations = workspaceDir.listFiles(dirOnlyFilter);
+        for(int i = 0; i < investigations.length; i++) {
+              //---------------------------------------------------------------
+              // Create the investigation node
+              //---------------------------------------------------------------
+              InvestigationNode node = new InvestigationNode(
+                                                   "Investigation", 
+                                                   investigations[i].getName());
+              
+              //---------------------------------------------------------------
+              // ADD THE NODE TO THE ROOT NODE
+              //---------------------------------------------------------------               
+              DefaultMutableTreeNode p  = addObject(rootNode, node, true);
+              
+              //---------------------------------------------------------------
+              // Open the investigation directory and read all the plists 
+              // directories
+              //---------------------------------------------------------------
+              String investigationFile = workspace + "/" + investigations[i].getName();
+              File investigation = new File(investigationFile);
+              File[] investigationfiles = investigation.listFiles(dirOnlyFilter);
+              for(int j = 0; j < investigationfiles.length; j++) {
+                    //-----------------------------------------------------------
+                    // Add each plist to the tree
+                    //-----------------------------------------------------------           	  
+                    String filename = investigationfiles[j].getName();
+    		        InvestigationNode evid = new InvestigationNode("EvidenceItem", filename);
+    			    DefaultMutableTreeNode t  = addObject(p, evid, false);
+              }
+        }
+        return;
+      }
+
+    
     public InvestigationTree() {
         super(new GridLayout(1,0));
         rootNode = new DefaultMutableTreeNode(new InvestigationNode("Investigations", nameMyInvestigations));
@@ -54,6 +104,7 @@ public class InvestigationTree extends JPanel {
         //TC tree.setEditable(true);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setShowsRootHandles(true);
+        init();
         
         // TODO - rework the popup menus and add listeners
         investigationsPopup = new JPopupMenu();
