@@ -51,6 +51,7 @@ public class PlistTreeTable
 	    
 		ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
 		frame.setIconImage(img.getImage());
+		frame.setBounds(200, 100, 500, 400);
 		
 	    //-------------------------------------------------------------------
 	    // Create the panel to display the plist in
