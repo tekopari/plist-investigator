@@ -69,6 +69,16 @@ public class InvestigationTree extends JPanel {
         	}
         });
         
+        JMenuItem mnInvNotes = investigationPopup.add(new JMenuItem("Show/Edit Investigation Notes"));
+        mnInvNotes.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		String dirFile = getDirPath() + "/" + getNodeName() + "/" + nameNotesFile;
+        		
+        	    MyEditor editor = new MyEditor();
+        	    editor.doEdit(dirFile, dirFile);
+        	}
+        });
+        
         JMenuItem mnRename = investigationPopup.add(new JMenuItem("Rename Investigation"));
         mnRename.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
@@ -171,9 +181,9 @@ public class InvestigationTree extends JPanel {
         			    	
         			    	    // Add node to JTree
                 		        InvestigationNode evid = new InvestigationNode("EvidenceItem", s);
-                			    InvestigationNode notes = new InvestigationNode("Notes", "PList "+nameNotesFile);
+                			    //TC InvestigationNode notes = new InvestigationNode("Notes", "PList "+nameNotesFile);
                 			    DefaultMutableTreeNode t  = addObject(evid);
-                			    addObject(t, notes);
+                			    //TC addObject(t, notes);
                 			    
                 			    //TC PlistTreeTable p = new PlistTreeTable(fileName);   
             	            }
@@ -242,6 +252,16 @@ public class InvestigationTree extends JPanel {
         	}
         });
  
+        JMenuItem mnPlistNotes = evidenceItemPopup.add(new JMenuItem("Show/Edit PList Notes"));
+        mnPlistNotes.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		String dirFile = getDirPath() + "/" + getNodeName() + "/" + nameNotesFile;
+        		
+        	    MyEditor editor = new MyEditor();
+        	    editor.doEdit(dirFile, dirFile);
+        	}
+        });
+        
         JMenuItem mnShowPlist = evidenceItemPopup.add(new JMenuItem("Show PList"));
         mnShowPlist.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
@@ -402,9 +422,9 @@ public class InvestigationTree extends JPanel {
 			    	
 			    	// Add node to JTree
 	        	    InvestigationNode node = new InvestigationNode("Investigation", s);
-	        		InvestigationNode notes = new InvestigationNode("Notes", "Investigation "+nameNotesFile);		
+	        		//TC InvestigationNode notes = new InvestigationNode("Notes", "Investigation "+nameNotesFile);		
 	        		DefaultMutableTreeNode p  = addObject(node);
-	        	    addObject(p, notes);
+	        	    //TC addObject(p, notes);
 		            }  
 			    else {
 			    	String m = "The same investigation name exists.\nPlease use a different name.";
