@@ -68,6 +68,10 @@ public class PlistFileDialog extends JDialog implements ActionListener {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		
+		ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
+		setIconImage(img.getImage());
+		
 		contentPanel.setLayout(null);
 		{
 		    //TC JLabel lblID= new JLabel("Evidence Id:");
