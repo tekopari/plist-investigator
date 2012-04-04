@@ -908,7 +908,45 @@ public class InvestigationTree extends JPanel {
     	}
     	
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+
+            String nodeName = "";
+            if(e.getClickCount() < 2) {
+            	return;
+            }
+            	
+            TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+            if (selPath == null){
+                return;
+            }else{
+            	Object x = selPath.getLastPathComponent();
+            	if(x == null) {
+            		nodeName = "UNKNOWN";
+            	}
+            	else {
+            		nodeName = ((InvestigationNode)((DefaultMutableTreeNode)x).getUserObject()).getNodeType();
+            	}
+                tree.setSelectionPath(selPath);
+            }
+
+ 	    	if (nodeName.equals("EvidenceItem")) {
+         		String nodename = getNodeName();
+ 	            
+ 	            String path = getDirPath() + "/" + nodename;
+
+ 	            File folder = new File(path);
+     		    File[] listOfFiles = folder.listFiles();
+     		    
+     		    for (int i = 0; i < listOfFiles.length; i++) {
+     		        if (listOfFiles[i].isFile()) {
+     		            String f = listOfFiles[i].getName();
+     		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
+     		               String plistName = path + "/" + f;
+     		               PlistTreeTable p = new PlistTreeTable(plistName);
+     		            }
+     		        }
+     		    }
+    	    }
+    	    return;
 		}
 
 		public void mouseEntered(MouseEvent e) {
