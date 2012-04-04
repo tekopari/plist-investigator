@@ -31,7 +31,7 @@ public class PlistMetaData {
 		this.investigationDir = investigationDir;
 	}
 	
-	private String removeBackSlashes(String str) {
+	public static String removeBackSlashes(String str) {
 		int len = str.length();
 		char[] tmp = str.toCharArray();
 		for(int i = 0; i < len; i++) {

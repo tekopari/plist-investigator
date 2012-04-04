@@ -194,7 +194,15 @@ public class PlistFileDialog extends JDialog implements ActionListener {
 		}
 		else if (evt.getActionCommand().equals("BROWSE")) {
 		    metadata.setFile(doFileChooser(contentPanel, "Choose a PList File to Import"));
-		    textFilename.setText(metadata.getFile().getAbsolutePath());
+		    
+		    File file = metadata.getFile();
+		    if(file != null) {
+		    	textFilename.setText(PlistMetaData.removeBackSlashes(file.getAbsolutePath()));
+		    	
+		        if(textName.getText().equals("")) {
+		    	    textName.setText(file.getName());
+		        }
+		    }
 		}
 		else if (evt.getActionCommand().equals("CANCEL")) {
             metadata.setEvidenceName("");
