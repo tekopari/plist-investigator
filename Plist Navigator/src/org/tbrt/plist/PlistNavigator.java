@@ -180,7 +180,7 @@ public class PlistNavigator {
 		sl_panel.putConstraint(SpringLayout.NORTH, investigationTree, 10, SpringLayout.NORTH, panel);
 		sl_panel.putConstraint(SpringLayout.WEST, investigationTree, 10, SpringLayout.WEST, panel);
 		sl_panel.putConstraint(SpringLayout.SOUTH, investigationTree, -10, SpringLayout.SOUTH, panel);
-		sl_panel.putConstraint(SpringLayout.EAST, investigationTree, -443, SpringLayout.EAST, panel);
+		sl_panel.putConstraint(SpringLayout.EAST, investigationTree, -343, SpringLayout.EAST, panel);
 		panel.add(investigationTree);		
 	
 		//===================================================================
