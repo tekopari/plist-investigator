@@ -981,22 +981,22 @@ public class InvestigationTree extends JPanel {
                 int index = e.getChildIndices()[0];
                 node = (DefaultMutableTreeNode)(node.getChildAt(index));
 
-            System.out.println("The user has finished editing the node.");
-            System.out.println("New value: " + node.getUserObject());
+            //System.out.println("The user has finished editing the node.");
+            //System.out.println("New value: " + node.getUserObject());
         }
         
         public void treeNodesInserted(TreeModelEvent e) {
-        	System.out.println("treeNodesInserted:");
-        	System.out.println("    TreePath:" + e.getTreePath().toString());
+        	//System.out.println("treeNodesInserted:");
+        	//System.out.println("    TreePath:" + e.getTreePath().toString());
         }
         
         public void treeNodesRemoved(TreeModelEvent e) {
-        	System.out.println("treeNodesRemoved:");
-        	System.out.println("    TreePath:" + e.getTreePath().toString());
+        	//System.out.println("treeNodesRemoved:");
+        	//System.out.println("    TreePath:" + e.getTreePath().toString());
         }
         
         public void treeStructureChanged(TreeModelEvent e) {
-        	System.out.println("treeStructureChanged:" + e.getTreePath().toString());
+        	//System.out.println("treeStructureChanged:" + e.getTreePath().toString());
         }
     }
 }
