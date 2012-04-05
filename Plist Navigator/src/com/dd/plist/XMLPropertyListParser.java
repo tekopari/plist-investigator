@@ -157,7 +157,7 @@ public class XMLPropertyListParser {
                 //-------------------------------------------------------
                 NSObject nsobj = parseObject(val);
                 nsobj.setKey(keyString);
-System.out.println("KEY[" + keyString + "]");
+//System.out.println("KEY[" + keyString + "]");
                 dict.put(keyString, nsobj);
                 //----------------------------------------------------END
             }

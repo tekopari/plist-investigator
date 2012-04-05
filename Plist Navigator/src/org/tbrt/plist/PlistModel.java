@@ -53,7 +53,7 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     //-----------------------------------------------------------------------
     public int getChildCount(Object node) {
     	if(node == null) {
-    		System.out.println("getChildCount(): node is null" );
+    		//System.out.println("getChildCount(): node is null" );
     		return 0;
     	}
     	
@@ -71,7 +71,7 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     	else {
     		rc = 0;	
     	}
-    	System.out.println("getChildCount(): ClassName is " + name + " count is " + rc );
+    	//System.out.println("getChildCount(): ClassName is " + name + " count is " + rc );
     	return rc;
     }
 
@@ -80,7 +80,7 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     //-----------------------------------------------------------------------
     public boolean isLeaf(Object node) {
     	String name = node.getClass().getCanonicalName();
-    	System.out.println("isLeaf(): TYPE[" + name + "]" );
+    	//System.out.println("isLeaf(): TYPE[" + name + "]" );
     	if(name.equals("com.dd.plist.NSArray") ||
     	   name.equals("com.dd.plist.NSDictionary") ||
     	   name.equals("com.dd.plist.NSSet")) {
@@ -127,7 +127,7 @@ public class PlistModel extends AbstractTreeTableModel implements TreeTableModel
     	
     	String rc = "";
     	rc = new String(((NSObject)node).getKey());
-    	System.out.println("GETKEY[" + rc + "]");
+    	//System.out.println("GETKEY[" + rc + "]");
  // DEBUG--------------
     	/*
     	String name = node.getClass().getCanonicalName();

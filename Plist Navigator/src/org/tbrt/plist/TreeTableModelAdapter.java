@@ -33,7 +33,7 @@ public class TreeTableModelAdapter extends AbstractTableModel
     
     public Object getValueAt(int rowNum, int columnNum) {
     	String rc = (String) (m_model.getValueAt(nodeForRow(rowNum), columnNum));
-    	System.out.println("GetValueAt[" + rowNum + "][" + columnNum + "]=[" + rc + "]");
+    	//System.out.println("GetValueAt[" + rowNum + "][" + columnNum + "]=[" + rc + "]");
     	return rc;
 	    //return m_model.getValueAt(nodeForRow(rowNum), columnNum);
     }
