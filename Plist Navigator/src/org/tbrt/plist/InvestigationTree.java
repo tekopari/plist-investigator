@@ -114,6 +114,10 @@ public class InvestigationTree extends JPanel {
         notesPopup = new JPopupMenu();
         unknownPopup = new JPopupMenu();
         
+ 		for (int i = 0; i < tree.getRowCount(); i++) {
+	         tree.expandRow(i);
+		}
+	
         JMenuItem mnInvestigations = investigationsPopup.add(new JMenuItem("Add New Investigation"));
         mnInvestigations.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
@@ -949,6 +953,7 @@ public class InvestigationTree extends JPanel {
      		        }
      		    }
     	    }
+ 	    	
     	    return;
 		}
 
