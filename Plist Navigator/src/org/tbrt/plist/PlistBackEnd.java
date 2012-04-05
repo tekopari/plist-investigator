@@ -32,7 +32,7 @@ import com.dd.plist.*;
 
 public class PlistBackEnd {
 	private static void usage() {
-		System.out.println("USAGE: tbrtplist.exe –i <plistfile> -o <outputfile> -t <xml | pdf | bin>");
+		System.out.println("USAGE: TBRTplist.bat -i <plistfile> -o <outputfile> -t <xml | pdf | bin>");
 		System.out.println();
 		return;
 	}
