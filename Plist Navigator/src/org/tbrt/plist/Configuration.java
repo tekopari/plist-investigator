@@ -114,13 +114,13 @@ public class Configuration {
         Class myclass = Configuration.class;
         String path = myclass.getClassLoader().getResource(
             myclass.getName().replace('.', '/') + ".class").toString();
-
+        
         if(path == null) {
         	rc = "";
         }
-        else if (path.endsWith(".jar")) {
-        	// Running from jar file
-        	rc = path.substring(6, path.lastIndexOf("/"));
+        else if (path.startsWith("jar:file:")) {
+        	rc = path.substring(10, path.lastIndexOf(".jar"));
+        	rc = rc.substring(0, rc.lastIndexOf("/"));
         }
         else if (path.endsWith(".class")) {
         	// Running from eclipse
@@ -133,6 +133,7 @@ public class Configuration {
         	rc = "/";
         }
         rc = rc.replaceAll("%20", " ");
+
         return rc;
 	}
 	
@@ -149,7 +150,7 @@ public class Configuration {
 		try {
  			File installDir = new File(installPath); 
  			if(!(installDir.isDirectory())) {
- 				System.err.println("Error: Specified INSTALL_DIR is not an existing directory.");
+ 				System.err.println("Error: Specified INSTALL_DIR[" + installPath + "] is not an existing directory.");
  				System.exit(1);		
  			}
 		} 
