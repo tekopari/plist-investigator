@@ -10,8 +10,8 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import com.dd.plist.NSDictionary;
-import com.dd.plist.PropertyListParser;
+import com.dd.plist.*;
+
 
 // http://pdfbox.apache.org/download.html
 // http://pdfbox.apache.org/userguide/cookbook.html
@@ -80,16 +80,57 @@ public class PdfCreate {
 			}
 		}
 	}
+	
+	public static void GetOutput (File file)  {
+		
+		try {
+			  
+			  NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(file);
+			  String name = rootDict.objectForKey("Name").toString();
+			  NSObject[] parameters = ((NSArray)rootDict.objectForKey("Parameters")).getArray();
+			  
+			  for(NSObject param:parameters) {
+			    if(param.getClass().equals(NSNumber.class) ) {
+			      NSNumber num = (NSNumber)param;
+			      switch(num.type()) {
+			        case NSNumber.BOOLEAN : {
+			          boolean bool = num.boolValue();
+			          //...
+			          break;
+			        }
+			        case NSNumber.INTEGER : {
+			          long l = num.longValue();
+			          //or int i = num.intValue();
+			          //...
+			          break;
+			        }
+			        case NSNumber.REAL : {
+			          double d = num.doubleValue();
+			          //...
+			          break;
+			        }
+			     }
+			   }
+			    else  {
+			    	// Ravi: Add whatever is necessary.
+			    }
+			  }
+			    
+		} catch(Exception ex) {
+			  ex.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 		NSDictionary rootDict = null;
 		try {
 			File file = new File("c:\\tmp\\plistfile.plist");
-			rootDict = (NSDictionary) PropertyListParser.parse(file);
-			// ravi: Why can't we also use rootDict to create PDF?
-			rootDict.setKey(file.getName());
+			GetOutput (file);
 			
-			System.out.println(rootDict);
+			// ravi: Why can't we also use rootDict to create PDF?
+			// rootDict = (NSDictionary) PropertyListParser.parse(file);
+			// rootDict.setKey(file.getName());
+			// System.out.println(rootDict);
 			
 			//TC new PdfCreate(rootDict);
 		} catch (Exception e) {
