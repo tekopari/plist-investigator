@@ -13,6 +13,8 @@ import com.dd.plist.PropertyListParser;
 
 public class PlistTreeTable
 {
+	private int rc = 0;
+	
     public static void main(String args[])
     {
     	String filename = "C:\\Documents and Settings\\paritj\\My Documents\\NetworkInterfaces.xml";
@@ -35,6 +37,8 @@ public class PlistTreeTable
         catch (Exception e)
         {
           System.err.println("Cannot use the PropertyListParser");
+          rc = 1;
+          return;
         }
     	
         //-------------------------------------------------------------------
@@ -61,5 +65,9 @@ public class PlistTreeTable
 	    frame.getContentPane().add(new JScrollPane(treeTable));
 	    frame.pack();
 	    frame.show();
+    }
+    
+    public int status () {
+    	return(rc);
     }
 }
