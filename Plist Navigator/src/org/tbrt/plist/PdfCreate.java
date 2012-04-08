@@ -1,6 +1,8 @@
 package org.tbrt.plist;
-
+import xmlpdf.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
@@ -42,8 +44,6 @@ public class PdfCreate {
 			File file = new File(plistName);
 			rootDict = (NSDictionary) PropertyListParser.parse(file);
 			// ravi: Why can't we also use rootDict to create PDF?
-			rootDict.setKey(file.getName());
-			testcreate(pdfName);
 			
 			System.out.println(rootDict);
 		} catch (Exception e) {
@@ -54,10 +54,11 @@ public class PdfCreate {
 	
 
 	
-	public void testcreate(String fileName) throws IOException, COSVisitorException {
+	public static void Str2Pdf(String OutputStr) throws IOException, COSVisitorException {
 		// the document
 		PDDocument doc = null;
 		try {
+			String fileName = "C:\\tmp\\ravi.pdf";
 			doc = new PDDocument();
 
 			PDPage page = new PDPage();
@@ -69,7 +70,7 @@ public class PdfCreate {
 			contentStream.beginText();
 			contentStream.setFont(font, 12);
 			contentStream.moveTextPositionByAmount(100, 700);
-			String message = "Test by TBRT";
+			String message = OutputStr;
 			contentStream.drawString(message);
 			contentStream.endText();
 			contentStream.close();
@@ -81,11 +82,41 @@ public class PdfCreate {
 		}
 	}
 	
+    private static String readFileAsString(String filePath)
+    throws java.io.IOException{
+        StringBuffer fileData = new StringBuffer(1024 * 100);
+        BufferedReader reader = new BufferedReader(
+                new FileReader(filePath));
+        char[] buf = new char[1024 * 100];
+        int numRead=0;
+        while((numRead=reader.read(buf)) != -1){
+            String readData = String.valueOf(buf, 0, numRead);
+            fileData.append(readData);
+            buf = new char[1024];
+        }
+        reader.close();
+        return fileData.toString();
+    }
+
+	
 	public static void GetOutput (File file)  {
+		
+		try  {
+			NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(file);
+			PropertyListParser.saveAsXML(rootDict, new File("C:\\tmp\\ravi.xml"));
+			String PlistXmlString = readFileAsString ("C:\\tmp\\ravi.xml");
+			Str2Pdf(PlistXmlString);
+		}
+	    catch(Exception ex) {
+		  ex.printStackTrace();
+	    }
+		
+		/*********************************  BEGIN:RAVI
 		
 		try {
 			  
 			  NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(file);
+			  
 			  String name = rootDict.objectForKey("Name").toString();
 			  NSObject[] parameters = ((NSArray)rootDict.objectForKey("Parameters")).getArray();
 			  
@@ -119,6 +150,8 @@ public class PdfCreate {
 		} catch(Exception ex) {
 			  ex.printStackTrace();
 		}
+		
+		******************END:RAVI****/
 	}
 
 	public static void main(String[] args) {
