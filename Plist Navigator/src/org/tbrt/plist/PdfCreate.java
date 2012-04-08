@@ -1,9 +1,16 @@
 package org.tbrt.plist;
-//import xmlpdf.*;
+
+// import itext library.
+import com.itextpdf.*;
+import com.itextpdf.tool.*;
+import com.itextpdf.tool.xml.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import javax.swing.text.Document;
 
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -39,7 +46,7 @@ public class PdfCreate {
 	
 	public PdfCreate(String evidenceName, String notesName, String plistName, String pdfName) {
 		NSDictionary rootDict = null;
-		System.out.println("TC:pdfcreate:"+plistName+","+pdfName);
+		System.out.println("Debug:pdfcreate:"+plistName+","+pdfName);
 		
 		try {
 			File file = new File(plistName);
@@ -153,6 +160,49 @@ public class PdfCreate {
 		}
 		
 		******************END:RAVI****/
+	}
+	
+	public static void Xml2Pdf (String Xmlfile)  {
+		
+		// Below is itext example.
+		// Document document = new Document();
+		// PdfWriter.GetInstance(document, new FileStream("ExampleDoc.pdf", FileMode.Create)); 
+		// ITextHandler xmlHandler = new ITextHandler(document); 
+		// xmlHandler.Parse("ExampleDoc.xml"); 
+		
+		/********** fopFactory example  BEGIN:RAVI
+		File xmlfile = new File("C:\\tmp\\ravi.xml");
+		File xsltfile = new File("C:\\tmp\\ravi.xsml");
+		File pdffile = new File("C:\\tmp\\ResultXMLPDF.pdf");
+
+		FopFactory fopFactory = FopFactory.newInstance();
+		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
+
+		OutputStream out = new java.io.FileOutputStream(pdffile);
+		out = new java.io.BufferedOutputStream(out);
+
+		try
+		{
+		    Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
+		    // Setup XSLT
+		    TransformerFactory factory = TransformerFactory.newInstance();
+		    Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
+
+		    transformer.setParameter("versionParam", "1.0");
+
+		    Source src = new StreamSource(xmlfile);
+
+		    Result res = new SAXResult(fop.getDefaultHandler());
+
+		    transformer.transform(src, res);
+
+		} finally {
+		    out.close();
+		}
+
+		System.out.println("Success!");
+		********** END:RAVI ********************/
+
 	}
 
 	public static void main(String[] args) {
