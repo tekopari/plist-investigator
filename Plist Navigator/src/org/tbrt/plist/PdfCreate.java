@@ -1,5 +1,5 @@
 package org.tbrt.plist;
-import xmlpdf.*;
+//import xmlpdf.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -25,6 +25,7 @@ public class PdfCreate {
 		int rc = 0;
 		
 		//TODO Handle PDF operation status. "rc=0" means success, "rc=1" means error
+		// PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\tmp\ravi.pdf"));
 		
 		return(rc);
 	}
