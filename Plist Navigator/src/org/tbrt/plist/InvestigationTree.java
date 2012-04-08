@@ -341,6 +341,7 @@ public class InvestigationTree extends JPanel {
         JMenuItem mnShowPlist = evidenceItemPopup.add(new JMenuItem("Show PList"));
         mnShowPlist.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
+        		Component frame = null;
         		String nodeName = getNodeName();
 	            
 	            String path = getDirPath() + "/" + nodeName;
@@ -354,6 +355,10 @@ public class InvestigationTree extends JPanel {
     		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
     		               String plistName = path + "/" + f;
     		               PlistTreeTable p = new PlistTreeTable(plistName);
+    		               if (p.status() != 0) {
+    		            	   String m = "File \"" + plistName + "\"\nThis file neither a binary nor a XML property list.";
+    		            	   JOptionPane.showMessageDialog(frame, m);
+    		               }
     		            }
     		        }
     		    }
