@@ -11,26 +11,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
-// import itext library.
-import com.itextpdf.*;
-import com.itextpdf.tool.*;
-import com.itextpdf.tool.xml.*;
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chapter;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Section;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 
 
@@ -45,10 +25,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.pdfbox.*;
 import org.apache.pdfbox.pdmodel.*;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDSimpleFont;
@@ -60,6 +42,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.xml.sax.HandlerBase;
+import org.xml.sax.SAXException;
 
 import com.dd.plist.*;
 
@@ -147,6 +131,7 @@ public class PdfCreate {
         reader.close();
         return fileData.toString();
     }
+
 
     
     private PDDocument createPDFFromText( Reader text ) throws IOException
@@ -329,53 +314,7 @@ public class PdfCreate {
 	
 	public static void Xml2Pdf (String Xmlfile)  {
 		
-		
-		
-		/*** itext try BEGIN:RAVI
-		try  {
-			// Below is itext example.
-			Document document = new Document();
-			PdfWriter.getInstance(document, new FileOutputStream("C:\\tmp\raviDoc.pdf") ); 
-			// THIS LINE DOES NOT WORK ITextHandler xmlHandler = new ITextHandler(document); 
-			// xmlHandler.Parse("ExampleDoc.xml"); 
-		}
-	        catch (Exception e) {
-		    System.err.println("Cannot use the PropertyListParser");
-	    }
-	    ******* END:RAVI ******/
-		
-		/********** fopFactory example  BEGIN:RAVI
-		File xmlfile = new File("C:\\tmp\\ravi.xml");
-		File xsltfile = new File("C:\\tmp\\ravi.xsml");
-		File pdffile = new File("C:\\tmp\\ResultXMLPDF.pdf");
-
-		FopFactory fopFactory = FopFactory.newInstance();
-		FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
-
-		OutputStream out = new java.io.FileOutputStream(pdffile);
-		out = new java.io.BufferedOutputStream(out);
-
-		try
-		{
-		    Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
-		    // Setup XSLT
-		    TransformerFactory factory = TransformerFactory.newInstance();
-		    Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
-
-		    transformer.setParameter("versionParam", "1.0");
-
-		    Source src = new StreamSource(xmlfile);
-
-		    Result res = new SAXResult(fop.getDefaultHandler());
-
-		    transformer.transform(src, res);
-
-		} finally {
-		    out.close();
-		}
-
-		System.out.println("Success!");
-		********** END:RAVI ********************/
+		// Use Java DOM or SAX parser.
 
 	}
 
