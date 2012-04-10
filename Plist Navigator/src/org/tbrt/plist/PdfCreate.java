@@ -252,6 +252,16 @@ public class PdfCreate {
     			return;
     		}
     		
+    		//---------------------------
+    		// Process current node here
+    		//---------------------------
+ 			   // 0 for key name, 1 for 
+    		   String KeyName = (String) MyModel.getValueAt(MyObj, 0);
+    		   String typename = (String) MyModel.getValueAt(MyObj, 1);
+    		   String value = (String) MyModel.getValueAt(MyObj, 2);	   
+    		   System.out.println("MyObj: " + KeyName);   
+    		   
+    		   
 			int ChildCount = MyModel.getChildCount(MyObj);
 			System.out.println("getChildCount(): is " + ChildCount);
 			
@@ -263,9 +273,7 @@ public class PdfCreate {
 					continue;
 				}
 				
-			   // 0 for key name, 1 for 
-    		   String KeyName = (String) MyModel.getValueAt(ChildObj, i);
-    		   System.out.println("MyObj: " + KeyName);
+
     		   
     		   ParseNSObject (MyModel, ChildObj);
 			}
