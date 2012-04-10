@@ -244,7 +244,11 @@ public class PdfCreate {
         return doc;
     }
     
+    // Below Variable is only Ussed by the below method.
+    static int Indent = 0;
     public static void ParseNSObject (PlistModel MyModel, NSObject MyObj )  {
+    	
+    	
     	
     	try {
     		if (MyObj == null)  {
@@ -255,27 +259,34 @@ public class PdfCreate {
     		//---------------------------
     		// Process current node here
     		//---------------------------
- 			   // 0 for key name, 1 for 
+ 			   // 0 for key name, 1 for Key Type Name and 2 for Key Value
     		   String KeyName = (String) MyModel.getValueAt(MyObj, 0);
-    		   String typename = (String) MyModel.getValueAt(MyObj, 1);
-    		   String value = (String) MyModel.getValueAt(MyObj, 2);	   
-    		   System.out.println("MyObj: " + KeyName);   
+    		   String KeyTypeName = (String) MyModel.getValueAt(MyObj, 1);
+    		   String KeyValue = (String) MyModel.getValueAt(MyObj, 2);	   
+    		   
+    		   for (int j = 0; j < Indent; j++) {
+    			    System.out.print("\t");
+    			}
+
+    		   // Good for debug - System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
+    		   System.out.println(KeyName + " = " + KeyValue);
     		   
     		   
 			int ChildCount = MyModel.getChildCount(MyObj);
-			System.out.println("getChildCount(): is " + ChildCount);
+			// System.out.println("getChildCount(): is " + ChildCount);
 			
 			for ( int i = 0; i < ChildCount; i++)  {
-				System.out.println("calling nPModel with ChildCount " + i);
+				// System.out.println("calling nPModel with ChildCount " + i);
+				Indent = Indent + 1;
 				NSObject ChildObj = (NSObject) MyModel.getChild(MyObj, i);
 				if (ChildObj == null)  {
-					System.out.println("Child Model is null: " + i);
+					System.out.println("***** Child Model is null: " + i);
+					// It looks like we never reach here by design.
 					continue;
 				}
 				
-
-    		   
     		   ParseNSObject (MyModel, ChildObj);
+    		   Indent = Indent - 1 ;
 			}
 
     	}
