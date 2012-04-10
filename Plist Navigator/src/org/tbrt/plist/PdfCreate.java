@@ -251,6 +251,15 @@ public class PdfCreate {
     			System.out.println("MyObj is null");
     			return;
     		}
+    		
+			int ChildCount = MyModel.getChildCount(MyObj);
+			System.out.println("getChildCount(): is " + ChildCount);
+			
+			for ( int i = 0; i < ChildCount; i++)  {
+				System.out.println("calling nPModel with ChildCount" + i);
+				NSObject ChildObj = (NSObject) MyModel.getChild(MyModel, i);
+			
+			}
     		// 0 for key name, 1 for 
     		String KeyName = (String) MyModel.getValueAt(MyObj, 0);
     		System.out.println("MyObj: " + KeyName);
@@ -310,14 +319,9 @@ public class PdfCreate {
 		try {
 			  
 			PlistModel nPModel = new PlistModel(LocRootDict);
-			int ChildCount = nPModel.getChildCount(LocRootDict);
-			System.out.println("getChildCount(): is " + ChildCount);
+			ParseNSObject (nPModel, LocRootDict);
 			
-			for ( int i = 0; i < ChildCount; i++)  {
-				System.out.println("calling nPModel with ChildCount" + i);
-				NSObject ChildObj = (NSObject) nPModel.getChild(nPModel, i);
-				ParseNSObject (nPModel, ChildObj );
-			}
+
 			
 			
 			
