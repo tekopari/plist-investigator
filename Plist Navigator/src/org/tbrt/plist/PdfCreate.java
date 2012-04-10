@@ -256,8 +256,12 @@ public class PdfCreate {
 			System.out.println("getChildCount(): is " + ChildCount);
 			
 			for ( int i = 0; i < ChildCount; i++)  {
-				System.out.println("calling nPModel with ChildCount" + i);
-				NSObject ChildObj = (NSObject) MyModel.getChild(MyModel, i);
+				System.out.println("calling nPModel with ChildCount " + i);
+				NSObject ChildObj = (NSObject) MyModel.getChild(MyObj, i);
+				if (ChildObj == null)  {
+					System.out.println("Child Model is null: " + i);
+					continue;
+				}
 			
 			}
     		// 0 for key name, 1 for 
