@@ -272,8 +272,14 @@ public class PdfCreate {
     			}
 
     		   // Good for debug - System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
-    		   System.out.println(KeyName + " = " + KeyValue);
-    		   
+    		   if ( (KeyTypeName == "Dictionary") ||(KeyTypeName == "Array"))  {
+    			   // For these types, don't print anything for the very first object.  For some reason, it is empty.
+    			   if (Indent != 0)
+    				   System.out.println(KeyName + ":  " + KeyValue);
+    		   }  else {
+    			   // System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
+    			   System.out.println(KeyName + " = " + KeyValue);
+    		   }
     		   
 			int ChildCount = MyModel.getChildCount(MyObj);
 			// System.out.println("getChildCount(): is " + ChildCount);
