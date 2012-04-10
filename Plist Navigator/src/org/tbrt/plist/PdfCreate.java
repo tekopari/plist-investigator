@@ -42,7 +42,6 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.xml.sax.HandlerBase;
 import org.xml.sax.SAXException;
 
 import com.dd.plist.*;
@@ -51,6 +50,9 @@ import com.dd.plist.*;
 // http://pdfbox.apache.org/download.html
 // http://pdfbox.apache.org/userguide/cookbook.html
 // http://pdfbox.apache.org/userguide/cookbook/creation.html#HelloWorld
+
+// Getting called from InvestigationTree.java 
+
 
 public class PdfCreate {
 
@@ -70,14 +72,15 @@ public class PdfCreate {
 	//TC public PdfCreate(NSDictionary rootDict) {
 	//TC }
 	
-	public PdfCreate(String evidenceName, String notesName, String plistName, String pdfName) {
+	public PdfCreate(String evidenceName, String notesName, String plistName, String PdfName) {
 		NSDictionary rootDict = null;
-		System.out.println("Debug:pdfcreate:"+plistName+","+pdfName);
+		System.out.println("Debug:pdfcreate parameters: "+ evidenceName + "," + notesName + "," + plistName+ "," + PdfName);
 		
 		try {
 			File file = new File(plistName);
-			rootDict = (NSDictionary) PropertyListParser.parse(file);
-			// ravi: Why can't we also use rootDict to create PDF?
+			// rootDict = (NSDictionary) PropertyListParser.parse(file);
+			GetOutput (file, PdfName);
+			
 			
 			System.out.println(rootDict);
 		} catch (Exception e) {
@@ -244,14 +247,14 @@ public class PdfCreate {
         return doc;
     }
     
+
     /*
      *  Below Variable is only Ussed by the below method.
      *  It is used for formatting the output of objects.
      */
     static int Indent = 0;
     public static void ParseNSObject (PlistModel MyModel, NSObject MyObj )  {
-    	
-    	
+
     	
     	try {
     		if (MyObj == null)  {
@@ -304,7 +307,7 @@ public class PdfCreate {
 	    }
     }
 	
-	public static void GetOutput (File file)  {
+	public static void GetOutput (File file, String PdfFileName)  {
 		
 		NSDictionary LocRootDict = null;
 		
@@ -326,7 +329,8 @@ public class PdfCreate {
 	        PDDocument MyPdfDoc = null;
 			BufferedReader data = new BufferedReader( new FileReader("C:\\tmp\\ravi.xml") );
 			MyPdfDoc = mine.createPDFFromText(data);
-			MyPdfDoc.save("C:\\tmp\\ravididit.pdf");
+			// MyPdfDoc.save("C:\\tmp\\ravididit.pdf");
+			MyPdfDoc.save(PdfFileName);
 			
 		}
 	    catch(Exception ex) {
@@ -401,12 +405,13 @@ public class PdfCreate {
 		// Use Java DOM or SAX parser.
 
 	}
+	
 
 	public static void main(String[] args) {
 		NSDictionary rootDict = null;
 		try {
 			File file = new File("c:\\tmp\\plistfile.plist");
-			GetOutput (file);
+			GetOutput (file, "C:\\tmp\\ravididit.pdf");
 			
 			// ravi: Why can't we also use rootDict to create PDF?
 			// rootDict = (NSDictionary) PropertyListParser.parse(file);
