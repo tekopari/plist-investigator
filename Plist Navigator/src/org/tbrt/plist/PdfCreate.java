@@ -244,7 +244,10 @@ public class PdfCreate {
         return doc;
     }
     
-    // Below Variable is only Ussed by the below method.
+    /*
+     *  Below Variable is only Ussed by the below method.
+     *  It is used for formatting the output of objects.
+     */
     static int Indent = 0;
     public static void ParseNSObject (PlistModel MyModel, NSObject MyObj )  {
     	
