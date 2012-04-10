@@ -243,12 +243,32 @@ public class PdfCreate {
         }
         return doc;
     }
+    
+    public static void ParseNSObject (PlistModel MyModel, NSObject MyObj )  {
+    	
+    	try {
+    		if (MyObj == null)  {
+    			System.out.println("MyObj is null");
+    			return;
+    		}
+    		// 0 for key name, 1 for 
+    		String KeyName = (String) MyModel.getValueAt(MyObj, 0);
+    		System.out.println("MyObj: " + KeyName);
+    	}
+	    catch(Exception ex) {
+		  ex.printStackTrace();
+	    }
+    }
 	
 	public static void GetOutput (File file)  {
 		
+		NSDictionary LocRootDict = null;
+		
+		
 		try  {
-			NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(file);
-			PropertyListParser.saveAsXML(rootDict, new File("C:\\tmp\\ravi.xml"));
+			System.out.println("Entering GetOutput");
+			LocRootDict = (NSDictionary)PropertyListParser.parse(file);
+			// PropertyListParser.saveAsXML(LocRootDict, new File("C:\\tmp\\ravi.xml"));
 			//String PlistXmlString = readFileAsString ("C:\\tmp\\ravi.xml");
 			//Str2Pdf(PlistXmlString);
 			
@@ -269,16 +289,40 @@ public class PdfCreate {
 		  ex.printStackTrace();
 	    }
 		
-		/*********************************  BEGIN:RAVI
+		/*** primitive works
+		try {
+			PlistModel nPModel = new PlistModel(LocRootDict);
+			int ChildCount = nPModel.getChildCount(LocRootDict);
+			System.out.println("getChildCount(): is " + ChildCount);
+			
+			for (int i = 0; i < nPModel; i++)  {
+				
+			}
+			
+		}
+	    catch(Exception ex) {
+		  ex.printStackTrace();
+	    }
+		**********/
+		
+		
 		
 		try {
 			  
-			  NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(file);
-			  
-			  String name = rootDict.objectForKey("Name").toString();
-			  NSObject[] parameters = ((NSArray)rootDict.objectForKey("Parameters")).getArray();
-			  
-			  for(NSObject param:parameters) {
+			PlistModel nPModel = new PlistModel(LocRootDict);
+			int ChildCount = nPModel.getChildCount(LocRootDict);
+			System.out.println("getChildCount(): is " + ChildCount);
+			
+			for ( int i = 0; i < ChildCount; i++)  {
+				System.out.println("calling nPModel with ChildCount" + i);
+				NSObject ChildObj = (NSObject) nPModel.getChild(nPModel, i);
+				ParseNSObject (nPModel, ChildObj );
+			}
+			
+			
+			
+			  /*****
+			  for(nPModel NSOBJECT:Node: ) {
 			    if(param.getClass().equals(NSNumber.class) ) {
 			      NSNumber num = (NSNumber)param;
 			      switch(num.type()) {
@@ -304,12 +348,13 @@ public class PdfCreate {
 			    	// Ravi: Add whatever is necessary.
 			    }
 			  }
+			  ***************/
 			    
 		} catch(Exception ex) {
 			  ex.printStackTrace();
 		}
 		
-		******************END:RAVI****/
+		
 	}
 	
 	public static void Xml2Pdf (String Xmlfile)  {

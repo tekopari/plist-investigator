@@ -20,14 +20,12 @@ public class PlistXmlParser {
 			SAXParser sp = spf.newSAXParser();
 
 			//parse the file and also register this class for call backs
-			sp.parse(XmlFile, this);
+			// sp.parse(XmlFile, this);
 
 		}catch(SAXException se) {
 			se.printStackTrace();
 		}catch(ParserConfigurationException pce) {
 			pce.printStackTrace();
-		}catch (IOException ie) {
-			ie.printStackTrace();
 		}
 	}
 	
