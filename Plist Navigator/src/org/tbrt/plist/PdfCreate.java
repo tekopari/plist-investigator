@@ -1,11 +1,13 @@
 package org.tbrt.plist;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -79,6 +81,7 @@ public class PdfCreate {
 		try {
 			File file = new File(plistName);
 			// rootDict = (NSDictionary) PropertyListParser.parse(file);
+			System.out.println("=====> The Dir the Plist file is at: " + file.getParent() );
 			GetOutput (file, PdfName);
 			
 			
@@ -247,20 +250,42 @@ public class PdfCreate {
         return doc;
     }
     
+    public static void WriteFile (String str, String OFile, int TuckIn)  {
+    	
+    	// System.out.print("&&&&&&&& WriteFile: Str" + str + ", " + "OFile " + OFile + "\n");
+		  try  { 
+			    File f = new File(OFile);
+			    
+	    	    FileWriter fw = new FileWriter(OFile, true);
+	    	    BufferedWriter bw = new BufferedWriter(fw);
+	    	    String Ostr = null;
+	    	    
+	    		for(int j = 0; j < Indent; j++) {
+	    		    Ostr = "\t" + str;
+	    		}
+                bw.write(Ostr);
+                bw.newLine();
+                bw.flush();
+                bw.close();
+		  }
+		  catch(Exception ex) {
+			  ex.printStackTrace();
+		  }
+    }
 
     /*
      *  Below Variable is only Ussed by the below method.
      *  It is used for formatting the output of objects.
      */
     static int Indent = 0;
-    public static void ParseNSObject (PlistModel MyModel, NSObject MyObj )  {
+    public static void ParseNSObject (PlistModel MyModel, NSObject MyObj, String OutFile)  {
 
-    	
     	try {
+    		
     		if (MyObj == null)  {
     			System.out.println("MyObj is null");
     			return;
-    		}
+    		} 
     		
     		//---------------------------
     		// Process current node here
@@ -277,11 +302,17 @@ public class PdfCreate {
     		   // Good for debug - System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
     		   if ( (KeyTypeName == "Dictionary") ||(KeyTypeName == "Array"))  {
     			   // For these types, don't print anything for the very first object.  For some reason, it is empty.
-    			   if (Indent != 0)
+    			   if (Indent != 0)  {
     				   System.out.println(KeyName + ":  " + KeyValue);
+    				   String Wstr = KeyName + ":  " + KeyValue;
+    				   WriteFile (Wstr, OutFile, Indent);
+    		            
+    			   }
     		   }  else {
     			   // System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
     			   System.out.println(KeyName + " = " + KeyValue);
+    			   String Wstr = KeyName + " =  " + KeyValue;
+				   WriteFile (Wstr, OutFile, Indent);
     		   }
     		   
 			int ChildCount = MyModel.getChildCount(MyObj);
@@ -297,7 +328,7 @@ public class PdfCreate {
 					continue;
 				}
 				
-    		   ParseNSObject (MyModel, ChildObj);
+    		   ParseNSObject (MyModel, ChildObj, OutFile);
     		   Indent = Indent - 1 ;
 			}
 
@@ -307,27 +338,41 @@ public class PdfCreate {
 	    }
     }
 	
-	public static void GetOutput (File file, String PdfFileName)  {
+	public static void GetOutput (File PlistFile, String PdfFileName)  {
 		
-		NSDictionary LocRootDict = null;
+		
 		
 		
 		try  {
+			
+			File f = null;
+			String Name = null;
+			BufferedWriter bufferedWriter = null;
+			
 			System.out.println("Entering GetOutput");
-			LocRootDict = (NSDictionary)PropertyListParser.parse(file);
-			// PropertyListParser.saveAsXML(LocRootDict, new File("C:\\tmp\\ravi.xml"));
-			//String PlistXmlString = readFileAsString ("C:\\tmp\\ravi.xml");
-			//Str2Pdf(PlistXmlString);
+			// Construct the .txt file, in the same directory in which we are going to create the pdf file
+			f = new File (PdfFileName);
+			String dir = f.getParent();
+			int index = f.getName().lastIndexOf('.');
+		    if (index>0&& index <= f.getName().length() - 2 ) {
+		        Name = f.getName().substring(0, index);
+		    }  
+		    String TextFile = dir + "\\" + Name + ".txt";
+		    f.delete();
+		    System.out.println("GetOutput: TextFile is: " + TextFile);
 			
-			// Now create the Pdf document using Apache PdfBox
-			// PDDocument document = new PDDocument();
-			// PDPage page = new PDPage();
-			// document.addPage( page );
-			
+
+    	    f = new File(TextFile);
+    	    f.createNewFile();
+		    
+			NSDictionary LocRootDict = null;
+			LocRootDict = (NSDictionary)PropertyListParser.parse(PlistFile);
+			PlistModel nPModel = new PlistModel(LocRootDict);
+			ParseNSObject (nPModel, LocRootDict, TextFile);
 			
 			TextToPDF mine = new TextToPDF();
 	        PDDocument MyPdfDoc = null;
-			BufferedReader data = new BufferedReader( new FileReader("C:\\tmp\\ravi.xml") );
+			BufferedReader data = new BufferedReader( new FileReader(TextFile) );
 			MyPdfDoc = mine.createPDFFromText(data);
 			// MyPdfDoc.save("C:\\tmp\\ravididit.pdf");
 			MyPdfDoc.save(PdfFileName);
@@ -336,67 +381,6 @@ public class PdfCreate {
 	    catch(Exception ex) {
 		  ex.printStackTrace();
 	    }
-		
-		/*** primitive works
-		try {
-			PlistModel nPModel = new PlistModel(LocRootDict);
-			int ChildCount = nPModel.getChildCount(LocRootDict);
-			System.out.println("getChildCount(): is " + ChildCount);
-			
-			for (int i = 0; i < nPModel; i++)  {
-				
-			}
-			
-		}
-	    catch(Exception ex) {
-		  ex.printStackTrace();
-	    }
-		**********/
-		
-		
-		
-		try {
-			  
-			PlistModel nPModel = new PlistModel(LocRootDict);
-			ParseNSObject (nPModel, LocRootDict);
-			
-
-			
-			
-			
-			  /*****
-			  for(nPModel NSOBJECT:Node: ) {
-			    if(param.getClass().equals(NSNumber.class) ) {
-			      NSNumber num = (NSNumber)param;
-			      switch(num.type()) {
-			        case NSNumber.BOOLEAN : {
-			          boolean bool = num.boolValue();
-			          //...
-			          break;
-			        }
-			        case NSNumber.INTEGER : {
-			          long l = num.longValue();
-			          //or int i = num.intValue();
-			          //...
-			          break;
-			        }
-			        case NSNumber.REAL : {
-			          double d = num.doubleValue();
-			          //...
-			          break;
-			        }
-			     }
-			   }
-			    else  {
-			    	// Ravi: Add whatever is necessary.
-			    }
-			  }
-			  ***************/
-			    
-		} catch(Exception ex) {
-			  ex.printStackTrace();
-		}
-		
 		
 	}
 	
