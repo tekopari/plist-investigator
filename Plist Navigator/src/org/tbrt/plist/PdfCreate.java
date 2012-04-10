@@ -262,11 +262,14 @@ public class PdfCreate {
 					System.out.println("Child Model is null: " + i);
 					continue;
 				}
-			
+				
+			   // 0 for key name, 1 for 
+    		   String KeyName = (String) MyModel.getValueAt(ChildObj, i);
+    		   System.out.println("MyObj: " + KeyName);
+    		   
+    		   ParseNSObject (MyModel, ChildObj);
 			}
-    		// 0 for key name, 1 for 
-    		String KeyName = (String) MyModel.getValueAt(MyObj, 0);
-    		System.out.println("MyObj: " + KeyName);
+
     	}
 	    catch(Exception ex) {
 		  ex.printStackTrace();
