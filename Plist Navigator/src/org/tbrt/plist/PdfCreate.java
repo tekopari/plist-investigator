@@ -9,7 +9,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 
@@ -75,7 +77,7 @@ public class PdfCreate {
 			File file = new File(plistName);
 			// rootDict = (NSDictionary) PropertyListParser.parse(file);
 			System.out.println("=====> The Dir the Plist file is at: " + file.getParent() );
-			GetOutput (file, PdfName);
+			GetOutput (file, PdfName, notesName);
 			
 			
 			System.out.println(rootDict);
@@ -84,124 +86,11 @@ public class PdfCreate {
 		}
 
 	}
-	
-    
-    private PDDocument createPDFFromText ( Reader text ) throws IOException
-    {
-        PDDocument doc = null;
-        try
-        {
-        	
-            final int margin = 40;
-            PDFont font = null;
-			float height = font.getFontDescriptor().getFontBoundingBox().getHeight()/1000;
-			
-			// PDFont font = PDType1Font.HELVETICA_BOLD;
-
-            int fontSize = 0;
-			//calculate font height and increase by 5 percent.
-            height = height*fontSize*1.05f;
-            doc = new PDDocument();
-            BufferedReader data = new BufferedReader( text );
-            String nextLine = null;
-            PDPage page = new PDPage();
-            PDPageContentStream contentStream = null;
-            float y = -1;
-            float maxStringLength = page.getMediaBox().getWidth() - 2*margin;
-            
-            // There is a special case of creating a PDF document from an empty string.
-            boolean textIsEmpty = true;
-            
-            while( (nextLine = data.readLine()) != null )
-            {
-            	
-            	// The input text is nonEmpty. New pages will be created and added
-            	// to the PDF document as they are needed, depending on the length of
-            	// the text.
-            	textIsEmpty = false;
-
-                String[] lineWords = nextLine.trim().split( " " );
-                int lineIndex = 0;
-                while( lineIndex < lineWords.length )
-                {
-                    StringBuffer nextLineToDraw = new StringBuffer();
-                    float lengthIfUsingNextWord = 0;
-                    do
-                    {
-                        nextLineToDraw.append( lineWords[lineIndex] );
-                        nextLineToDraw.append( " " );
-                        lineIndex++;
-                        if( lineIndex < lineWords.length )
-                        {
-                            String lineWithNextWord = nextLineToDraw.toString() + lineWords[lineIndex];
-                            lengthIfUsingNextWord =
-                                (font.getStringWidth( lineWithNextWord )/1000) * fontSize;
-                        }
-                    }
-                    while( lineIndex < lineWords.length &&
-                           lengthIfUsingNextWord < maxStringLength );
-                    if( y < margin )
-                    {
-                    	// We have crossed the end-of-page boundary and need to extend the
-                    	// document by another page.
-                        page = new PDPage();
-                        doc.addPage( page );
-                        if( contentStream != null )
-                        {
-                            contentStream.endText();
-                            contentStream.close();
-                        }
-                        contentStream = new PDPageContentStream(doc, page);
-                        contentStream.setFont( font, fontSize );
-                        contentStream.beginText();
-                        y = page.getMediaBox().getHeight() - margin + height;
-                        contentStream.moveTextPositionByAmount(
-                            margin, y );
-
-                    }
-                    //System.out.println( "Drawing string at " + x + "," + y );
-
-                    if( contentStream == null )
-                    {
-                        throw new IOException( "Error:Expected non-null content stream." );
-                    }
-                    contentStream.moveTextPositionByAmount( 0, -height);
-                    y -= height;
-                    contentStream.drawString( nextLineToDraw.toString() );
-                }
-
-
-            }
-            
-            // If the input text was the empty string, then the above while loop will have short-circuited
-            // and we will not have added any PDPages to the document.
-            // So in order to make the resultant PDF document readable by Adobe Reader etc, we'll add an empty page.
-            if (textIsEmpty)
-            {
-            	doc.addPage(page);
-            }
-            
-            if( contentStream != null )
-            {
-                contentStream.endText();
-                contentStream.close();
-            }
-        }
-        catch( IOException io )
-        {
-            if( doc != null )
-            {
-                doc.close();
-            }
-            throw io;
-        }
-        return doc;
-    }
     
     public static void WriteFile (String str, String OFile, int TuckIn)  {
     	
     	// For Better formatting in the txt file.
-    	if (TuckIn <= 0)  {
+    	if (TuckIn <= 1)  {
     		TuckIn = 0; 
     	}  else  {
     		TuckIn = TuckIn - 1;
@@ -264,7 +153,7 @@ public class PdfCreate {
     		   }  else {
     			   // System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
     			   System.out.println(KeyName + " = " + KeyValue);
-    			   String Wstr = KeyName + " =  " + KeyValue;
+    			   String Wstr = KeyName + " = " + KeyValue;
 				   WriteFile (Wstr, OutFile, Indent);
     		   }
     		   
@@ -291,7 +180,101 @@ public class PdfCreate {
 	    }
     }
 	
-	public static void GetOutput (File PlistFile, String PdfFileName)  {
+    public static PDDocument text2Pdf ( BufferedReader data) 
+    {
+
+    	        PDDocument doc = null;
+    	        try
+    	        {
+    	        	
+    	            final int margin = 0;
+    	            float font = 6;
+    	            float height = 6;
+    	            float fontSize = 6;
+
+    	            //calculate font height and increase by 5 percent.
+    	            height = height*fontSize*1.05f;
+    	            doc = new PDDocument();
+    	            String nextLine = null;
+    	            PDPage page = new PDPage();
+    	            PDPageContentStream contentStream = null;
+    	            float y = -1;
+    	            float maxStringLength = page.getMediaBox().getWidth() - 2*margin;
+    	            
+    	            // There is a special case of creating a PDF document from an empty string.
+    	            boolean textIsEmpty = true;
+    	            
+    	            while( (nextLine = data.readLine()) != null )
+    	            {
+    	            	
+    	            	// The input text is nonEmpty. New pages will be created and added
+    	            	// to the PDF document as they are needed, depending on the length of
+    	            	// the text.
+    	            	textIsEmpty = false;
+
+    	                //TBRT: original. String[] lineWords = nextLine.trim().split( " " );
+    	            	String[] lineWords = new String[3];
+    	            	lineWords[0] = nextLine;
+    	                int lineIndex = 0;
+    	                while( lineIndex < lineWords.length )
+    	                {
+    	                    StringBuffer nextLineToDraw = new StringBuffer();
+    	                    float lengthIfUsingNextWord = 0;
+    	                    do
+    	                    {
+    	                        nextLineToDraw.append( lineWords[lineIndex] );
+    	                        nextLineToDraw.append( " " );
+    	                        lineIndex++;
+    	                        if( lineIndex < lineWords.length )
+    	                        {
+    	                            String lineWithNextWord = nextLineToDraw.toString() + lineWords[lineIndex];
+    	                            lengthIfUsingNextWord = 80;
+    	                        }
+    	                    }
+    	                    while( lineIndex < lineWords.length &&
+    	                           lengthIfUsingNextWord < maxStringLength );
+    	                    if( y < margin )
+    	                    {
+    	                    	// We have crossed the end-of-page boundary and need to extend the
+    	                    	// document by another page.
+    	                        page = new PDPage();
+    	                        doc.addPage( page );
+    	                        if( contentStream != null )
+    	                        {
+    	                            contentStream.endText();
+    	                            contentStream.close();
+    	                        }
+    	                        contentStream = new PDPageContentStream(doc, page);
+    	                        contentStream.beginText();
+    	                        y = page.getMediaBox().getHeight() - margin + height;
+    	                        contentStream.moveTextPositionByAmount(
+    	                            margin, y );
+
+    	                    }
+    	                    //System.out.println( "Drawing string at " + x + "," + y );
+
+    	                    if( contentStream == null )
+    	                    {
+    	                        throw new IOException( "Error:Expected non-null content stream." );
+    	                    }
+    	                    contentStream.moveTextPositionByAmount( 0, -height);
+    	                    y -= height;
+    	                    contentStream.drawString( nextLineToDraw.toString() );
+    	                }
+
+
+    	            }
+    	            
+    	        }
+    	        catch(Exception ex) {
+    	    			  ex.printStackTrace();
+    	        }
+    	        return doc;
+
+    }
+
+    
+	public static void GetOutput (File PlistFile, String PdfFileName,  String NotesFile)  {
 		
 		try  {
 			
@@ -322,10 +305,39 @@ public class PdfCreate {
 			PlistModel nPModel = new PlistModel(LocRootDict);
 			ParseNSObject (nPModel, LocRootDict, TextFile);
 			
+			// Having parsed plist into txt file, append the comment file to it.
+			String S1 = "\n\nComments:\n";
+			String S2 = "========\n";
+			WriteFile (S1, TextFile, 0);
+			WriteFile (S2, TextFile, 0);
+			
+			File f1 = new File(TextFile);
+			File f2 = new File(NotesFile);
+            InputStream in = new FileInputStream(f2);
+            
+            
+            OutputStream out = new FileOutputStream(f1,true);
+ 
+            byte[] buf = new byte[10240];
+            int len;
+            
+            
+
+            while ((len = in.read(buf)) > 0){
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+            System.out.println("File copied.");
+			
+			
 			TextToPDF mine = new TextToPDF();
 	        PDDocument MyPdfDoc = null;
 			BufferedReader data = new BufferedReader( new FileReader(TextFile) );
+			mine.setFontSize(6);
 			MyPdfDoc = mine.createPDFFromText(data);
+			
+			// Test. MyPdfDoc = text2Pdf (data);
 			MyPdfDoc.save(PdfFileName);
 			
 		}
@@ -340,7 +352,7 @@ public class PdfCreate {
 
 		try {
 			File file = new File("c:\\tmp\\plistfile.plist");
-			GetOutput (file, "C:\\tmp\\ravididit.pdf");
+			GetOutput (file, "C:\\tmp\\ravididit.pdf", "C:\\tmp\\ravinotes.txt");
 			
 			// ravi: Why can't we also use rootDict to create PDF?
 			// rootDict = (NSDictionary) PropertyListParser.parse(file);
