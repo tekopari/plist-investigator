@@ -110,7 +110,7 @@ public class PdfCreate {
 	    	    String Ostr = str;
 	    	    
 	    		for(int j = 0; j < Indent; j++) {
-	    		    Ostr = "\t" + Ostr;
+	    		    Ostr = ".." + Ostr;
 	    		}
                 bw.write(Ostr);
                 bw.newLine();
