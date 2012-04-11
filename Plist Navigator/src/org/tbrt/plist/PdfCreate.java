@@ -328,7 +328,6 @@ public class PdfCreate {
             }
             in.close();
             out.close();
-            System.out.println("File copied.");
 			
 			
 			TextToPDF mine = new TextToPDF();
@@ -339,6 +338,7 @@ public class PdfCreate {
 			
 			// Test. MyPdfDoc = text2Pdf (data);
 			MyPdfDoc.save(PdfFileName);
+			MyPdfDoc.close();
 			
 		}
 	    catch(Exception ex) {
