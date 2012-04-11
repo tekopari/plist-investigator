@@ -58,15 +58,13 @@ import com.dd.plist.*;
 // Getting called from InvestigationTree.java 
 
 
+
 public class PdfCreate {
 
+	static int PdfCreateProblem = 0;
+	
 	public int pdfStatus() {
-		int rc = 0;
-		
-		//TODO Handle PDF operation status. "rc=0" means success, "rc=1" means error
-		// PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("C:\\tmp\ravi.pdf"));
-		
-		return(rc);
+		return(PdfCreateProblem);
 	}
 	
 	public PdfCreate(String evidenceName, String notesName, String plistName, String PdfName) {
@@ -75,6 +73,15 @@ public class PdfCreate {
 		
 		try {
 			File file = new File(plistName);
+			// If plist file does not exist, nothing to do.
+			if (! file.exists())  {
+				PdfCreateProblem = 1;
+				return;
+			}
+			
+			// Clear the error flag, assume everything is fine.
+			PdfCreateProblem = 0;
+			
 			// rootDict = (NSDictionary) PropertyListParser.parse(file);
 			System.out.println("=====> The Dir the Plist file is at: " + file.getParent() );
 			GetOutput (file, PdfName, notesName);
@@ -279,6 +286,7 @@ public class PdfCreate {
 		try  {
 			
 			File f = null;
+			File pF = null;
 			String Name = null;
 			
 			System.out.println("Entering GetOutput");
@@ -305,30 +313,30 @@ public class PdfCreate {
 			PlistModel nPModel = new PlistModel(LocRootDict);
 			ParseNSObject (nPModel, LocRootDict, TextFile);
 			
+			
 			// Having parsed plist into txt file, append the comment file to it.
-			String S1 = "\n\nComments:\n";
-			String S2 = "========\n";
-			WriteFile (S1, TextFile, 0);
-			WriteFile (S2, TextFile, 0);
-			
-			File f1 = new File(TextFile);
-			File f2 = new File(NotesFile);
-            InputStream in = new FileInputStream(f2);
-            
-            
-            OutputStream out = new FileOutputStream(f1,true);
- 
-            byte[] buf = new byte[10240];
-            int len;
-            
-            
 
-            while ((len = in.read(buf)) > 0){
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
 			
+			File Txtf = new File(TextFile);
+			File Notef = new File(NotesFile);
+			
+			if (Notef.exists())  {
+				InputStream in = new FileInputStream(Notef);    
+				OutputStream out = new FileOutputStream(Txtf,true);
+				
+				String S1 = "\n\nComments:\n";
+				String S2 = "========\n";
+				WriteFile (S1, TextFile, 0);
+				WriteFile (S2, TextFile, 0);
+				byte[] buf = new byte[10240];
+				int len;
+        
+				while ((len = in.read(buf)) > 0){
+					out.write(buf, 0, len);
+				}
+				in.close();
+				out.close();
+			}
 			
 			TextToPDF mine = new TextToPDF();
 	        PDDocument MyPdfDoc = null;
