@@ -92,55 +92,8 @@ public class PdfCreate {
 
 	}
 	
-
-	
-	public static void Str2Pdf(String OutputStr) throws IOException, COSVisitorException {
-		// the document
-		PDDocument doc = null;
-		try {
-			String fileName = "C:\\tmp\\ravi.pdf";
-			doc = new PDDocument();
-
-			PDPage page = new PDPage();
-			doc.addPage(page);
-			PDFont font = PDType1Font.HELVETICA_BOLD;
-
-			PDPageContentStream contentStream = new PDPageContentStream(doc,
-					page);
-			contentStream.beginText();
-			contentStream.setFont(font, 12);
-			contentStream.moveTextPositionByAmount(100, 700);
-			String message = OutputStr;
-			contentStream.drawString(message);
-			contentStream.endText();
-			contentStream.close();
-			doc.save(fileName);
-		} finally {
-			if (doc != null) {
-				doc.close();
-			}
-		}
-	}
-	
-    private static String readFileAsString(String filePath)
-    throws java.io.IOException{
-        StringBuffer fileData = new StringBuffer(1024 * 100);
-        BufferedReader reader = new BufferedReader(
-                new FileReader(filePath));
-        char[] buf = new char[1024 * 100];
-        int numRead=0;
-        while((numRead=reader.read(buf)) != -1){
-            String readData = String.valueOf(buf, 0, numRead);
-            fileData.append(readData);
-            buf = new char[1024];
-        }
-        reader.close();
-        return fileData.toString();
-    }
-
-
     
-    private PDDocument createPDFFromText( Reader text ) throws IOException
+    private PDDocument createPDFFromText ( Reader text ) throws IOException
     {
         PDDocument doc = null;
         try
@@ -252,16 +205,23 @@ public class PdfCreate {
     
     public static void WriteFile (String str, String OFile, int TuckIn)  {
     	
+    	// For Better formatting in the txt file.
+    	if (TuckIn <= 0)  {
+    		TuckIn = 0; 
+    	}  else  {
+    		TuckIn = TuckIn - 1;
+    	}
+    	
     	// System.out.print("&&&&&&&& WriteFile: Str" + str + ", " + "OFile " + OFile + "\n");
 		  try  { 
 			    File f = new File(OFile);
 			    
 	    	    FileWriter fw = new FileWriter(OFile, true);
 	    	    BufferedWriter bw = new BufferedWriter(fw);
-	    	    String Ostr = null;
+	    	    String Ostr = str;
 	    	    
 	    		for(int j = 0; j < Indent; j++) {
-	    		    Ostr = "\t" + str;
+	    		    Ostr = "\t" + Ostr;
 	    		}
                 bw.write(Ostr);
                 bw.newLine();
@@ -340,9 +300,6 @@ public class PdfCreate {
 	
 	public static void GetOutput (File PlistFile, String PdfFileName)  {
 		
-		
-		
-		
 		try  {
 			
 			File f = null;
@@ -361,8 +318,11 @@ public class PdfCreate {
 		    f.delete();
 		    System.out.println("GetOutput: TextFile is: " + TextFile);
 			
-
+		    // If the tmp file exists, delete and recreate it.
     	    f = new File(TextFile);
+    	    if (f.exists())  {
+    	    	f.delete();
+    	    }
     	    f.createNewFile();
 		    
 			NSDictionary LocRootDict = null;
@@ -382,12 +342,6 @@ public class PdfCreate {
 		  ex.printStackTrace();
 	    }
 		
-	}
-	
-	public static void Xml2Pdf (String Xmlfile)  {
-		
-		// Use Java DOM or SAX parser.
-
 	}
 	
 
