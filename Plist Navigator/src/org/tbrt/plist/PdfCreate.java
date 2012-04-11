@@ -40,12 +40,18 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDSimpleFont;
 import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.examples.pdmodel.ReplaceString;
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
+import org.apache.pdfbox.TextToPDF;
+
 
 
 import com.dd.plist.*;
@@ -343,10 +349,24 @@ public class PdfCreate {
 			BufferedReader data = new BufferedReader( new FileReader(TextFile) );
 			mine.setFontSize(6);
 			MyPdfDoc = mine.createPDFFromText(data);
-			
+	    	data.close();
+		
 			// Test. MyPdfDoc = text2Pdf (data);
-			MyPdfDoc.save(PdfFileName);
+	    	String tmpPdf = PdfFileName + ".tmp";
+			MyPdfDoc.save(tmpPdf);
 			MyPdfDoc.close();
+			
+			// if we can replace the .. with space, it will be great.
+	        try
+	        {
+	            ReplaceString app = new ReplaceString();
+	            app.doIt( tmpPdf, PdfFileName, "%%", "  " );
+	        }
+	        catch (Exception e)
+	        {
+	            e.printStackTrace();
+	        }
+			
 			
 		}
 	    catch(Exception ex) {
