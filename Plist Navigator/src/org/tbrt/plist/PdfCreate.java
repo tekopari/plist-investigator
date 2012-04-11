@@ -44,7 +44,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.xml.sax.SAXException;
+
 
 import com.dd.plist.*;
 
@@ -66,13 +66,6 @@ public class PdfCreate {
 		
 		return(rc);
 	}
-	
-	public void foo() {
-		PDFont font = PDType1Font.HELVETICA_BOLD;
-	}
-
-	//TC public PdfCreate(NSDictionary rootDict) {
-	//TC }
 	
 	public PdfCreate(String evidenceName, String notesName, String plistName, String PdfName) {
 		NSDictionary rootDict = null;
@@ -102,6 +95,8 @@ public class PdfCreate {
             final int margin = 40;
             PDFont font = null;
 			float height = font.getFontDescriptor().getFontBoundingBox().getHeight()/1000;
+			
+			// PDFont font = PDType1Font.HELVETICA_BOLD;
 
             int fontSize = 0;
 			//calculate font height and increase by 5 percent.
@@ -214,8 +209,6 @@ public class PdfCreate {
     	
     	// System.out.print("&&&&&&&& WriteFile: Str" + str + ", " + "OFile " + OFile + "\n");
 		  try  { 
-			    File f = new File(OFile);
-			    
 	    	    FileWriter fw = new FileWriter(OFile, true);
 	    	    BufferedWriter bw = new BufferedWriter(fw);
 	    	    String Ostr = str;
@@ -304,7 +297,6 @@ public class PdfCreate {
 			
 			File f = null;
 			String Name = null;
-			BufferedWriter bufferedWriter = null;
 			
 			System.out.println("Entering GetOutput");
 			// Construct the .txt file, in the same directory in which we are going to create the pdf file
@@ -334,7 +326,6 @@ public class PdfCreate {
 	        PDDocument MyPdfDoc = null;
 			BufferedReader data = new BufferedReader( new FileReader(TextFile) );
 			MyPdfDoc = mine.createPDFFromText(data);
-			// MyPdfDoc.save("C:\\tmp\\ravididit.pdf");
 			MyPdfDoc.save(PdfFileName);
 			
 		}
@@ -346,7 +337,7 @@ public class PdfCreate {
 	
 
 	public static void main(String[] args) {
-		NSDictionary rootDict = null;
+
 		try {
 			File file = new File("c:\\tmp\\plistfile.plist");
 			GetOutput (file, "C:\\tmp\\ravididit.pdf");
