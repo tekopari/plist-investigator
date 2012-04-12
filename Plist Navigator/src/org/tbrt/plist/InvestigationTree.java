@@ -303,7 +303,7 @@ public class InvestigationTree extends JPanel {
     	        		               plistName = dirPath[i] + "/" + f;
     	        		               //TBRT: calling for all plist files under an investigation 
     	        		               PdfCreate h = new PdfCreate(invName, notesName, plistName, pdfName);
-    	        		               if (h.pdfStatus() != 0) {
+    	        		               if (!h.pdfStatus()) {
     	        		            	   flag = 1;
     	        		            	   j = listOfFiles.length;
     	        		            	   i = max;
@@ -315,7 +315,7 @@ public class InvestigationTree extends JPanel {
     	            	else {
     	            		//TBRT: calling at the investigation line where plist file name is blank 
     	            		PdfCreate h = new PdfCreate(invName, notesName, plistName, pdfName);
-    	            		if (h.pdfStatus() != 0) {
+    	            		if (! h.pdfStatus()) {
     	            			flag = 1;
      		            	    i = max;
     	            		}
@@ -459,7 +459,7 @@ public class InvestigationTree extends JPanel {
         		               PdfCreate h = new PdfCreate(nodeName, notesName, plistName, pdfName);
         		               
         		               String m = "PDF file \"" + pdfName + "\" is ready.";
-        		               if (h.pdfStatus() != 0) {
+        		               if (!h.pdfStatus()) {
         		            	   m = "Failed to generate the PDF file \"" + pdfName + "\".";
         		               }
         	        		   JOptionPane.showMessageDialog(frame, m);

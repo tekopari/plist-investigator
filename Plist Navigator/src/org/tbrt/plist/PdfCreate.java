@@ -67,37 +67,62 @@ import com.dd.plist.*;
 
 public class PdfCreate {
 
-	static int PdfCreateProblem = 0;
+	static boolean PdfCreated = false;
 	
-	public int pdfStatus() {
-		return(PdfCreateProblem);
+	public boolean pdfStatus() {
+		return(PdfCreated);
 	}
 	
 	public PdfCreate(String evidenceName, String notesName, String plistName, String PdfName) {
-		NSDictionary rootDict = null;
 		System.out.println("Debug:pdfcreate parameters: "+ evidenceName + "," + notesName + "," + plistName+ "," + PdfName);
 		
 		try {
 			File file = new File(plistName);
+			
 			// If plist file does not exist, nothing to do.
 			if (! file.exists())  {
-				PdfCreateProblem = 1;
+				PdfCreated = false;
 				return;
 			}
 			
+			// If the file is empty, nothing to do say it is a success and return.
+			if ( file.length() == 0)  {
+				PdfCreated = false;
+				return;				
+			}
+			
+			// Check plist file's magic string.  Unfortunately the parser does not.
+			try {
+				InputStream is = new FileInputStream(file);
+				byte[] bytes = new byte[64];
+				int numBytes = 6;
+				int numRead = 0;
+				
+				// Read six byes for "bplist"
+				numRead=is.read(bytes, 0, 6);
+				if (numRead < 6)  {
+					PdfCreated = false;
+					return;
+				}
+				String mStr = new String(bytes);
+				System.out.println("=======>Magic String is: " + mStr);
+				int result = mStr.compareToIgnoreCase("bplist");
+				if (result != 0)  {
+					PdfCreated = false;
+					return;
+				}
+				
+			} catch (Exception e) {
+				System.err.println("Cannot validate the magic string of plist");
+			}
+			
 			// Clear the error flag, assume everything is fine.
-			PdfCreateProblem = 0;
+			PdfCreated = true;
 			
-			// rootDict = (NSDictionary) PropertyListParser.parse(file);
-			System.out.println("=====> The Dir the Plist file is at: " + file.getParent() );
 			GetOutput (file, PdfName, notesName);
-			
-			
-			System.out.println(rootDict);
 		} catch (Exception e) {
 			System.err.println("Cannot use the PropertyListParser");
 		}
-
 	}
     
     public static void WriteFile (String str, String OFile, int TuckIn)  {
@@ -316,13 +341,30 @@ public class PdfCreate {
 		    
 			NSDictionary LocRootDict = null;
 			LocRootDict = (NSDictionary)PropertyListParser.parse(PlistFile);
+			if (LocRootDict == null)  {
+				PdfCreated = false;
+				return;
+			}
+			
+			// Write the plist header - i.e. file name of plist file
+			int len;
+			String border = "";
+			Name = Name.toUpperCase();
+			WriteFile ((Name + "\n"), TextFile, 0);
+			len = Name.length();
+			for(int j = 0; j < len; j++) {
+    		    border = "=" + border;
+    		}
+			border = border + "\n";
+			
+			WriteFile (border, TextFile, 0);
+			
+			// Go parse the plist Dictionary
 			PlistModel nPModel = new PlistModel(LocRootDict);
 			ParseNSObject (nPModel, LocRootDict, TextFile);
 			
 			
 			// Having parsed plist into txt file, append the comment file to it.
-
-			
 			File Txtf = new File(TextFile);
 			File Notef = new File(NotesFile);
 			
@@ -335,7 +377,7 @@ public class PdfCreate {
 				WriteFile (S1, TextFile, 0);
 				WriteFile (S2, TextFile, 0);
 				byte[] buf = new byte[10240];
-				int len;
+				
         
 				while ((len = in.read(buf)) > 0){
 					out.write(buf, 0, len);
