@@ -69,6 +69,7 @@ import com.dd.plist.*;
 public class PdfCreate {
 
 	static boolean PdfCreated = false;
+	static boolean Pdfexist = true;
 	
 	public boolean pdfStatus() {
 		return(PdfCreated);
@@ -83,13 +84,14 @@ public class PdfCreate {
 			// If plist file does not exist, nothing to do.
 			if (! file.exists())  {
 				PdfCreated = false;
-				return;
+				Pdfexist = false;
+				//TC return;
 			}
 			
 			// If the file is empty, nothing to do say it is a success and return.
 			if ( file.length() == 0)  {
 				PdfCreated = false;
-				return;				
+				//TC return;				
 			}
 			
 			/*********** COMMENT out for now
@@ -122,7 +124,7 @@ public class PdfCreate {
 			// Clear the error flag, assume everything is fine.
 			PdfCreated = true;
 			
-			GetOutput (file, PdfName, notesName);
+			GetOutput (file, PdfName, notesName, evidenceName);
 		} catch (Exception e) {
 			System.err.println("Cannot use the PropertyListParser");
 		}
@@ -336,7 +338,7 @@ public class PdfCreate {
     }
 
     
-	public static void GetOutput (File PlistFile, String PdfFileName,  String NotesFile)  {
+	public static void GetOutput (File PlistFile, String PdfFileName,  String NotesFile, String evidenceName)  {
 		
 		try  {
 			
@@ -358,38 +360,30 @@ public class PdfCreate {
 			
 		    // If the tmp file exists, delete and recreate it.
     	    f = new File(TextFile);
-    	    if (f.exists())  {
-    	    	f.delete();
+    	    if ((Pdfexist == false) && f.exists())  {
+    	        f.delete();
+    	        f.createNewFile();
     	    }
-    	    f.createNewFile();
-		    
-			NSDictionary LocRootDict = null;
-			LocRootDict = (NSDictionary)PropertyListParser.parse(PlistFile);
-			if (LocRootDict == null)  {
-				PdfCreated = false;
-				return;
-			}
-			
+    	    
 			// Write the plist header - i.e. file name of plist file
-			int len;
-			String border = "";
-			Name = Name.toUpperCase();
-			Name = "PLIST: " + Name;
-			WriteFile ((Name + "\n"), TextFile, 0);
-			len = Name.length();
-			for(int j = 0; j < len; j++) {
-    		    border = "=" + border;
-    		}
-			border = border + "\n";
+    	    if (Pdfexist == false) {
+    	    	Pdfexist = true;
+    	    	
+		    	int len;
+			    String border = "";
+			    Name = Name.toUpperCase();
+			    Name = "PLIST: " + Name;
+			    WriteFile ((Name + "\n"), TextFile, 0);
+			    len = Name.length();
+			    for(int j = 0; j < len; j++) {
+    		        border = "=" + border;
+    		    }
+			    border = border + "\n";
 			
-			WriteFile (border, TextFile, 0);
-			
-			// Go parse the plist Dictionary
-			PlistModel nPModel = new PlistModel(LocRootDict);
-			ParseNSObject (nPModel, LocRootDict, TextFile);
-			
-			
-			// Having parsed plist into txt file, append the comment file to it.
+			    WriteFile (border, TextFile, 0);
+    	    }
+    	    
+			// Append the evident name and comment file to it.
 			File Txtf = new File(TextFile);
 			File Notef = new File(NotesFile);
 			
@@ -397,18 +391,27 @@ public class PdfCreate {
 				InputStream in = new FileInputStream(Notef);    
 				OutputStream out = new FileOutputStream(Txtf,true);
 				
-				String S1 = "\n\nComments:\n";
-				String S2 = "========\n";
+				String S1 = "\n\n" + evidenceName + "\n";
+				String S2 = "\n\n========\n";
 				WriteFile (S1, TextFile, 0);
-				WriteFile (S2, TextFile, 0);
-				byte[] buf = new byte[10240];
-				
-        
+
+				int len;
+				byte[] buf = new byte[10240];				
 				while ((len = in.read(buf)) > 0){
 					out.write(buf, 0, len);
 				}
+				
+				WriteFile (S2, TextFile, 0);
 				in.close();
 				out.close();
+			}
+			
+			// Go parse the plist Dictionary
+			NSDictionary LocRootDict = null;
+			LocRootDict = (NSDictionary)PropertyListParser.parse(PlistFile);
+			if (LocRootDict != null)  {
+				PlistModel nPModel = new PlistModel(LocRootDict);
+				ParseNSObject (nPModel, LocRootDict, TextFile);
 			}
 			
 			TextToPDF mine = new TextToPDF();
@@ -447,7 +450,7 @@ public class PdfCreate {
 
 		try {
 			File file = new File("c:\\tmp\\plistfile.plist");
-			GetOutput (file, "C:\\tmp\\ravididit.pdf", "C:\\tmp\\ravinotes.txt");
+			GetOutput (file, "C:\\tmp\\ravididit.pdf", "C:\\tmp\\ravinotes.txt", "PLIST TITLE");
 			
 			// ravi: Why can't we also use rootDict to create PDF?
 			// rootDict = (NSDictionary) PropertyListParser.parse(file);
