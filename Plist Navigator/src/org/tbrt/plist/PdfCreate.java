@@ -101,7 +101,7 @@ public class PdfCreate {
 		}
 	}
 
-	public static final int MAX_STR_LEN = 70;
+	public static final int MAX_STR_LEN = 60;
 	public static final int MAX_ARRAY_SIZE = 30;
 	public static final int MAX_LINE_LEN = (MAX_STR_LEN * MAX_ARRAY_SIZE);
 	private static String[] stringArray = new String[20];
@@ -120,12 +120,19 @@ public class PdfCreate {
 			stringArray[iterator] = inStr.substring(start, end) + "\n";
 		}
 		
+		//System.err.println("====> Split Str, total ARRAY SIZE: " + iterator);
+		// Test, splitting the string.
+		for (int t=0; t < iterator; t++)  {
+			//System.out.println("====> Split Str: " + stringArray[t]);
+		}
+		
 		return iterator;
 	}
 
     
     public static void WriteFile (String str, String OFile, int TuckIn)  {
     	
+    	// System.err.print("&&&&&&&& WriteFile:, TuckIn value: " + TuckIn);
     	// For Better formatting in the txt file.
     	if (TuckIn <= 1)  {
     		TuckIn = 0; 
@@ -139,7 +146,7 @@ public class PdfCreate {
 	    	    BufferedWriter bw = new BufferedWriter(fw);
 	    	    String Ostr = str;
 	    	    
-	    		for(int j = 0; j < Indent; j++) {
+	    		for(int j = 0; j < TuckIn; j++) {
 	    		    Ostr = ".." + Ostr;
 	    		}
                 bw.write(Ostr);
@@ -193,7 +200,11 @@ public class PdfCreate {
     			   Wstr = KeyName + " = " + KeyValue;
     		   }
     		   
-    		   WriteFile (Wstr, OutFile, Indent);
+    		   int nStr = splitStr (Wstr);
+    		   for (int j = 0; j < nStr; j++) {
+    			   System.err.print("------->ParseNSObject: Indent = " + (Indent+ j) + stringArray[j]);
+    			   WriteFile (stringArray[j], OutFile, (Indent+j) );
+    		   }
     		   
 			int ChildCount = MyModel.getChildCount(MyObj);
 			// System.out.println("getChildCount(): is " + ChildCount);
