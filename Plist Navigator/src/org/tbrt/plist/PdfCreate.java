@@ -92,33 +92,6 @@ public class PdfCreate {
 				return;				
 			}
 			
-			/*********** COMMENT out for now
-			// Check plist file's magic string.  Unfortunately the parser does not.
-			try {
-				InputStream is = new FileInputStream(file);
-				byte[] bytes = new byte[64];
-				int numBytes = 6;
-				int numRead = 0;
-				
-				// Read six byes for "bplist"
-				numRead=is.read(bytes, 0, 6);
-				if (numRead < 6)  {
-					PdfCreated = false;
-					return;
-				}
-				String mStr = new String(bytes);
-				System.out.println("=======>Magic String is: " + mStr);
-				int result = mStr.compareToIgnoreCase("bplist");
-				if (result != 0)  {
-					PdfCreated = false;
-					return;
-				}
-				
-			} catch (Exception e) {
-				System.err.println("Cannot validate the magic string of plist");
-			}
-			*********** END */
-			
 			// Clear the error flag, assume everything is fine.
 			PdfCreated = true;
 			
@@ -205,21 +178,22 @@ public class PdfCreate {
     			    System.out.print("\t");
     			}
 
+    		   String Wstr = "";
     		   // Good for debug - System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
     		   if ( (KeyTypeName == "Dictionary") ||(KeyTypeName == "Array"))  {
     			   // For these types, don't print anything for the very first object.  For some reason, it is empty.
     			   if (Indent != 0)  {
     				   System.out.println(KeyName + ":  " + KeyValue);
-    				   String Wstr = KeyName + ":  " + KeyValue;
-    				   WriteFile (Wstr, OutFile, Indent);
+    				   Wstr = KeyName + ":  " + KeyValue;
     		            
     			   }
     		   }  else {
     			   // System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
     			   System.out.println(KeyName + " = " + KeyValue);
-    			   String Wstr = KeyName + " = " + KeyValue;
-				   WriteFile (Wstr, OutFile, Indent);
+    			   Wstr = KeyName + " = " + KeyValue;
     		   }
+    		   
+    		   WriteFile (Wstr, OutFile, Indent);
     		   
 			int ChildCount = MyModel.getChildCount(MyObj);
 			// System.out.println("getChildCount(): is " + ChildCount);
@@ -345,6 +319,9 @@ public class PdfCreate {
 			File f = null;
 			File pF = null;
 			String Name = null;
+			String TitleName = "";
+			String S1 = "";
+			String S2 = "";
 			
 			System.out.println("Entering GetOutput");
 			// Construct the .txt file, in the same directory in which we are going to create the pdf file
@@ -375,10 +352,11 @@ public class PdfCreate {
 			// Write the plist header - i.e. file name of plist file
 			int len;
 			String border = "";
-			Name = Name.toUpperCase();
-			Name = "PLIST: " + Name;
-			WriteFile ((Name + "\n"), TextFile, 0);
-			len = Name.length();
+			TitleName = "PLIST NAME: " + PlistFile;
+			TitleName = TitleName.toUpperCase();
+			
+			WriteFile ((TitleName + "\n"), TextFile, 0);
+			len = TitleName.length();
 			for(int j = 0; j < len; j++) {
     		    border = "=" + border;
     		}
@@ -386,12 +364,9 @@ public class PdfCreate {
 			
 			WriteFile (border, TextFile, 0);
 			
-			// Go parse the plist Dictionary
-			PlistModel nPModel = new PlistModel(LocRootDict);
-			ParseNSObject (nPModel, LocRootDict, TextFile);
+		
 			
-			
-			// Having parsed plist into txt file, append the comment file to it.
+			// Put the comment after the title
 			File Txtf = new File(TextFile);
 			File Notef = new File(NotesFile);
 			
@@ -399,8 +374,8 @@ public class PdfCreate {
 				InputStream in = new FileInputStream(Notef);    
 				OutputStream out = new FileOutputStream(Txtf,true);
 				
-				String S1 = "\n\nComments:\n";
-				String S2 = "========\n";
+				S1 = "\n\nComments:\n";
+				S2 = "~~~~~~~~~\n";
 				WriteFile (S1, TextFile, 0);
 				WriteFile (S2, TextFile, 0);
 				byte[] buf = new byte[10240];
@@ -411,8 +386,21 @@ public class PdfCreate {
 				}
 				in.close();
 				out.close();
+				
+				// Write new lines after the comment
+				S1 = "\n\n";
+				WriteFile (S1, TextFile, 0);
 			}
 			
+			S1 = "Plist Content\n";
+			WriteFile (S1, TextFile, 0);
+			S1 = "~~~~~~~~~~\n";
+			WriteFile (S1, TextFile, 0);
+			
+			// Go parse the plist Dictionary
+			PlistModel nPModel = new PlistModel(LocRootDict);
+			ParseNSObject (nPModel, LocRootDict, TextFile);
+	
 			TextToPDF mine = new TextToPDF();
 	        PDDocument MyPdfDoc = null;
 			BufferedReader data = new BufferedReader( new FileReader(TextFile) );
@@ -421,10 +409,12 @@ public class PdfCreate {
 	    	data.close();
 		
 			// Test. MyPdfDoc = text2Pdf (data);
-	    	String tmpPdf = PdfFileName + ".tmp";
-			MyPdfDoc.save(tmpPdf);
+	    	
+			MyPdfDoc.save(PdfFileName);
 			MyPdfDoc.close();
 			
+			/***  But this does do the trick.
+			String tmpPdf = PdfFileName + ".tmp";
 			// if we can replace the .. with space, it will be great.
 	        try
 	        {
@@ -435,6 +425,7 @@ public class PdfCreate {
 	        {
 	            e.printStackTrace();
 	        }
+	        ***/
 			
 			
 		}
