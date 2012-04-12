@@ -1,5 +1,6 @@
 package org.tbrt.plist;
 
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -124,6 +125,27 @@ public class PdfCreate {
 			System.err.println("Cannot use the PropertyListParser");
 		}
 	}
+
+	public static final int MAX_STR_LEN = 70;
+	private static String[] stringArray = new String[20];
+	public static int splitStr (String inStr)  {
+		
+		int iterator = 0;
+		int total = inStr.length();
+		for (iterator = 0; (iterator * MAX_STR_LEN) < total; iterator++)  // Max. string size is 70
+		{
+			int start = iterator * MAX_STR_LEN;
+			int end = start + MAX_STR_LEN;
+			if (end > total)
+			{
+				end = inStr.length();
+			}
+			stringArray[iterator] = inStr.substring(start, end) + "\n";
+		}
+		
+		return iterator;
+	}
+
     
     public static void WriteFile (String str, String OFile, int TuckIn)  {
     	
@@ -350,6 +372,7 @@ public class PdfCreate {
 			int len;
 			String border = "";
 			Name = Name.toUpperCase();
+			Name = "PLIST: " + Name;
 			WriteFile ((Name + "\n"), TextFile, 0);
 			len = Name.length();
 			for(int j = 0; j < len; j++) {
@@ -389,7 +412,7 @@ public class PdfCreate {
 			TextToPDF mine = new TextToPDF();
 	        PDDocument MyPdfDoc = null;
 			BufferedReader data = new BufferedReader( new FileReader(TextFile) );
-			mine.setFontSize(6);
+			mine.setFontSize(12);
 			MyPdfDoc = mine.createPDFFromText(data);
 	    	data.close();
 		
