@@ -92,6 +92,7 @@ public class PdfCreate {
 				return;				
 			}
 			
+			/*********** COMMENT out for now
 			// Check plist file's magic string.  Unfortunately the parser does not.
 			try {
 				InputStream is = new FileInputStream(file);
@@ -116,6 +117,7 @@ public class PdfCreate {
 			} catch (Exception e) {
 				System.err.println("Cannot validate the magic string of plist");
 			}
+			*********** END */
 			
 			// Clear the error flag, assume everything is fine.
 			PdfCreated = true;
