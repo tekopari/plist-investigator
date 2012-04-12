@@ -301,6 +301,7 @@ public class InvestigationTree extends JPanel {
     	        		            String f = listOfFiles[j].getName();
     	        		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
     	        		               plistName = dirPath[i] + "/" + f;
+    	        		               //TBRT: calling for all plist files under an investigation 
     	        		               PdfCreate h = new PdfCreate(invName, notesName, plistName, pdfName);
     	        		               if (h.pdfStatus() != 0) {
     	        		            	   flag = 1;
@@ -312,6 +313,7 @@ public class InvestigationTree extends JPanel {
     	        		    }
     	            	}
     	            	else {
+    	            		//TBRT: calling at the investigation line where plist file name is blank 
     	            		PdfCreate h = new PdfCreate(invName, notesName, plistName, pdfName);
     	            		if (h.pdfStatus() != 0) {
     	            			flag = 1;
@@ -452,6 +454,8 @@ public class InvestigationTree extends JPanel {
         		            String f = listOfFiles[i].getName();
         		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
         		               String plistName = path + "/" + f;
+        		               
+        		               //TBRT: calling at the individual plist file
         		               PdfCreate h = new PdfCreate(nodeName, notesName, plistName, pdfName);
         		               
         		               String m = "PDF file \"" + pdfName + "\" is ready.";
