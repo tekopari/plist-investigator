@@ -207,49 +207,58 @@ public class InvestigationTree extends JPanel {
         			
         			if ((eviName.length() > 0) && (eviFile.length() > 0)) {
         				File fromFile = new File(eviFile);
-        				if (fromFile.exists()) {       				
-        				    //Create directory
-        				    String strDirectory = getDirPath() + "/" + getNodeName() + "/" + eviName;        				
-        			        boolean success = (new File(strDirectory)).mkdir();
-        			        if (success) {
-                			    //Choose PList source file name and perform copy
-        			    	    String f = fromFile.getName();      			    		
+        				if (fromFile.exists()) {
+        					//Valid the PList file
+        					PlistTreeTable p = new PlistTreeTable(eviFile, 0);
+     		                if (p.status() != 0) {
+     		            	    String m = "File \"" + eviFile + "\"\nThis file neither a binary nor a XML property list.";
+     		            	    JOptionPane.showMessageDialog(frame, m);
+     		                }
+     		                else {
+     		               
+        				        //Create directory
+        				        String strDirectory = getDirPath() + "/" + getNodeName() + "/" + eviName;        				
+        			            boolean success = (new File(strDirectory)).mkdir();
+        			            if (success) {
+                			        //Choose PList source file name and perform copy
+        			    	        String f = fromFile.getName();      			    		
     			    		
-        			    	    //Copy PList file
-    			    		    String fileName = strDirectory + "/" + f;   			    		 
-    			    		    File toFile = new File(fileName);
-        			    	    copyFile(fromFile, toFile);
-        			    	    toFile = new File(fileName + nameExtORG);
-        			    	    copyFile(fromFile, toFile);
+        			    	        //Copy PList file
+    			    		        String fileName = strDirectory + "/" + f;   			    		 
+    			    		        File toFile = new File(fileName);
+        			    	        copyFile(fromFile, toFile);
+        			    	        toFile = new File(fileName + nameExtORG);
+        			    	        copyFile(fromFile, toFile);
         			    	
         			    	    
-        			    	    //Copy PList file to a fixed name           			    	
-        			    	    //TC int pos = f.lastIndexOf('.');
-        			    	    //TC String ext = f.substring(pos + 1);
-        			    	    //TC fileName = strDirectory + "/" + namePlistFile;            			    
-        			    	    //TC if (ext.length() > 0) {
-        			    	    //TC     fileName = fileName + "." + ext;
-        			    	    //TC }
-        			    	    //TC
-        			    	    //TC toFile = new File(fileName);
-        			    	    //TC copyFile(fromFile, toFile);
+        			    	        //Copy PList file to a fixed name           			    	
+        			    	        //TC int pos = f.lastIndexOf('.');
+        			    	        //TC String ext = f.substring(pos + 1);
+        			    	        //TC fileName = strDirectory + "/" + namePlistFile;            			    
+        			    	        //TC if (ext.length() > 0) {
+        			    	        //TC     fileName = fileName + "." + ext;
+        			    	        //TC }
+        			    	        //TC
+        			    	        //TC toFile = new File(fileName);
+        			    	        //TC copyFile(fromFile, toFile);
 
-    			                //Create notes file
-    			    	        File n = new File(strDirectory + "/" + nameNotesFile);
-    			    	        if (!n.exists()) {
-                                    n.createNewFile();
-    			    	        }
+    			                    //Create notes file
+    			    	            File n = new File(strDirectory + "/" + nameNotesFile);
+    			    	            if (!n.exists()) {
+                                        n.createNewFile();
+    			    	            }
     			    	
-    			    	        // Add node to JTree
-            		            InvestigationNode evid = new InvestigationNode("EvidenceItem", eviName);
-            			        //TC InvestigationNode notes = new InvestigationNode("Notes", "PList "+nameNotesFile);
-            			        DefaultMutableTreeNode t  = addObject(evid);
-            			        //TC addObject(t, notes);
-        			        }
-        			        else {
-        			    	    String m = "The same evidence name exists.\nPlease use a different name.";
-        			    	    JOptionPane.showMessageDialog(frame, m);
-        			        }
+    			    	            // Add node to JTree
+            		                InvestigationNode evid = new InvestigationNode("EvidenceItem", eviName);
+            			            //TC InvestigationNode notes = new InvestigationNode("Notes", "PList "+nameNotesFile);
+            			            DefaultMutableTreeNode t  = addObject(evid);
+            			            //TC addObject(t, notes);
+        			            }
+        			            else {
+        			    	        String m = "The same evidence name exists.\nPlease use a different name.";
+        			    	        JOptionPane.showMessageDialog(frame, m);
+        			            }
+     		                }
         			    }
         				else {
         			        String m = "The evidence file does not exist.";
@@ -356,7 +365,7 @@ public class InvestigationTree extends JPanel {
     		            String f = listOfFiles[i].getName();
     		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
     		               String plistName = path + "/" + f;
-    		               PlistTreeTable p = new PlistTreeTable(plistName);
+    		               PlistTreeTable p = new PlistTreeTable(plistName, 1);
     		               if (p.status() != 0) {
     		            	   String m = "File \"" + plistName + "\"\nThis file neither a binary nor a XML property list.";
     		            	   JOptionPane.showMessageDialog(frame, m);
@@ -957,7 +966,7 @@ public class InvestigationTree extends JPanel {
      		            String f = listOfFiles[i].getName();
      		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
      		               String plistName = path + "/" + f;
-     		               PlistTreeTable p = new PlistTreeTable(plistName);
+     		               PlistTreeTable p = new PlistTreeTable(plistName, 1);
      		            }
      		        }
      		    }
