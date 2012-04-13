@@ -436,6 +436,7 @@ public class PdfCreate {
 			File f = null;
 			File pF = null;
 			String Name = null;
+			boolean plistValid = false;
 			String TitleName = "";
 			String S1 = "";
 			String S2 = "";
@@ -460,12 +461,18 @@ public class PdfCreate {
     	    f.createNewFile();
 		    
 			NSDictionary LocRootDict = null;
-			LocRootDict = (NSDictionary)PropertyListParser.parse(PlistFile);
-			if (LocRootDict == null)  {
-				PdfCreated = false;
-				return;
-			}
-			
+			try {
+				LocRootDict = (NSDictionary)PropertyListParser.parse(PlistFile);
+				if (LocRootDict == null)  {
+					plistValid = false;
+					return;
+				}  else  {
+					plistValid = true;
+				}
+			} catch (Exception ex) {
+				plistValid = false;
+		    }
+		 	
 			// Write the plist header - i.e. file name of plist file
 			int len;
 			String border = "";
@@ -514,9 +521,15 @@ public class PdfCreate {
 			S1 = "~~~~~~~~~~\n";
 			WriteFile (S1, TextFile, 0);
 			
-			// Go parse the plist Dictionary
-			PlistModel nPModel = new PlistModel(LocRootDict);
-			ParseNSObject (nPModel, LocRootDict, TextFile);
+			if (plistValid)  {
+				// Go parse the plist Dictionary
+				PlistModel nPModel = new PlistModel(LocRootDict);
+				ParseNSObject (nPModel, LocRootDict, TextFile);
+			}  else {
+				S1 = "===> *** Encountered Invalid Plist file *** <===\n";
+				WriteFile (S1, TextFile, 0);
+				System.out.println("===> *** Encountered Invalid Plist file *** <===\n");
+			}
 	
 			TextToPDF mine = new TextToPDF();
 	        PDDocument MyPdfDoc = null;
@@ -556,6 +569,8 @@ public class PdfCreate {
 	public static void main(String[] args) {
 
 		try {
+			// GOOD. File file = new File("c:\\tmp\\plistfile.plist");
+			// BAD: for testing. File file = new File("c:\\tmp\\ravinotes.txt");
 			File file = new File("c:\\tmp\\plistfile.plist");
 			GetOutput (file, "C:\\tmp\\ravididit.pdf", "C:\\tmp\\ravinotes.txt", "myEvidence");
 			
