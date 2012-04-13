@@ -69,6 +69,7 @@ import com.dd.plist.*;
 public class PdfCreate {
 
 	static boolean PdfCreated = false;
+	static boolean Pdfmulti = false;
 	
 	public boolean pdfStatus() {
 		return(PdfCreated);
@@ -83,6 +84,7 @@ public class PdfCreate {
 			if (plistName.length() == 0)  {
 				if (evidenceName.length() != 0)  {
 					PdfCreated = true;
+					Pdfmulti = true;
 					OutputInvestigation (evidenceName, PdfName, notesName);
 					return;
 				}
@@ -454,11 +456,13 @@ public class PdfCreate {
 		    System.out.println("GetOutput: TextFile is: " + TextFile);
 			
 		    // If the tmp file exists, delete and recreate it.
-    	    f = new File(TextFile);
-    	    if (f.exists())  {
-    	    	f.delete();
-    	    }
-    	    f.createNewFile();
+		    if (Pdfmulti == false) {
+    	         f = new File(TextFile);
+    	         if (f.exists())  {
+    	             f.delete();
+    	        }
+    	        f.createNewFile();
+		    }
 		    
 			NSDictionary LocRootDict = null;
 			try {
