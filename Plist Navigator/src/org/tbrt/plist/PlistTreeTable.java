@@ -19,10 +19,10 @@ public class PlistTreeTable
     {
     	String filename = "C:\\Documents and Settings\\paritj\\My Documents\\NetworkInterfaces.xml";
     	//String filename = "C:\\Documents and Settings\\paritj\\My Documents\\PlistOne.xml";
-    	PlistTreeTable p = new PlistTreeTable(filename);
+    	PlistTreeTable p = new PlistTreeTable(filename, 1);
     }
     
-    public PlistTreeTable(String filename) {
+    public PlistTreeTable(String filename, int mode) {
     	
     	//-------------------------------------------------------------------
     	// Parse the plist file
@@ -41,6 +41,10 @@ public class PlistTreeTable
           return;
         }
     	
+        if (mode == 0) {
+        	return;
+        }
+        
         //-------------------------------------------------------------------
         // The frame will have the same name as the file
         //-------------------------------------------------------------------
