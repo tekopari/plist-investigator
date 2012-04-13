@@ -105,7 +105,7 @@ public class PdfCreate {
 			// Clear the error flag, assume everything is fine.
 			PdfCreated = true;
 			
-			GetOutput (file, PdfName, notesName);
+			GetOutput (file, PdfName, notesName, evidenceName);
 		} catch (Exception e) {
 			System.err.println("Problem in PdfCreate Constructor");
 		}
@@ -429,7 +429,7 @@ public class PdfCreate {
 		
     }
     
-	public static void GetOutput (File PlistFile, String PdfFileName,  String NotesFile)  {
+	public static void GetOutput (File PlistFile, String PdfFileName,  String NotesFile, String evidenceName)  {
 		
 		try  {
 			
@@ -469,7 +469,7 @@ public class PdfCreate {
 			// Write the plist header - i.e. file name of plist file
 			int len;
 			String border = "";
-			TitleName = "PLIST NAME: " + PlistFile;
+			TitleName = "PLIST NAME: " + evidenceName;
 			TitleName = TitleName.toUpperCase();
 			
 			WriteFile ((TitleName + "\n"), TextFile, 0);
@@ -557,7 +557,7 @@ public class PdfCreate {
 
 		try {
 			File file = new File("c:\\tmp\\plistfile.plist");
-			GetOutput (file, "C:\\tmp\\ravididit.pdf", "C:\\tmp\\ravinotes.txt");
+			GetOutput (file, "C:\\tmp\\ravididit.pdf", "C:\\tmp\\ravinotes.txt", "myEvidence");
 			
 			// ravi: Why can't we also use rootDict to create PDF?
 			// rootDict = (NSDictionary) PropertyListParser.parse(file);
