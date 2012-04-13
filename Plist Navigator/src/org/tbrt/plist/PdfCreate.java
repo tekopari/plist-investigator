@@ -78,6 +78,16 @@ public class PdfCreate {
 		System.out.println("Debug:pdfcreate parameters: "+ evidenceName + "," + notesName + "," + plistName+ "," + PdfName);
 		
 		try {
+			
+			// During an investigation, plist name is blank, evidenceName is valid, if there is notes, output notes.
+			if (plistName.length() == 0)  {
+				if (evidenceName.length() != 0)  {
+					PdfCreated = true;
+					OutputInvestigation (evidenceName, PdfName, notesName);
+					return;
+				}
+				
+			}
 			File file = new File(plistName);
 			
 			// If plist file does not exist, nothing to do.
@@ -97,7 +107,7 @@ public class PdfCreate {
 			
 			GetOutput (file, PdfName, notesName);
 		} catch (Exception e) {
-			System.err.println("Cannot use the PropertyListParser");
+			System.err.println("Problem in PdfCreate Constructor");
 		}
 	}
 
@@ -202,7 +212,6 @@ public class PdfCreate {
     		   
     		   int nStr = splitStr (Wstr);
     		   for (int j = 0; j < nStr; j++) {
-    			   System.err.print("------->ParseNSObject: Indent = " + (Indent+ j) + stringArray[j]);
     			   WriteFile (stringArray[j], OutFile, (Indent+j) );
     		   }
     		   
@@ -323,6 +332,103 @@ public class PdfCreate {
     }
 
     
+    public static void OutputInvestigation (String evidenceName, String PdfFileName, String notesName)  {
+		try  {
+			
+			File f = null;
+			File pF = null;
+			String Name = null;
+			String TitleName = "";
+			String S1 = "";
+			String S2 = "";
+			
+			System.out.println("Entering OutputInvestigation");
+			// Construct the .txt file, in the same directory in which we are going to create the pdf file
+			f = new File (PdfFileName);
+			String dir = f.getParent();
+			int index = f.getName().lastIndexOf('.');
+		    if (index>0&& index <= f.getName().length() - 2 ) {
+		        Name = f.getName().substring(0, index);
+		    }  
+		    String TextFile = dir + "\\" + Name + ".txt";
+		    f.delete();
+		    System.out.println("OutputInvestigation: TextFile is: " + TextFile);
+			
+		    // If the tmp file exists, delete and recreate it.
+    	    f = new File(TextFile);
+    	    if (f.exists())  {
+    	    	f.delete();
+    	    }
+    	    f.createNewFile();
+		    
+			
+			// Write the investigation header - i.e. file name of plist file
+			TitleName = "Evidence Name: " + evidenceName;
+			
+			WriteFile ((TitleName + "\n"), TextFile, 0);
+
+			// Output the title to pdf
+			TextToPDF mine = new TextToPDF();
+	        PDDocument MyPdfDoc = null;
+			BufferedReader data = new BufferedReader( new FileReader(TextFile) );
+			mine.setFontSize(18);
+			MyPdfDoc = mine.createPDFFromText(data);
+	    	data.close();
+		
+			// Test. MyPdfDoc = text2Pdf (data);
+	    	
+			MyPdfDoc.save(PdfFileName);
+			MyPdfDoc.close();
+		
+			
+			// Put the comment after the title
+			File Txtf = new File(TextFile);
+			File Notef = new File(notesName);
+			
+			if (Notef.exists())  {
+				InputStream in = new FileInputStream(Notef);    
+				OutputStream out = new FileOutputStream(Txtf,true);
+				
+				S1 = "\n\nInvestigation Comments:    ";
+				WriteFile (S1, TextFile, 0);
+				
+				int len;
+				byte[] buf = new byte[10240];
+				
+				while ((len = in.read(buf)) > 0){
+					out.write(buf, 0, len);
+				}
+				in.close();
+				out.close();
+				
+				// Write new lines after the comment
+				S1 = "\n\n";
+				WriteFile (S1, TextFile, 0);
+			}
+			
+	
+			TextToPDF nmine = new TextToPDF();
+	        PDDocument nMyPdfDoc = null;
+			BufferedReader ndata = new BufferedReader( new FileReader(TextFile) );
+			nmine.setFontSize(10);
+			nMyPdfDoc = mine.createPDFFromText(ndata);
+	    	data.close();
+		
+			// Test. MyPdfDoc = text2Pdf (data);
+	    	
+			nMyPdfDoc.save(PdfFileName);
+			nMyPdfDoc.close();
+			
+
+			
+			
+		}
+	    catch(Exception ex) {
+		  ex.printStackTrace();
+	    }
+		
+    }
+    
 	public static void GetOutput (File PlistFile, String PdfFileName,  String NotesFile)  {
 		
 		try  {
@@ -385,8 +491,8 @@ public class PdfCreate {
 				InputStream in = new FileInputStream(Notef);    
 				OutputStream out = new FileOutputStream(Txtf,true);
 				
-				S1 = "\n\nComments:\n";
-				S2 = "~~~~~~~~~\n";
+				S1 = "\n\nPlist Comments:\n";
+				S2 = "~~~~~~~~~~~~~\n";
 				WriteFile (S1, TextFile, 0);
 				WriteFile (S2, TextFile, 0);
 				byte[] buf = new byte[10240];
@@ -415,7 +521,7 @@ public class PdfCreate {
 			TextToPDF mine = new TextToPDF();
 	        PDDocument MyPdfDoc = null;
 			BufferedReader data = new BufferedReader( new FileReader(TextFile) );
-			mine.setFontSize(12);
+			mine.setFontSize(10);
 			MyPdfDoc = mine.createPDFFromText(data);
 	    	data.close();
 		
