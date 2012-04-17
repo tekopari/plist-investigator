@@ -39,6 +39,7 @@ public class InvestigationTree extends JPanel {
 
     protected MyEditor MyEditor;
     protected PdfCreate PdfCreate;
+    protected PlistSearch PlistSearch;
     protected PlistFileDialog PlistFileDialog;
     
     private String nameMyInvestigations = "My Investigations";
@@ -274,7 +275,45 @@ public class InvestigationTree extends JPanel {
         	}       		                
         });    
         
-        investigationPopup.add(new JMenuItem("Search Text String"));
+        
+        JMenuItem invSearch = investigationPopup.add(new JMenuItem("Search Text String"));
+        invSearch.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent arg0) {
+                	Component frame = null;
+                		
+    	            String[] nodeName = new String[2001];
+    	            String[] dirPath = new String[2001];
+    	      
+    	            int max = travelDirPath(frame, nodeName, dirPath, 2000);
+    	            int flag = 0;
+    	            
+    	            for (int i = 0; i < max; i++) {
+    	            	String notesName = dirPath[i] + "/" + nameNotesFile;   	            	
+    	            	String invName = nodeName[i];
+    	            	String plistName = "";
+    	            	
+    	            	if (i > 0) {
+   	    	                File folder = new File(dirPath[i]);
+    	        		    File[] listOfFiles = folder.listFiles();
+    	        		    
+    	        		    for (int j = 0; j < listOfFiles.length; j++) {
+    	        		        if (listOfFiles[j].isFile()) {
+    	        		            String f = listOfFiles[j].getName();
+    	        		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
+    	        		               plistName = dirPath[i] + "/" + f;
+    	        		               //TBRT: calling for all plist files under an investigation 
+    	        		               PlistSearch pS = new PlistSearch (invName, notesName, plistName);
+    	        		            }
+    	        		        }
+    	        		    }
+    	            	}
+    	            	else {
+    	            		//TBRT: calling at the investigation line where plist file name is blank 
+    	            		PlistSearch pS = new PlistSearch(invName, notesName, plistName);
+    	            	}
+    	           }
+                }
+        });
         
         JMenuItem mnInv2pdf = investigationPopup.add(new JMenuItem("Save Investigation as PDF File"));
         mnInv2pdf.addActionListener(new ActionListener() {
@@ -435,7 +474,30 @@ public class InvestigationTree extends JPanel {
         	}
         });
         
-        evidenceItemPopup.add(new JMenuItem("Search Text String"));
+        JMenuItem searchPlist = evidenceItemPopup.add(new JMenuItem("Search Text String"));
+        searchPlist.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		
+    	            String nodeName = getNodeName();
+    	            String path = getDirPath() + "/" + nodeName;
+    	            String notesName = path + "/" + nameNotesFile;
+    	            
+    	            File folder = new File(path);
+        		    File[] listOfFiles = folder.listFiles();
+        		    
+        		    for (int i = 0; i < listOfFiles.length; i++) {
+        		        if (listOfFiles[i].isFile()) {
+        		            String f = listOfFiles[i].getName();
+        		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
+        		               String plistName = path + "/" + f;
+        		               
+        		               //TBRT: calling at the individual plist file
+        		               PlistSearch h = new PlistSearch(nodeName, notesName, plistName);
+        		            }
+        		        }
+        		    }
+        		}
+        });
         
         JMenuItem mnPlist2pdf = evidenceItemPopup.add(new JMenuItem("Save PList as PDF File"));
         mnPlist2pdf.addActionListener(new ActionListener() {

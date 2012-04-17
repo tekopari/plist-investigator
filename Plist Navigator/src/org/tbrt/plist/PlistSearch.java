@@ -1,0 +1,182 @@
+package org.tbrt.plist;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.List;
+import java.awt.TextArea;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+
+
+
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.File;
+import javax.swing.*;
+
+public class PlistSearch {
+
+	static boolean SearchMulti = false;
+	static boolean Searchdone = false;
+	
+	public PlistSearch(String invName, String notesName, String plistName) {
+		
+		try {
+			
+			// During an investigation, plist name is blank, evidenceName is valid, if there is notes, output notes.
+			if (plistName.length() == 0)  {
+				if (invName.length() != 0)  {
+					Searchdone = true;
+					SearchMulti = true;
+					SearchInvestigation (plistName, notesName, invName);
+					return;
+				}
+				
+			}
+			File file = new File(plistName);
+			
+			// If plist file does not exist, nothing to do.
+			if (! file.exists())  {
+				Searchdone = false;
+				return;
+			}
+			
+			// If the file is empty, nothing to do say it is a success and return.
+			if ( file.length() == 0)  {
+				Searchdone = false;
+				return;				
+			}
+			
+			// Clear the error flag, assume everything is fine.
+			Searchdone = true;
+			
+			GetSearchOutput (file, plistName, notesName, invName);
+		} catch (Exception e) {
+			System.err.println("Problem in PlistSearch Constructor");
+		}
+	}
+	
+	static String searchStr = "";
+	public static void SearchWindow(String sName)  {
+		
+		if (sName.length() == 0)  {
+			sName = "Search Results";
+		}
+		JFrame frame = new JFrame(sName);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		// TextArea textArea=new TextArea("Searching for: " + searchStr,300,300);
+		// frame.add(textArea);
+		 
+		JLabel textLabel = new JLabel("TBRT: Feature is being Implemented", SwingConstants.CENTER);
+		textLabel.setPreferredSize(new Dimension(300,300));
+		frame.getContentPane().add(textLabel, BorderLayout.CENTER);
+		frame.setTitle("Searching for..." + searchStr);
+			 
+		// Display the Window
+		frame.setLocationRelativeTo(null);
+		frame.pack();
+		frame.setVisible(true);
+		
+		for (int i=0; i < 100; i++)  {
+			System.out.println("Outputting to TEXT AREA===========================================================>");
+		}
+			 
+	}
+	
+	public static String Title = "";
+	public class sendOutput extends JFrame  {
+		  JTextArea aTextArea = new JTextArea(Title);
+		  PrintStream aPrintStream = new PrintStream(new FilteredStream(new ByteArrayOutputStream()));
+
+		  public sendOutput() {
+		    setSize(200, 300);
+		    add("Center", new JScrollPane(aTextArea));
+		    setVisible(true);
+
+		    System.setOut(aPrintStream); // catches System.out messages
+		    System.setErr(aPrintStream); // catches error messages
+		  }
+
+		  class FilteredStream extends FilterOutputStream {
+		    public FilteredStream(OutputStream aStream) {
+		      super(aStream);
+		    }
+
+		    public void write(byte b[]) throws IOException {
+		      String aString = new String(b);
+		      aTextArea.append(aString);
+		    }
+
+		    public void write(byte b[], int off, int len) throws IOException {
+		      String aString = new String(b, off, len);
+		      aTextArea.append(aString);
+		      FileWriter aWriter = new FileWriter("a.log", true);
+		      aWriter.write(aString);
+		      aWriter.close();
+		    }
+		  }
+		}
+
+		
+	public static void GetSearchString()  {
+		   searchStr = JOptionPane.showInputDialog(null,
+				   "Type the Search String:",
+				   JOptionPane.WANTS_INPUT_PROPERTY);
+		   System.out.println("Search string typed by the user: " + searchStr);
+		
+		
+	}
+	public static void SearchInvestigation (String plistName, String notesName, String invName)  {
+
+		GetSearchString();
+		SearchWindow(invName +" Investigation" + " Search");
+		
+	}
+	
+	 
+
+		 
+
+	public static void GetSearchOutput (File file, String plistName, String notesName, String evidenceName)  {
+		 //Create a simple GUI window
+		if (!SearchMulti)  {
+			GetSearchString();
+			SearchWindow(evidenceName +" Plist:" + " Search");
+			Title = evidenceName +" Plist:" + " Search";
+			// Why can't I call it like this?  sendOutput();
+		}
+
+	}
+	
+}
