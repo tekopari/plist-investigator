@@ -174,7 +174,7 @@ public class PlistSearch {
 			GetSearchString();
 			SearchWindow(evidenceName +" Plist:" + " Search");
 			Title = evidenceName +" Plist:" + " Search";
-			// Why can't I call it like this?  sendOutput();
+			// Why can't I call it like this?  		sendOutput sS = new sendOutput();
 		}
 
 	}
