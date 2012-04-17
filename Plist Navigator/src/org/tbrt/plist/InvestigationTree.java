@@ -333,7 +333,8 @@ public class InvestigationTree extends JPanel {
     	            String[] dirPath = new String[2001];
     	      
     	            int max = travelDirPath(frame, nodeName, dirPath, 2000);
-    	            int flag = 0;
+    	            int flag = 0;   	            
+    	            PdfCreate hh = null;
     	            
     	            for (int i = 0; i < max; i++) {
     	            	String notesName = dirPath[i] + "/" + nameNotesFile;   	            	
@@ -362,13 +363,18 @@ public class InvestigationTree extends JPanel {
     	            	}
     	            	else {
     	            		//TBRT: calling at the investigation line where plist file name is blank 
-    	            		PdfCreate h = new PdfCreate(invName, notesName, plistName, pdfName);
-    	            		if (! h.pdfStatus()) {
+    	            		hh = new PdfCreate(invName, notesName, plistName, pdfName);
+    	            		if (! hh.pdfStatus()) {
     	            			flag = 1;
      		            	    i = max;
     	            		}
     	            	}
     	            }
+    	            
+	            	if (hh != null) {
+	            		hh.pdfReset();
+	            	}
+	            	
     	            String m = "PDF file \"" + pdfName + "\" is ready.";
 		            if (flag != 0) {
 		                m = "Failed to generate the PDF file \"" + pdfName + "\".";
