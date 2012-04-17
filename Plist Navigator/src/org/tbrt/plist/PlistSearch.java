@@ -122,15 +122,15 @@ public class PlistSearch {
 
 		  
 		  public sendOutput() {
-		    setSize(200, 300);
+		    setSize(800, 200);
+		    setTitle(Title);
 		    add("Center", new JScrollPane(aTextArea));
 		    setVisible(true);
 		  }
 
-
-		    public void write(String aString) throws IOException {
-		      aTextArea.append(aString);
-		    }
+		  public void write(String aString) throws IOException {
+		    aTextArea.append(aString);
+		  }
 
 	}
 
