@@ -78,6 +78,8 @@ public class PdfCreate {
 	public PdfCreate(String evidenceName, String notesName, String plistName, String PdfName) {
 		System.out.println("Debug:pdfcreate parameters: "+ evidenceName + "," + notesName + "," + plistName+ "," + PdfName);
 		
+        Pdfmulti = false;
+        
 		try {
 			
 			// During an investigation, plist name is blank, evidenceName is valid, if there is notes, output notes.
