@@ -115,7 +115,7 @@ public class PlistSearch {
 	}
 	
 	public static String Title = "";
-	public class sendOutput extends JFrame  {
+	public static class sendOutput extends JFrame  {
 		  JTextArea aTextArea = new JTextArea(Title);
 		  PrintStream aPrintStream = new PrintStream(new FilteredStream(new ByteArrayOutputStream()));
 
@@ -174,7 +174,8 @@ public class PlistSearch {
 			GetSearchString();
 			SearchWindow(evidenceName +" Plist:" + " Search");
 			Title = evidenceName +" Plist:" + " Search";
-			// Why can't I call it like this?  		sendOutput sS = new sendOutput();
+			// Why can't I call it like this?  		
+			sendOutput sS = new sendOutput();
 		}
 
 	}
