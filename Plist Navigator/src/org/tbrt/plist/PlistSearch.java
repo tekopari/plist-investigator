@@ -44,6 +44,8 @@ import java.io.Reader;
 import java.io.File;
 import javax.swing.*;
 
+import com.dd.plist.NSObject;
+
 public class PlistSearch {
 
 	public static boolean SearchMulti = false;
@@ -115,24 +117,73 @@ public class PlistSearch {
 		
 	private  void GetSearchString()  {
 		   searchStr = JOptionPane.showInputDialog(null,
-				   "Type the Search String:",
-				   JOptionPane.WANTS_INPUT_PROPERTY);
+				   "Type the Exact Search String:", "");
 		   System.out.println("Search string typed by the user: " + searchStr);
-		   
-		   if (searchStr == "")  {
-			   return;  
-		   }
-		
-		
 	}
+	
+    private void NSObjectPrint (PlistModel MyModel, NSObject MyObj, String OutFile)  {
+
+    	try {
+    		
+    		if (MyObj == null)  {
+    			System.out.println("MyObj is null");
+    			return;
+    		} 
+    		
+    		//---------------------------
+    		// Process current node here
+    		//---------------------------
+ 			   // 0 for key name, 1 for Key Type Name and 2 for Key Value
+    		   String KeyName = (String) MyModel.getValueAt(MyObj, 0);
+    		   String KeyTypeName = (String) MyModel.getValueAt(MyObj, 1);
+    		   String KeyValue = (String) MyModel.getValueAt(MyObj, 2);	   
+
+    		   String Wstr = "";
+    		   // Good for debug - System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
+    		   if ( (KeyTypeName == "Dictionary") ||(KeyTypeName == "Array"))  {
+    			   // For these types, don't print anything for the very first object.  For some reason, it is empty.
+    				   System.out.println(KeyName + ":  " + KeyValue);
+    				   Wstr = KeyName + ":  " + KeyValue;
+    		   }  else {
+    			   // System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
+    			   System.out.println(KeyName + " = " + KeyValue);
+    			   Wstr = KeyName + " = " + KeyValue;
+    		   }
+    		   
+
+    		   
+			int ChildCount = MyModel.getChildCount(MyObj);
+			// System.out.println("getChildCount(): is " + ChildCount);
+			
+			for ( int i = 0; i < ChildCount; i++)  {
+				// System.out.println("calling nPModel with ChildCount " + i);
+				NSObject ChildObj = (NSObject) MyModel.getChild(MyObj, i);
+				if (ChildObj == null)  {
+					System.out.println("***** Child Model is null: " + i);
+					// It looks like we never reach here by design.
+					continue;
+				}
+				
+				NSObjectPrint (MyModel, ChildObj, OutFile);
+			}
+
+    	}
+	    catch(Exception ex) {
+		  ex.printStackTrace();
+	    }
+    }
+
 	
 	private  void SearchInvestigation (String plistName, String notesName, String invName)  {
 		
 		System.out.println("in SearchInvestigation\n" );
-		GetSearchString();
+		GetSearchString();		   
+		if (searchStr.length() == 0)  {
+			   return;  
+		}
+		
 		Title = "Investigation: " + invName + " search resuts for the pattern - " + "\"" + searchStr + "\"";
 		oBox = new OutputBox();
-		SearchMulti = true;
 		
 		try  {
 		}  catch(Exception ex) {
