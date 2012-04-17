@@ -75,10 +75,14 @@ public class PdfCreate {
 		return(PdfCreated);
 	}
 	
+	public void pdfReset() {
+		Pdfmulti = false;
+	}
+	
+	
 	public PdfCreate(String evidenceName, String notesName, String plistName, String PdfName) {
-		System.out.println("Debug:pdfcreate parameters: "+ evidenceName + "," + notesName + "," + plistName+ "," + PdfName);
 		
-        Pdfmulti = false;
+		System.out.println("Debug:pdfcreate parameters: "+ evidenceName + "," + notesName + "," + plistName+ "," + PdfName);
         
 		try {
 			
@@ -142,7 +146,6 @@ public class PdfCreate {
 		
 		return iterator;
 	}
-
     
     public static void WriteFile (String str, String OFile, int TuckIn)  {
     	
