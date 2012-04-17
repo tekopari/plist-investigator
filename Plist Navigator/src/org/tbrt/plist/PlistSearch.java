@@ -195,16 +195,21 @@ public class PlistSearch {
 	private  void SearchPlist (File file, String plistName, String notesName, String evidenceName) throws IOException  {
 		
 		 //Create a simple GUI window
-		if (SearchMulti == false)  { // i.e. if it is called for a single plist file, do this.
-			GetSearchString();
-			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"";
- 		
-			oBox = new OutputBox();		
-			
-			for (int i=0; i < 100; i++)  {
-				oBox.write("Outputting to TEXT AREA===========================================================>\n");
-			}
+		if (SearchMulti == false)  { // i.e. if it is called for a single plist file, do this.	
+			GetSearchString();	
 		}
+				
+		if (searchStr.length() == 0)  {
+		   return;  
+		}
+			
+		Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"";
+ 		oBox = new OutputBox();		
+			
+		for (int i=0; i < 100; i++)  {
+			oBox.write("Outputting to TEXT AREA===========================================================>\n");
+		}
+	
 				
 		try  {
 		}  catch(Exception ex) {
