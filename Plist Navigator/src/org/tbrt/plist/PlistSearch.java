@@ -50,7 +50,7 @@ public class PlistSearch {
 	boolean Searchdone = false;
 	String searchStr = "";
 	String Title = "";
-	sendOutput sS;
+	OutputBox oBox;
 	
 	public void PlistSearchReset()  {
 		SearchMulti = false;
@@ -95,11 +95,11 @@ public class PlistSearch {
 	}
 	
 	
-	private  class sendOutput extends JFrame  {
+	private  class OutputBox extends JFrame  {
 		  JTextArea aTextArea = new JTextArea(Title);
 
 		  
-		  public sendOutput() {
+		  public OutputBox() {
 		    setSize(800, 200);
 		    setTitle(Title);
 		    add("Center", new JScrollPane(aTextArea));
@@ -131,7 +131,7 @@ public class PlistSearch {
 		System.out.println("in SearchInvestigation\n" );
 		GetSearchString();
 		Title = "Investigation: " + invName + " search resuts for the pattern - " + "\"" + searchStr + "\"";
-		sS = new sendOutput();
+		oBox = new OutputBox();
 		SearchMulti = true;
 		
 		try  {
@@ -148,15 +148,13 @@ public class PlistSearch {
 			GetSearchString();
 			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"";
  		
-			sS = new sendOutput();		
+			oBox = new OutputBox();		
 			
 			for (int i=0; i < 100; i++)  {
-				sS.write("Outputting to TEXT AREA===========================================================>\n");
+				oBox.write("Outputting to TEXT AREA===========================================================>\n");
 			}
 		}
-		
-		
-		
+				
 		try  {
 		}  catch(Exception ex) {
 		  ex.printStackTrace();
