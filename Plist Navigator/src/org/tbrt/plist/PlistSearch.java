@@ -46,8 +46,10 @@ import javax.swing.*;
 
 public class PlistSearch {
 
-	static boolean SearchMulti = false;
-	static boolean Searchdone = false;
+	private boolean SearchMulti = false;
+	private boolean Searchdone = false;
+	private String searchStr = "";
+	private  String Title = "";
 	
 	public PlistSearch(String invName, String notesName, String plistName) {
 		
@@ -86,8 +88,8 @@ public class PlistSearch {
 		}
 	}
 	
-	static String searchStr = "";
-	public static void SearchWindow(String sName)  {
+	
+	private  void SearchWindow(String sName)  {
 		
 		if (sName.length() == 0)  {
 			sName = "Search Results";
@@ -114,42 +116,26 @@ public class PlistSearch {
 			 
 	}
 	
-	public static String Title = "";
-	public static class sendOutput extends JFrame  {
+	
+	private  class sendOutput extends JFrame  {
 		  JTextArea aTextArea = new JTextArea(Title);
-		  PrintStream aPrintStream = new PrintStream(new FilteredStream(new ByteArrayOutputStream()));
 
+		  
 		  public sendOutput() {
 		    setSize(200, 300);
 		    add("Center", new JScrollPane(aTextArea));
 		    setVisible(true);
-
-		    System.setOut(aPrintStream); // catches System.out messages
-		    System.setErr(aPrintStream); // catches error messages
 		  }
 
-		  class FilteredStream extends FilterOutputStream {
-		    public FilteredStream(OutputStream aStream) {
-		      super(aStream);
-		    }
 
-		    public void write(byte b[]) throws IOException {
-		      String aString = new String(b);
+		    public void write(String aString) throws IOException {
 		      aTextArea.append(aString);
 		    }
 
-		    public void write(byte b[], int off, int len) throws IOException {
-		      String aString = new String(b, off, len);
-		      aTextArea.append(aString);
-		      FileWriter aWriter = new FileWriter("a.log", true);
-		      aWriter.write(aString);
-		      aWriter.close();
-		    }
-		  }
-		}
+	}
 
 		
-	public static void GetSearchString()  {
+	private  void GetSearchString()  {
 		   searchStr = JOptionPane.showInputDialog(null,
 				   "Type the Search String:",
 				   JOptionPane.WANTS_INPUT_PROPERTY);
@@ -157,10 +143,13 @@ public class PlistSearch {
 		
 		
 	}
-	public static void SearchInvestigation (String plistName, String notesName, String invName)  {
+	
+	private  void SearchInvestigation (String plistName, String notesName, String invName)  {
 
 		GetSearchString();
 		SearchWindow(invName +" Investigation" + " Search");
+		
+
 		
 	}
 	
@@ -168,14 +157,18 @@ public class PlistSearch {
 
 		 
 
-	public static void GetSearchOutput (File file, String plistName, String notesName, String evidenceName)  {
+	private  void GetSearchOutput (File file, String plistName, String notesName, String evidenceName) throws IOException  {
 		 //Create a simple GUI window
 		if (!SearchMulti)  {
 			GetSearchString();
 			SearchWindow(evidenceName +" Plist:" + " Search");
 			Title = evidenceName +" Plist:" + " Search";
 			// Why can't I call it like this?  		
-			sendOutput sS = new sendOutput();
+			sendOutput sS = new sendOutput();		
+			
+			for (int i=0; i < 100; i++)  {
+				sS.write("Outputting to TEXT AREA===========================================================>\n");
+			}
 		}
 
 	}
