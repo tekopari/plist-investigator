@@ -161,7 +161,7 @@ public class PlistSearch {
 		 //Create a simple GUI window
 		if (!SearchMulti)  {
 			GetSearchString();
-			SearchWindow(evidenceName +" Plist:" + " Search");
+			// SearchWindow(evidenceName +" Plist:" + " Search");
 			Title = evidenceName +" Plist:" + " Search";
 			// Why can't I call it like this?  		
 			sendOutput sS = new sendOutput();		
