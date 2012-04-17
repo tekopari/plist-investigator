@@ -46,10 +46,15 @@ import javax.swing.*;
 
 public class PlistSearch {
 
-	private boolean SearchMulti = false;
-	private boolean Searchdone = false;
-	private String searchStr = "";
-	private  String Title = "";
+	public static boolean SearchMulti = false;
+	boolean Searchdone = false;
+	String searchStr = "";
+	String Title = "";
+	sendOutput sS;
+	
+	public void PlistSearchReset()  {
+		SearchMulti = false;
+	}
 	
 	public PlistSearch(String invName, String notesName, String plistName) {
 		
@@ -65,6 +70,7 @@ public class PlistSearch {
 				}
 				
 			}
+			
 			File file = new File(plistName);
 			
 			// If plist file does not exist, nothing to do.
@@ -82,7 +88,7 @@ public class PlistSearch {
 			// Clear the error flag, assume everything is fine.
 			Searchdone = true;
 			
-			GetSearchOutput (file, plistName, notesName, invName);
+			SearchPlist (file, plistName, notesName, invName);
 		} catch (Exception e) {
 			System.err.println("Problem in PlistSearch Constructor");
 		}
@@ -112,33 +118,49 @@ public class PlistSearch {
 				   "Type the Search String:",
 				   JOptionPane.WANTS_INPUT_PROPERTY);
 		   System.out.println("Search string typed by the user: " + searchStr);
+		   
+		   if (searchStr == "")  {
+			   return;  
+		   }
 		
 		
 	}
 	
 	private  void SearchInvestigation (String plistName, String notesName, String invName)  {
-
-		GetSearchString();
 		
+		System.out.println("in SearchInvestigation\n" );
+		GetSearchString();
+		Title = "Investigation: " + invName + " search resuts for the pattern - " + "\"" + searchStr + "\"";
+		sS = new sendOutput();
+		SearchMulti = true;
+		
+		try  {
+		}  catch(Exception ex) {
+		  ex.printStackTrace();
+	    }
 	}
-	
-	 
-
 		 
 
-	private  void GetSearchOutput (File file, String plistName, String notesName, String evidenceName) throws IOException  {
+	private  void SearchPlist (File file, String plistName, String notesName, String evidenceName) throws IOException  {
+		
 		 //Create a simple GUI window
-		if (!SearchMulti)  {
+		if (SearchMulti == false)  { // i.e. if it is called for a single plist file, do this.
 			GetSearchString();
-			// SearchWindow(evidenceName +" Plist:" + " Search");
-			Title = evidenceName +" Plist:" + " Search";
-			// Why can't I call it like this?  		
-			sendOutput sS = new sendOutput();		
+			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"";
+ 		
+			sS = new sendOutput();		
 			
 			for (int i=0; i < 100; i++)  {
 				sS.write("Outputting to TEXT AREA===========================================================>\n");
 			}
 		}
+		
+		
+		
+		try  {
+		}  catch(Exception ex) {
+		  ex.printStackTrace();
+	    }
 
 	}
 	

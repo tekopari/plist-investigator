@@ -286,6 +286,7 @@ public class InvestigationTree extends JPanel {
     	      
     	            int max = travelDirPath(frame, nodeName, dirPath, 2000);
     	            int flag = 0;
+    	            PlistSearch pSi = null;
     	            
     	            for (int i = 0; i < max; i++) {
     	            	String notesName = dirPath[i] + "/" + nameNotesFile;   	            	
@@ -309,9 +310,12 @@ public class InvestigationTree extends JPanel {
     	            	}
     	            	else {
     	            		//TBRT: calling at the investigation line where plist file name is blank 
-    	            		PlistSearch pS = new PlistSearch(invName, notesName, plistName);
+    	            		pSi = new PlistSearch(invName, notesName, plistName);
     	            	}
     	           }
+	               if (pSi != null) {
+	            		pSi.PlistSearchReset();
+	               }
                 }
         });
         
