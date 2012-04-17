@@ -89,34 +89,6 @@ public class PlistSearch {
 	}
 	
 	
-	private  void SearchWindow(String sName)  {
-		
-		if (sName.length() == 0)  {
-			sName = "Search Results";
-		}
-		JFrame frame = new JFrame(sName);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
-		// TextArea textArea=new TextArea("Searching for: " + searchStr,300,300);
-		// frame.add(textArea);
-		 
-		JLabel textLabel = new JLabel("TBRT: Feature is being Implemented", SwingConstants.CENTER);
-		textLabel.setPreferredSize(new Dimension(300,300));
-		frame.getContentPane().add(textLabel, BorderLayout.CENTER);
-		frame.setTitle("Searching for..." + searchStr);
-			 
-		// Display the Window
-		frame.setLocationRelativeTo(null);
-		frame.pack();
-		frame.setVisible(true);
-		
-		for (int i=0; i < 100; i++)  {
-			System.out.println("Outputting to TEXT AREA===========================================================>");
-		}
-			 
-	}
-	
-	
 	private  class sendOutput extends JFrame  {
 		  JTextArea aTextArea = new JTextArea(Title);
 
@@ -147,9 +119,6 @@ public class PlistSearch {
 	private  void SearchInvestigation (String plistName, String notesName, String invName)  {
 
 		GetSearchString();
-		SearchWindow(invName +" Investigation" + " Search");
-		
-
 		
 	}
 	
