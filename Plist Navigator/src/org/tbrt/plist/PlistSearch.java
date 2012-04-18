@@ -194,6 +194,35 @@ public class PlistSearch {
 	    }
     }
 
+    private void notesSearch(String notesName) throws IOException  {
+		File file = new File(notesName);
+		
+		// If notes file does not exist, nothing to do.
+		if (! file.exists())  {
+			return;
+		}
+		
+		// If the file is empty, nothing to do.
+		if ( file.length() == 0)  {
+			return;				
+		}
+		
+		oBox.write("\n\nFrom Notes File:\n");
+		oBox.write("================\n");
+		FileInputStream fstream = new FileInputStream(notesName);
+		DataInputStream in = new DataInputStream(fstream);
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		String strLine;
+		//Read File Line By Line
+		while ((strLine = br.readLine()) != null)   {
+			// Print the content on the console
+			if (strLine.contains(searchStr))  {
+				   oBox.write(strLine  + "\n");
+			}
+		}
+		in.close();
+    	
+    }
 	
 	private  void SearchInvestigation (String plistName, String notesName, String invName)  {
 		
@@ -243,6 +272,8 @@ public class PlistSearch {
 				System.out.println("SearchPlist:  LocRootDict is null\n");
 			}
 			NSObjectSearch (nPModel, LocRootDict);
+			
+			notesSearch(notesName);
 		}  catch(Exception ex) {
 		  ex.printStackTrace();
 	    }
