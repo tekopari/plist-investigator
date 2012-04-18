@@ -207,8 +207,6 @@ public class PlistSearch {
 			return;				
 		}
 		
-		oBox.write("\n\nFrom Notes File:\n");
-		oBox.write("================\n");
 		FileInputStream fstream = new FileInputStream(notesName);
 		DataInputStream in = new DataInputStream(fstream);
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -273,6 +271,9 @@ public class PlistSearch {
 			}
 			NSObjectSearch (nPModel, LocRootDict);
 			
+			// Search the notes file too.
+			oBox.write("\n\nFrom Notes File:\n");
+			oBox.write("================\n");
 			notesSearch(notesName);
 		}  catch(Exception ex) {
 		  ex.printStackTrace();
