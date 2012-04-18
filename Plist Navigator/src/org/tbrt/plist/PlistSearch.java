@@ -231,7 +231,7 @@ public class PlistSearch {
 			   return;  
 		}
 		
-		Title = "Investigation: " + invName + " search resuts for the pattern - " + "\"" + searchStr + "\"";
+		Title = "Investigation: " + invName + " search results for the pattern - " + "\"" + searchStr + "\"";
 		oBox = new OutputBox();
 		
 		if (oBox == null)  {
@@ -244,7 +244,7 @@ public class PlistSearch {
 		try  {		
 			// Search the notes file for investigations.
 			oBox.write("\n\nFrom Investigation Notes File:\n");
-			oBox.write("------------------------------\n");
+			oBox.write("----------------------------------------\n");
 			notesSearch(notesName);
 		}  catch(Exception ex) {
 		  ex.printStackTrace();
@@ -257,7 +257,7 @@ public class PlistSearch {
 		System.out.println("Entering SearchPlist\n");
 		// i.e. if it is called for a single plist file, go get the search string and create a TextArea to output.
 		if (SearchMulti == false)  { 			
-			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"" + "\n";
+			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search results for the pattern - " + "\"" + searchStr + "\"" + "\n";
 			GetSearchString();	
 			oBox = new OutputBox();
 		}  else  {
@@ -297,7 +297,7 @@ public class PlistSearch {
 			
 			// Search the notes file too.
 			oBox.write("\n\nFrom Notes File:\n");
-			oBox.write("----------------\n");
+			oBox.write("----------------------\n");
 			notesSearch(notesName);
 		}  catch(Exception ex) {
 		  ex.printStackTrace();
