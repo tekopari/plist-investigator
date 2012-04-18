@@ -44,7 +44,9 @@ import java.io.Reader;
 import java.io.File;
 import javax.swing.*;
 
+import com.dd.plist.NSDictionary;
 import com.dd.plist.NSObject;
+import com.dd.plist.PropertyListParser;
 
 public class PlistSearch {
 
@@ -56,6 +58,7 @@ public class PlistSearch {
 	
 	public void PlistSearchReset()  {
 		SearchMulti = false;
+		searchStr = "";
 	}
 	
 	public PlistSearch(String invName, String notesName, String plistName) {
@@ -121,7 +124,7 @@ public class PlistSearch {
 		   System.out.println("Search string typed by the user: " + searchStr);
 	}
 	
-    private void NSObjectPrint (PlistModel MyModel, NSObject MyObj, String OutFile)  {
+    private void NSObjectSearch (PlistModel MyModel, NSObject MyObj)  {
 
     	try {
     		
@@ -144,10 +147,20 @@ public class PlistSearch {
     			   // For these types, don't print anything for the very first object.  For some reason, it is empty.
     				   System.out.println(KeyName + ":  " + KeyValue);
     				   Wstr = KeyName + ":  " + KeyValue;
+    				   // oBox.write(Wstr  + "\n");
+    				   if (Wstr.contains(searchStr))  {
+    					   // Search string is in this line.  Print it.
+    					   oBox.write(Wstr  + "\n");
+    				   }
     		   }  else {
     			   // System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
     			   System.out.println(KeyName + " = " + KeyValue);
     			   Wstr = KeyName + " = " + KeyValue;
+    			   // oBox.write(Wstr  + "\n");
+				   if (Wstr.contains(searchStr))  {
+					   // Search string is in this line.  Print it.
+					   oBox.write(Wstr  + "\n");
+				   }
     		   }
     		   
 
@@ -164,7 +177,7 @@ public class PlistSearch {
 					continue;
 				}
 				
-				NSObjectPrint (MyModel, ChildObj, OutFile);
+				NSObjectSearch (MyModel, ChildObj);
 			}
 
     	}
@@ -192,10 +205,10 @@ public class PlistSearch {
 	}
 		 
 
-	private  void SearchPlist (File file, String plistName, String notesName, String evidenceName) throws IOException  {
+	private  void SearchPlist (File PlistFile, String plistName, String notesName, String evidenceName) throws IOException  {
 		
-		 //Create a simple GUI window
-		if (SearchMulti == false)  { // i.e. if it is called for a single plist file, do this.	
+		// i.e. if it is called for a single plist file, go get the search string.
+		if (SearchMulti == false)  { 	
 			GetSearchString();	
 		}
 				
@@ -205,13 +218,23 @@ public class PlistSearch {
 			
 		Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"";
  		oBox = new OutputBox();		
-			
+		
+ 		/**** test
 		for (int i=0; i < 100; i++)  {
 			oBox.write("Outputting to TEXT AREA===========================================================>\n");
 		}
+		 * **** test*/
 	
 				
 		try  {
+			NSDictionary LocRootDict = null;
+
+			PlistModel nPModel = new PlistModel(LocRootDict);
+			LocRootDict = (NSDictionary)PropertyListParser.parse(PlistFile);
+			if (LocRootDict == null)  {
+				System.out.println("SearchPlist:  LocRootDict is null\n");
+			}
+			NSObjectSearch (nPModel, LocRootDict);
 		}  catch(Exception ex) {
 		  ex.printStackTrace();
 	    }
