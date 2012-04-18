@@ -1,5 +1,6 @@
 package org.tbrt.plist;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.List;
 import java.awt.TextArea;
@@ -107,6 +108,7 @@ public class PlistSearch {
 		  public OutputBox() {
 		    setSize(800, 200);
 		    setTitle(Title);
+		    setForeground(Color.blue);
 		    add("Center", new JScrollPane(aTextArea));
 		    setVisible(true);
 		  }
@@ -150,7 +152,10 @@ public class PlistSearch {
     				   // oBox.write(Wstr  + "\n");
     				   if (Wstr.contains(searchStr))  {
     					   // Search string is in this line.  Print it.
+    					   // Color c = oBox.aTextArea.getForeground();
+    					   oBox.aTextArea.setForeground(Color.blue);
     					   oBox.write(Wstr  + "\n");
+    					   //oBox.aTextArea.setForeground(c);
     				   }
     		   }  else {
     			   // System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
@@ -159,7 +164,10 @@ public class PlistSearch {
     			   // oBox.write(Wstr  + "\n");
 				   if (Wstr.contains(searchStr))  {
 					   // Search string is in this line.  Print it.
+					   // Color c = oBox.getForeground();
+					   oBox.aTextArea.setForeground(Color.blue);
 					   oBox.write(Wstr  + "\n");
+					   //oBox.aTextArea.setForeground(c);
 				   }
     		   }
     		   
@@ -216,7 +224,7 @@ public class PlistSearch {
 		   return;  
 		}
 			
-		Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"";
+		Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"" + "\n";
  		oBox = new OutputBox();		
 		
  		/**** test
