@@ -53,13 +53,14 @@ public class PlistSearch {
 
 	public static boolean SearchMulti = false;
 	boolean Searchdone = false;
-	String searchStr = "";
+	public static OutputBox oBox;
+	public static String searchStr = "";
 	String Title = "";
-	OutputBox oBox;
 	
 	public void PlistSearchReset()  {
 		SearchMulti = false;
 		searchStr = "";
+		oBox = null;
 	}
 	
 	public PlistSearch(String invName, String notesName, String plistName) {
@@ -233,7 +234,18 @@ public class PlistSearch {
 		Title = "Investigation: " + invName + " search resuts for the pattern - " + "\"" + searchStr + "\"";
 		oBox = new OutputBox();
 		
-		try  {
+		if (oBox == null)  {
+			// Can't even make a TextArea on a Jframe.  Something wrong, just return.
+			return;
+		}
+		
+
+		
+		try  {		
+			// Search the notes file for investigations.
+			oBox.write("\n\nFrom Investigation Notes File:\n");
+			oBox.write("------------------------------\n");
+			notesSearch(notesName);
 		}  catch(Exception ex) {
 		  ex.printStackTrace();
 	    }
@@ -242,24 +254,36 @@ public class PlistSearch {
 
 	private  void SearchPlist (File PlistFile, String plistName, String notesName, String evidenceName) throws IOException  {
 		
-		// i.e. if it is called for a single plist file, go get the search string.
-		if (SearchMulti == false)  { 	
+		System.out.println("Entering SearchPlist\n");
+		// i.e. if it is called for a single plist file, go get the search string and create a TextArea to output.
+		if (SearchMulti == false)  { 			
+			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"" + "\n";
 			GetSearchString();	
+			oBox = new OutputBox();
+		}  else  {
+			System.out.println("SearchPlist Getting called as part of investigation.  Search String is: " + searchStr + "\n");
 		}
 				
 		if (searchStr.length() == 0)  {
 		   return;  
 		}
 			
-		Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search resuts for the pattern - " + "\"" + searchStr + "\"" + "\n";
- 		oBox = new OutputBox();		
-		
- 		/**** test
-		for (int i=0; i < 100; i++)  {
-			oBox.write("Outputting to TEXT AREA===========================================================>\n");
+
+ 		
+		if (oBox == null)  {
+			// Can't even make a TextArea on a Jframe.  Something wrong, just return.
+			return;
 		}
-		 * **** test*/
-	
+		
+		String pTitle = "\n\nEVIDENCE NAME: " + evidenceName + "\n";
+		String border = "";
+		int len = 0;
+		len = pTitle.length();
+		for(int j = 0; j < len; j++) {
+		    border = "=" + border;
+		}
+		oBox.write(pTitle);
+		oBox.write(border + "\n");
 				
 		try  {
 			NSDictionary LocRootDict = null;
@@ -273,7 +297,7 @@ public class PlistSearch {
 			
 			// Search the notes file too.
 			oBox.write("\n\nFrom Notes File:\n");
-			oBox.write("================\n");
+			oBox.write("----------------\n");
 			notesSearch(notesName);
 		}  catch(Exception ex) {
 		  ex.printStackTrace();
