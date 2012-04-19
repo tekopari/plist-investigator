@@ -127,7 +127,7 @@ public class PlistSearch {
 	private  void GetSearchString()  {
 		   searchStr = JOptionPane.showInputDialog(null,
 				   "Type the Exact Search String:", "");
-		   System.out.println("Search string typed by the user: " + searchStr);
+		   //System.out.println("Search string typed by the user: " + searchStr);
 	}
 	
     private void NSObjectSearch (PlistModel MyModel, NSObject MyObj)  {
@@ -151,7 +151,7 @@ public class PlistSearch {
     		   // Good for debug - System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
     		   if ( (KeyTypeName == "Dictionary") ||(KeyTypeName == "Array"))  {
     			   // For these types, don't print anything for the very first object.  For some reason, it is empty.
-    				   System.out.println(KeyName + ":  " + KeyValue);
+    				   //System.out.println(KeyName + ":  " + KeyValue);
     				   Wstr = KeyName + ":  " + KeyValue;
     				   // oBox.write(Wstr  + "\n");
     				   if (Wstr.contains(searchStr))  {
@@ -163,7 +163,7 @@ public class PlistSearch {
     				   }
     		   }  else {
     			   // System.out.println("MyObj: " + "" + KeyName + " of type " + KeyTypeName + " = " + KeyValue);
-    			   System.out.println(KeyName + " = " + KeyValue);
+    			   //System.out.println(KeyName + " = " + KeyValue);
     			   Wstr = KeyName + " = " + KeyValue;
     			   // oBox.write(Wstr  + "\n");
 				   if (Wstr.contains(searchStr))  {
@@ -228,7 +228,7 @@ public class PlistSearch {
 	
 	private  void SearchInvestigation (String plistName, String notesName, String invName)  {
 		
-		System.out.println("in SearchInvestigation\n" );
+		//System.out.println("in SearchInvestigation\n" );
 		GetSearchString();		   
 		if (searchStr.length() == 0)  {
 			   return;  
@@ -257,16 +257,17 @@ public class PlistSearch {
 
 	private  void SearchPlist (File PlistFile, String plistName, String notesName, String evidenceName) throws IOException  {
 		
-		System.out.println("Entering SearchPlist\n");
+		//System.out.println("Entering SearchPlist\n");
 		// i.e. if it is called for a single plist file, go get the search string and create a TextArea to output.
 		if (SearchMulti == false)  { 		
 			GetSearchString();		
 			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search results for the pattern - " + "\"" + searchStr + "\"";
 			
 			oBox = new OutputBox();
-		}  else  {
-			System.out.println("SearchPlist Getting called as part of investigation.  Search String is: " + searchStr + "\n");
-		}
+		}  
+		//else  {
+		//	System.out.println("SearchPlist Getting called as part of investigation.  Search String is: " + searchStr + "\n");
+		//}
 				
 		if (searchStr.length() == 0)  {
 		   return;  
