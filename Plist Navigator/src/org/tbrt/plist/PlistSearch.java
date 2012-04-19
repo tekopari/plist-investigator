@@ -104,22 +104,22 @@ public class PlistSearch {
 	
 	
 	private  class OutputBox extends JFrame  {
-		  JTextArea aTextArea = new JTextArea(Title);
-			ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
+		JTextArea aTextArea = new JTextArea(Title);
+		ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
 
 		  
-		  public OutputBox() {
+		public OutputBox() {
 		    setSize(800, 200);
 		    setTitle(Title);
 		    setForeground(Color.blue);
 		    setIconImage(img.getImage());
 		    add("Center", new JScrollPane(aTextArea));
 		    setVisible(true);
-		  }
+		}
 
-		  public void write(String aString) throws IOException {
+		public void write(String aString) throws IOException {
 		    aTextArea.append(aString);
-		  }
+		}
 
 	}
 
