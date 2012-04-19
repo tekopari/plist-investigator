@@ -44,7 +44,6 @@ public class JTreeTable extends JTable {
         return (getColumnClass(editingColumn) == TreeTableModel.class) ? -1 : editingRow;  
     }
 
-    //TOM
     public void updateUI() {
 	    super.updateUI();
 	    if(tree != null) {

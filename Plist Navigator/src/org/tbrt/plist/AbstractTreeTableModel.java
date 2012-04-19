@@ -182,7 +182,7 @@ public abstract class AbstractTreeTableModel implements TreeTableModel {
     	if(name.equals("com.dd.plist.NSArray") ||
     	   name.equals("com.dd.plist.NSDictionary")|| 
     	   name.equals("com.dd.plist.NSSet")) {
-    		System.out.println("IsEditable NAME=" + name);
+    		//System.out.println("IsEditable NAME=" + name);
     		return true;
     	}
     	return false;	
