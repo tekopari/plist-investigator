@@ -256,9 +256,10 @@ public class PlistSearch {
 		
 		System.out.println("Entering SearchPlist\n");
 		// i.e. if it is called for a single plist file, go get the search string and create a TextArea to output.
-		if (SearchMulti == false)  { 			
-			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search results for the pattern - " + "\"" + searchStr + "\"" + "\n";
-			GetSearchString();	
+		if (SearchMulti == false)  { 		
+			GetSearchString();		
+			Title = " INDIVIDUAL Plist Search: " + evidenceName +  " search results for the pattern - " + "\"" + searchStr + "\"";
+			
 			oBox = new OutputBox();
 		}  else  {
 			System.out.println("SearchPlist Getting called as part of investigation.  Search String is: " + searchStr + "\n");
