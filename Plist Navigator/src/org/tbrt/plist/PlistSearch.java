@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -104,12 +105,14 @@ public class PlistSearch {
 	
 	private  class OutputBox extends JFrame  {
 		  JTextArea aTextArea = new JTextArea(Title);
+			ImageIcon img = new ImageIcon(this.getClass().getResource("images/tbrt_logo.jpg"));
 
 		  
 		  public OutputBox() {
 		    setSize(800, 200);
 		    setTitle(Title);
 		    setForeground(Color.blue);
+		    setIconImage(img.getImage());
 		    add("Center", new JScrollPane(aTextArea));
 		    setVisible(true);
 		  }
