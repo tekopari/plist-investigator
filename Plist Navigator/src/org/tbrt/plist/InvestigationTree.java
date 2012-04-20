@@ -339,6 +339,7 @@ public class InvestigationTree extends JPanel {
     	            	}
     	           }
 	               if (pSi != null) {
+	            	    PlistSearch.showResults();
 	            		pSi.PlistSearchReset();
 	               }
                 }
@@ -531,6 +532,7 @@ public class InvestigationTree extends JPanel {
         		            }
         		        }
         		    }
+        		    PlistSearch.showResults();
         		}
         });
         
