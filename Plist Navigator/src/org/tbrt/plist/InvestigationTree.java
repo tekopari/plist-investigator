@@ -51,6 +51,8 @@ import javax.swing.tree.TreeSelectionModel;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 
+import com.dd.plist.NSObject;
+
 public class InvestigationTree extends JPanel {
     protected DefaultMutableTreeNode rootNode;
     protected DefaultTreeModel treeModel;
@@ -536,6 +538,55 @@ public class InvestigationTree extends JPanel {
         		}
         });
         
+        JMenuItem mnPlist2bin = evidenceItemPopup.add(new JMenuItem("Save PList in Binary File"));
+        mnPlist2bin.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		Component frame = null;
+        		
+   			    //Choose a file name
+        		File target = doFileChooser(frame, "Choose a Binary Plist File Name");
+	            if (target != null) {
+	            	String nodeName = getNodeName();
+    	            String binName = target.getPath();
+    	            
+    	            if (!binName.endsWith(".binary")) {
+    	            	binName = binName + ".binary";
+    	            }
+    	            
+    	            String path = getDirPath() + "/" + nodeName;
+    	            String notesName = path + "/" + nameNotesFile;
+    	            
+    	            File folder = new File(path);
+        		    File[] listOfFiles = folder.listFiles();
+        		    
+        		    //--------------------------------------------------------------  
+        		    // Perform a directory listing of the files in the
+        		    // evidence path and when we find the plist file
+        		    // convert it to binary plist format
+        		    //--------------------------------------------------------------
+        		    for (int i = 0; i < listOfFiles.length; i++) {
+        		        if (listOfFiles[i].isFile()) {
+        		            String f = listOfFiles[i].getName();
+        		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
+        		               String plistName = path + "/" + f;
+        		               String m = "";         
+        		               try {
+        		                   File in = new File(plistName);
+        		                   File out = new File(binName);            
+        		                   com.dd.plist.PropertyListParser.convertToBinary(in, out);
+        		                   m = "Binary Plist file \"" + binName + "\" is ready.";
+        		               }
+        		               catch(Exception e) {
+        		            	   m = "Failed to generate the Binary Plist file \"" + binName + "\".";
+        		               }
+        	        		   JOptionPane.showMessageDialog(frame, m);
+        		            }
+        		        }
+        		    }
+        		}
+        	}
+        });
+        
         JMenuItem mnPlist2pdf = evidenceItemPopup.add(new JMenuItem("Save PList as PDF File"));
         mnPlist2pdf.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
@@ -578,6 +629,55 @@ public class InvestigationTree extends JPanel {
         	}
         });
         
+        JMenuItem mnPlist2xml = evidenceItemPopup.add(new JMenuItem("Save PList as XML File"));
+        mnPlist2xml.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		Component frame = null;
+        		
+   			    //Choose a file name
+        		File target = doFileChooser(frame, "Choose a XML Plist File Name");
+	            if (target != null) {
+	            	String nodeName = getNodeName();
+    	            String xmlName = target.getPath();
+    	            
+    	            if (!xmlName.endsWith(".xml")) {
+    	            	xmlName = xmlName + ".xml";
+    	            }
+    	            
+    	            String path = getDirPath() + "/" + nodeName;
+    	            String notesName = path + "/" + nameNotesFile;
+    	            
+    	            File folder = new File(path);
+        		    File[] listOfFiles = folder.listFiles();
+        		    
+        		    //--------------------------------------------------------------  
+        		    // Perform a directory listing of the files in the
+        		    // evidence path and when we find the plist file
+        		    // convert it to xml
+        		    //--------------------------------------------------------------
+        		    for (int i = 0; i < listOfFiles.length; i++) {
+        		        if (listOfFiles[i].isFile()) {
+        		            String f = listOfFiles[i].getName();
+        		            if (!f.endsWith(nameExtORG) && !f.contains(nameNotesFile)) {
+        		               String plistName = path + "/" + f;
+        		               String m = "";         
+        		               try {
+        		                   File in = new File(plistName);
+        		                   File out = new File(xmlName);            
+        		                   com.dd.plist.PropertyListParser.convertToXml(in, out);
+        		                   m = "XML Plist file \"" + xmlName + "\" is ready.";
+        		               }
+        		               catch(Exception e) {
+        		            	   m = "Failed to generate the XML Plist file \"" + xmlName + "\".";
+        		               }
+        	        		   JOptionPane.showMessageDialog(frame, m);
+        		            }
+        		        }
+        		    }
+        		}
+        	}
+        });
+ 
         JMenuItem mnEdit = notesPopup.add(new JMenuItem("Edit Notes"));
         mnEdit.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
