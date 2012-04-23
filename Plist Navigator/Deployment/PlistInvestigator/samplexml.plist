@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Interfaces</key>
+	<array>
+		<dict>
+			<key>Active</key>
+			<false/>
+			<key>BSD Name</key>
+			<string>en0</string>
+			<key>IOBuiltin</key>
+			<false/>
+			<key>IOInterfaceType</key>
+			<integer>6</integer>
+			<key>IOInterfaceUnit</key>
+			<integer>6</integer>
+			<key>IOMACAddress</key>
+			<data>
+			ABtjk+k2
+			</data>
+			<key>IOPathMatch</key>
+			<string>IOService:/AppleACPIPlatformExpert/PCI0/AppleACPIPCI/RP06@1C,5/IOPCI2PCIBridge/GIGE@0/yukon2osx/yukon/IOEthernetInterface</string>
+			<key>SCNetworkInterfaceInfo</key>
+			<dict>
+				<key>UserDefinedName</key>
+				<string>Ethernet</string>
+			</dict>
+			<key>SCNetworkInterfaceType</key>
+			<string>Ethernet</string>
+		</dict>
+		<dict>
+			<key>Active</key>
+			<true/>
+			<key>BSD Name</key>
+			<string>en1</string>
+			<key>IOBuiltin</key>
+			<true/>
+			<key>IOInterfaceType</key>
+			<integer>6</integer>
+			<key>IOInterfaceUnit</key>
+			<integer>1</integer>
+			<key>IOMACAddress</key>
+			<data>
+			AByzcaNO
+			</data>
+			<key>IOPathMatch</key>
+			<string>IEEE80211</string>
+			<key>SCNetworkInterfaceInfo</key>
+			<dict>
+				<key>UserDefinedName</key>
+				<string>Wi-Fi</string>
+			</dict>
+			<key>SCNetworkInterfaceType</key>
+			<string>IEEE80211</string>
+		</dict>
+		<dict>
+			<key>Active</key>
+			<true/>
+			<key>BSD Name</key>
+			<string>en2</string>
+			<key>IOBuiltin</key>
+			<false/>
+			<key>IOInterfaceType</key>
+			<integer>6</integer>
+			<key>IOInterfaceUnit</key>
+			<integer>2</integer>
+			<key>IOMACAddress</key>
+			<data>
+			ABtjUH1/
+			</data>
+			<key>IOPathMatch</key>
+			<string>IOService:/IOResources/IOUserEthernetResource/IOUserEthernetResourceUserClient/IOUserEthernetController/IOEthernetInterface</string>
+			<key>SCNetworkInterfaceInfo</key>
+			<dict>
+				<key>UserDefinedName</key>
+				<string>Bluetooth PAN</string>
+			</dict>
+			<key>SCNetworkInterfaceType</key>
+			<string>Ethernet</string>
+		</dict>
+		<dict>
+			<key>Active</key>
+			<true/>
+			<key>BSD Name</key>
+			<string>fw0</string>
+			<key>IOBuiltin</key>
+			<true/>
+			<key>IOInterfaceType</key>
+			<integer>144</integer>
+			<key>IOInterfaceUnit</key>
+			<integer>0</integer>
+			<key>IOMACAddress</key>
+			<data>
+			ABtj//6NYp4=
+			</data>
+			<key>IOPathMatch</key>
+			<string>IOService:/AppleACPIPlatformExpert/PCI0/AppleACPIPCI/RP04@1C,3/IOPCI2PCIBridge/FRWR@0/AppleFWOHCI/IOFireWireController/IOFireWireLocalNode/IOFireWireIP/IOFWInterface</string>
+			<key>SCNetworkInterfaceInfo</key>
+			<dict>
+				<key>UserDefinedName</key>
+				<string>FireWire</string>
+			</dict>
+			<key>SCNetworkInterfaceType</key>
+			<string>FireWire</string>
+		</dict>
+	</array>
+	<key>Model</key>
+	<string>iMac7,1</string>
+</dict>
+</plist>
