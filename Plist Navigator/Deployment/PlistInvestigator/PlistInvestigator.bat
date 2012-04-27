@@ -1,10 +1,10 @@
 @echo off
 REM +=======================================================+
 REM |                                                       |
-REM |  SCRIPT:  PlistNavigator.bat                          |
+REM |  SCRIPT:  PlistIvestigator.bat                        |
 REM |                                                       |
 REM |  PURPOSE: The script sets up the environment          |
-REM |           and starts the Plist Navigator              |
+REM |           and starts the Plist Navigator Tool         |
 REM |                                                       |
 REM +=======================================================+
 
