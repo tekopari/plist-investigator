@@ -97,7 +97,7 @@ public class PlistSearch {
 			
 		} catch (Exception e) {
 			System.err.println("Problem in PlistSearch Constructor");
-			System.err.println(e);		
+			System.err.println(e);	
 		}
 	}
 	
@@ -153,6 +153,9 @@ public class PlistSearch {
 
 	private void GetSearchString() {
 		searchStr = JOptionPane.showInputDialog(null, "Type the Exact Search String:", "");
+		if(searchStr == null) {
+			searchStr = "";
+		}
 		return;
 	}
 	
@@ -311,7 +314,7 @@ public class PlistSearch {
 		if (SearchMulti == false) {
 			GetSearchString();
 			
-			if (searchStr.length() == 0) {
+			if (searchStr == null || searchStr.length() == 0) {
 				Searchdone = false;
 				return;
 			}
