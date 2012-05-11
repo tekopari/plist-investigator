@@ -310,10 +310,12 @@ public class PlistSearch {
 		// string and create a TextArea to output.
 		if (SearchMulti == false) {
 			GetSearchString();
+			
 			if (searchStr.length() == 0) {
 				Searchdone = false;
 				return;
 			}
+			
 			Title = " INDIVIDUAL Plist Search: " + evidenceName
 					+ " search results for the pattern - " + "\"" + searchStr
 					+ "\"";
