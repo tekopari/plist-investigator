@@ -48,7 +48,7 @@ import com.dd.plist.NSObject;
 import com.dd.plist.PropertyListParser;
 
 public class PlistSearch {
-		
+	
 	public static boolean SearchMulti = false;
 	boolean Searchdone = false;
 	public static OutputBox oBox;
@@ -310,6 +310,10 @@ public class PlistSearch {
 		// string and create a TextArea to output.
 		if (SearchMulti == false) {
 			GetSearchString();
+			if (searchStr.length() == 0) {
+				Searchdone = false;
+				return;
+			}
 			Title = " INDIVIDUAL Plist Search: " + evidenceName
 					+ " search results for the pattern - " + "\"" + searchStr
 					+ "\"";
