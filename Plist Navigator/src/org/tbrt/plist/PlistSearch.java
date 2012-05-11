@@ -1,5 +1,5 @@
 /*
- * tbrt - An open source application for plist display
+ * TBRT - An open source application for plist display
  * Copyright (C) 2012 Tom Pari, Blair Wolfinger, Todd Chu, Ravi Jagannathan
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
