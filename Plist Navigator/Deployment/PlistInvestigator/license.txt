@@ -4,7 +4,7 @@ THE TERMS AND CONDITIONS SET FORTH BELOW (THIS “AGREEMENT”) GOVERN END USER
 USE OF TBRT PList Investigator (TBRT: Tom Pari, Blair Wolfinger, Todd Chu, Ravi Jagannathan)
 
 Subject to the terms of this Agreement, "TBRT" grants to recipient  (“End User”)  a personal,
-nonsublicensable, nonexclusive license to use the TBRT Plist Investigator (‘Software”) in
+nonsublicensable, nonexclusive license to use the TBRT  Investigator (‘Software”) in
 accordance with the documentation or instructions supplied by "TBRT".
 
 END USER ACKNOWLEDGES THAT THE SOFTWARE PROVIDED IS NOT FULLY TESTED OR
